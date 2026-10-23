@@ -215,6 +215,35 @@
             color: #8a6d1d;
             margin-top: 5px;
         }
+
+        /* Small "model downloading" badge shown over the live camera feed */
+        .model-loading-badge {
+            position: absolute; top: 10px; right: 10px; z-index: 11;
+            background: rgba(61,47,82,0.88); color: var(--cream);
+            padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .model-loading-badge .spinner-sm {
+            width: 13px; height: 13px;
+            border: 2px solid rgba(253,246,227,0.3); border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin-sm 0.8s linear infinite;
+        }
+        @keyframes spin-sm { to { transform: rotate(360deg); } }
+
+        /* Flash sweep played once the model finishes loading and detection kicks in */
+        .model-ready-flash {
+            position: absolute; inset: 0; z-index: 10;
+            background: radial-gradient(circle, rgba(245,196,81,0.85) 0%, rgba(255,255,255,0.35) 45%, transparent 75%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .model-ready-flash.flash { animation: model-flash 0.7s ease-out; }
+        @keyframes model-flash {
+            0%   { opacity: 0; }
+            15%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -237,13 +266,15 @@
         <div class="container" id="videoContainer" style="display: none;">
             <video id="videoElement" width="640" height="480" autoplay></video>
             <canvas id="canvasElement" width="640" height="480"></canvas>
+            <div class="model-loading-badge" id="modelBadge"><span class="spinner-sm"></span> Loading AI model&hellip;</div>
+            <div class="model-ready-flash" id="modelFlash"></div>
         </div>
 
         <div class="side-panel">
             <div class="info">
                 <div class="webcam-controls">
                     <div class="button-group">
-                        <button id="startButton" class="start" onclick="startCamera()" disabled>▶ Start Camera</button>
+                        <button id="startButton" class="start" onclick="startCamera()">▶ Start Camera</button>
                         <button id="stopButton" class="stop" onclick="stopCamera()" disabled>■ Stop Camera</button>
                     </div>
                 </div>
@@ -297,6 +328,8 @@
         const detectionListDiv = document.getElementById('detectionList');
         const progressFill = document.getElementById('progressFill');
         const loadingDetails = document.getElementById('loadingDetails');
+        const modelBadge = document.getElementById('modelBadge');
+        const modelFlash = document.getElementById('modelFlash');
 
         let isDetecting = true;
         let showBoxes = true;
@@ -305,6 +338,19 @@
         let currentStream = null;
         let animationFrameId = null;
         let model = null;
+        let detectionActive = false;
+
+        // Play a quick light-sweep flash and enable the detection controls the
+        // moment the model becomes available while the camera is already live
+        function activateDetection() {
+            detectionActive = true;
+            toggleButton.disabled = false;
+            toggleBoxesButton.disabled = false;
+            modelBadge.style.display = 'none';
+            modelFlash.classList.remove('flash');
+            void modelFlash.offsetWidth; // restart the animation if triggered again
+            modelFlash.classList.add('flash');
+        }
 
         // Load COCO-SSD model
         async function loadModel() {
@@ -347,6 +393,7 @@
         // Detect objects in video frame
         async function detectObjects() {
             if (!isDetecting || !currentStream || !model) return;
+            if (!detectionActive) activateDetection();
 
             try {
                 // Clear canvas
@@ -438,12 +485,6 @@
                     stopCamera();
                 }
 
-                if (!model) {
-                    statusDiv.textContent = '✗ Error: Model not loaded';
-                    statusDiv.className = 'status error';
-                    return;
-                }
-
                 statusDiv.textContent = '⏳ Starting camera...';
                 statusDiv.className = 'status loading';
 
@@ -464,8 +505,14 @@
                     };
                 });
 
+                // Show the live camera feed immediately; object detection only
+                // starts once the model has finished loading (detectObjects
+                // above calls activateDetection() for the flash + UI update).
                 videoContainer.style.display = 'block';
-                statusDiv.textContent = '✓ Detection active';
+                modelBadge.style.display = model ? 'none' : 'flex';
+                statusDiv.textContent = model
+                    ? '✓ Detection active'
+                    : '📷 Camera live — loading AI model in the background...';
                 statusDiv.className = 'status ready';
 
                 // Start detection loop
@@ -480,8 +527,6 @@
 
                 startButton.disabled = true;
                 stopButton.disabled = false;
-                toggleButton.disabled = false;
-                toggleBoxesButton.disabled = false;
 
             } catch (error) {
                 console.error('Camera start failed:', error);
@@ -521,6 +566,7 @@
 
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
             videoContainer.style.display = 'none';
+            detectionActive = false;
 
             statusDiv.textContent = '■ Camera stopped';
             statusDiv.className = 'status loading';

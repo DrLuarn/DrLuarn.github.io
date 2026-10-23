@@ -180,6 +180,35 @@
 
         button.stop { background: linear-gradient(135deg, #c0392b, #8e2a1f); }
         button.stop:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(192,57,43,0.4); }
+
+        /* Small "model downloading" badge shown over the live camera feed */
+        .model-loading-badge {
+            position: absolute; top: 10px; right: 10px; z-index: 11;
+            background: rgba(61,47,82,0.88); color: var(--cream);
+            padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .model-loading-badge .spinner-sm {
+            width: 13px; height: 13px;
+            border: 2px solid rgba(253,246,227,0.3); border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin-sm 0.8s linear infinite;
+        }
+        @keyframes spin-sm { to { transform: rotate(360deg); } }
+
+        /* Flash sweep played once the model finishes loading and detection kicks in */
+        .model-ready-flash {
+            position: absolute; inset: 0; z-index: 10;
+            background: radial-gradient(circle, rgba(245,196,81,0.85) 0%, rgba(255,255,255,0.35) 45%, transparent 75%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .model-ready-flash.flash { animation: model-flash 0.7s ease-out; }
+        @keyframes model-flash {
+            0%   { opacity: 0; }
+            15%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -190,12 +219,14 @@
 
     <h1>MediaPipe Face Landmark Detection</h1>
 
-    <div id="status" class="status loading">Initializing MediaPipe...</div>
+    <div id="status" class="status ready">✓ Ready. Click "Start Camera" to begin.</div>
 
     <div class="main-content">
         <div class="container" id="videoContainer" style="display: none;">
             <video id="videoElement" width="640" height="480" autoplay></video>
             <canvas id="canvasElement" width="640" height="480"></canvas>
+            <div class="model-loading-badge" id="modelBadge"><span class="spinner-sm"></span> Loading AI model&hellip;</div>
+            <div class="model-ready-flash" id="modelFlash"></div>
         </div>
 
         <div class="side-panel">
@@ -208,7 +239,7 @@
                     </select>
 
                     <div class="button-group">
-                        <button id="startButton" class="start" onclick="startCamera()" disabled>▶ Start Camera</button>
+                        <button id="startButton" class="start" onclick="startCamera()">▶ Start Camera</button>
                         <button id="stopButton" class="stop" onclick="stopCamera()" disabled>⏹ Stop Camera</button>
                     </div>
                 </div>
@@ -264,6 +295,8 @@
         const videoContainer = document.getElementById('videoContainer');
         const modelSelect = document.getElementById('modelSelect');
         const currentModelSpan = document.getElementById('currentModel');
+        const modelBadge = document.getElementById('modelBadge');
+        const modelFlash = document.getElementById('modelFlash');
 
         let isDetecting = true;
         let showPoints = true;
@@ -273,6 +306,20 @@
         let animationFrameId = null;
         let drawMode = 'tesselation';
         let useBlackBackground = false;
+        let modelReady = false;
+        let detectionActive = false;
+
+        // Play a quick light-sweep flash and enable the detection controls the
+        // moment the model becomes available while the camera is already live
+        function activateDetection() {
+            detectionActive = true;
+            toggleButton.disabled = false;
+            togglePointsButton.disabled = false;
+            toggleBgButton.disabled = false;
+            modelFlash.classList.remove('flash');
+            void modelFlash.offsetWidth; // restart the animation if triggered again
+            modelFlash.classList.add('flash');
+        }
 
         // Initialize MediaPipe Face Mesh
         const faceMesh = new FaceMesh({
@@ -440,14 +487,17 @@
 
                 // Show video container
                 videoContainer.style.display = 'block';
+                modelBadge.style.display = modelReady ? 'none' : 'flex';
 
-                statusDiv.textContent = '✓ Camera started. Initializing detection...';
-                statusDiv.className = 'status ready';
-
-                // Start processing frames
+                // Start processing frames. The video is visible immediately;
+                // detection only runs once the model has finished loading, so
+                // the first few frames may just show the plain camera feed.
                 const processFrame = async () => {
                     if (currentStream && videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-                        await faceMesh.send({image: videoElement});
+                        if (modelReady) {
+                            if (!detectionActive) activateDetection();
+                            await faceMesh.send({image: videoElement});
+                        }
                     }
                     animationFrameId = requestAnimationFrame(processFrame);
                 };
@@ -455,13 +505,12 @@
                 processFrame();
 
                 // Update UI
-                statusDiv.textContent = '✓ Detection active';
+                statusDiv.textContent = modelReady
+                    ? '✓ Detection active'
+                    : '📷 Camera live — loading AI model in the background...';
                 statusDiv.className = 'status ready';
                 startButton.disabled = true;
                 stopButton.disabled = false;
-                toggleButton.disabled = false;
-                togglePointsButton.disabled = false;
-                toggleBgButton.disabled = false;
 
             } catch (error) {
                 console.error('Camera start failed:', error);
@@ -507,6 +556,7 @@
 
             // Hide video container
             videoContainer.style.display = 'none';
+            detectionActive = false;
 
             // Update UI
             statusDiv.textContent = '⏹ Camera stopped';
@@ -579,26 +629,22 @@
             document.body.appendChild(troubleshooting);
         }
 
-        // Pre-load the MediaPipe model as soon as the page opens, instead of
-        // waiting for the user to click "Start Camera". initialize() downloads
-        // and compiles the WASM/model assets; send() would otherwise do this
-        // lazily on the very first video frame, which is what made the first
-        // "Start Camera" click feel slow.
+        // Start downloading the MediaPipe model as soon as the page opens,
+        // in the background — the camera can be started right away without
+        // waiting for this. initialize() does the same download/compile work
+        // that send() would otherwise do lazily on the first video frame.
+        // Once it resolves, the frame loop (see processFrame above) notices
+        // modelReady flip to true and plays the activateDetection() flash.
         window.addEventListener('load', () => {
-            statusDiv.textContent = '⏳ Loading MediaPipe model...';
-            statusDiv.className = 'status loading';
-
             faceMesh.initialize()
                 .then(() => {
-                    statusDiv.textContent = '✓ Model loaded. Click "Start Camera" to begin.';
-                    statusDiv.className = 'status ready';
-                    startButton.disabled = false;
+                    modelReady = true;
+                    modelBadge.style.display = 'none';
                 })
                 .catch((error) => {
                     console.warn('Model pre-load failed, will load on first camera frame instead:', error);
-                    statusDiv.textContent = '✓ Ready. Click "Start Camera" to begin.';
-                    statusDiv.className = 'status ready';
-                    startButton.disabled = false;
+                    modelReady = true; // fall back to send()'s own lazy-load
+                    modelBadge.style.display = 'none';
                 });
         });
     </script>
