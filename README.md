@@ -170,7 +170,12 @@ the device.
 
 ## For students: turning this fork into your own site
 
-1. Fork/clone this repository and enable GitHub Pages on it.
+> **Full step-by-step walkthrough:** [STUDENT_SETUP.md](STUDENT_SETUP.md)
+> (how to use the "Use this template" button, name your repo, and turn on
+> GitHub Pages). Quick summary:
+
+1. Click **"Use this template"** on this repo to create your own, independent
+   copy, then enable GitHub Pages on it.
 2. Edit **`profile.txt`** with your own name, titles, education, contact info,
    and About Me text.
 3. Replace **`mypic.jpg`** with your own photo (keep the filename).
