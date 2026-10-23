@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>單元詳情 | 2026 AI</title>
+    <title>Unit Details | 2026 AI</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-        /* 清爽專業漸層背景 */
+        /* Clean, professional gradient background */
         body {
             background: linear-gradient(135deg, #3d2f52 0%, #574571 50%, #9a89b3 100%);
             background-attachment: fixed;
@@ -17,7 +17,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
-        /* 柔和光點背景 */
+        /* Soft background highlights */
         body::before {
             content: '';
             position: fixed;
@@ -33,7 +33,7 @@
             pointer-events: none;
         }
 
-        /* 導航列 */
+        /* Navigation bar */
         .navbar {
             background: rgba(61, 47, 82, 0.9) !important;
             backdrop-filter: blur(20px);
@@ -310,7 +310,7 @@
             text-decoration: underline;
         }
 
-        /* Badge 樣式 */
+        /* Badge styles */
         .badge {
             padding: 0.4rem 1rem;
             border-radius: 50px;
@@ -415,16 +415,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">首頁</a>
+                        <a class="nav-link" href="index.html#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#about">關於我</a>
+                        <a class="nav-link" href="index.html#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#projects">我的專案</a>
+                        <a class="nav-link" href="index.html#projects">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#contact">聯絡我</a>
+                        <a class="nav-link" href="index.html#contact">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -435,7 +435,7 @@
     <div class="unit-nav-container unit-nav-left">
         <button class="unit-nav-btn" id="prevUnitBtn" onclick="navigateToUnit(currentUnit - 1)">
             <i class="fas fa-chevron-left"></i>
-            <div class="unit-nav-tooltip" id="prevUnitTooltip">單元 1</div>
+            <div class="unit-nav-tooltip" id="prevUnitTooltip">Unit 1</div>
         </button>
     </div>
 
@@ -443,19 +443,19 @@
     <div class="unit-nav-container unit-nav-right">
         <button class="unit-nav-btn" id="nextUnitBtn" onclick="navigateToUnit(currentUnit + 1)">
             <i class="fas fa-chevron-right"></i>
-            <div class="unit-nav-tooltip" id="nextUnitTooltip">單元 3</div>
+            <div class="unit-nav-tooltip" id="nextUnitTooltip">Unit 3</div>
         </button>
     </div>
 
     <!-- Unit Counter -->
     <div class="unit-counter" id="unitCounter">
-        單元 1 / 12
+        Unit 1 / 12
     </div>
 
     <!-- Keyboard Navigation Hint -->
     <div class="keyboard-hint" id="keyboardHint">
         <button class="hint-close" onclick="closeHint()">&times;</button>
-        💡 使用 ← → 鍵快速切換單元
+        💡 Use ← → keys to switch units
     </div>
 
     <!-- Project Header -->
@@ -466,18 +466,18 @@
                     <nav aria-label="breadcrumb" class="mt-3">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.html">首頁</a>
+                                <a href="index.html">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="index.html#projects">專案</a>
+                                <a href="index.html#projects">Projects</a>
                             </li>
-                            <li class="breadcrumb-item active" id="breadcrumb-unit">單元</li>
+                            <li class="breadcrumb-item active" id="breadcrumb-unit">Unit</li>
                         </ol>
                     </nav>
 
-                    <h1 class="project-title" id="project-title">單元</h1>
+                    <h1 class="project-title" id="project-title">Unit</h1>
                     <p class="project-subtitle" id="project-subtitle">
-                        單元作業
+                        Unit Assignment
                     </p>
                 </div>
             </div>
@@ -488,7 +488,7 @@
     <div class="container">
         <!-- Image Gallery -->
         <section class="content-section fade-in">
-            <h2 class="section-title">作業相簿</h2>
+            <h2 class="section-title">Assignment Gallery</h2>
             <div class="image-gallery">
                 <div class="gallery-grid" id="gallery-grid">
                     <!-- Images will be dynamically generated -->
@@ -502,11 +502,11 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalTitle">專案圖片</h5>
+                    <h5 class="modal-title" id="imageModalTitle">Project Image</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="modalImage" src="" alt="專案圖片" class="img-fluid rounded mb-3">
+                    <img id="modalImage" src="" alt="Project image" class="img-fluid rounded mb-3">
                     <p id="imageDescription" class="mt-2"></p>
                 </div>
             </div>
@@ -537,10 +537,10 @@
             // Show a temporary loading state while we probe for images
             const galleryGrid = document.getElementById('gallery-grid');
             if (galleryGrid) {
-                galleryGrid.innerHTML = '<div class="text-center text-white py-5"><i class="fas fa-spinner fa-spin me-2"></i>偵測圖片中...</div>';
+                galleryGrid.innerHTML = '<div class="text-center text-white py-5"><i class="fas fa-spinner fa-spin me-2"></i>Detecting images...</div>';
             }
 
-            // Generate images for this unit (動態偵測有幾張圖), then render
+            // Generate images for this unit (dynamically detect how many exist), then render
             generateImages().then(() => {
                 renderGallery();
             });
@@ -554,18 +554,18 @@
 
         // Unit information with names and attributes
         const unitInfo = {
-            1: { name: "課程簡介、安裝github.io", attributes: [] },
+            1: { name: "Course introduction, setting up github.io", attributes: [] },
             2: { name: "Claude AI, Claude Cowork, Claude Code", attributes: [] },
-            3: { name: "Skills 製作與設定、Claude Skills 應用", attributes: [] },
+            3: { name: "Creating & configuring Skills, Claude Skills applications", attributes: [] },
             4: { name: "OpenAI Codex", attributes: [] },
-            5: { name: "OpenAI 記憶、技能與外掛插件", attributes: [] },
+            5: { name: "OpenAI memory, skills, and plugins", attributes: [] },
             6: { name: "Google Gemini Skills", attributes: [] },
             7: { name: "GoogleFlow", attributes: [] },
-            8: { name: "N8N 工作流自動化", attributes: [] },
-            9: { name: "N8N 工作流自動化進階", attributes: [] },
-            10: { name: "地端 Ollama, Cloudflare, Docker", attributes: [] },
-            11: { name: "所有的地端整合（含LINE、FB、What's App）", attributes: [] },
-            12: { name: "期末報告", attributes: [] }
+            8: { name: "N8N workflow automation", attributes: [] },
+            9: { name: "N8N workflow automation (advanced)", attributes: [] },
+            10: { name: "Local Ollama, Cloudflare, Docker", attributes: [] },
+            11: { name: "Full local integration (LINE, Facebook, WhatsApp)", attributes: [] },
+            12: { name: "Final project", attributes: [] }
         };
 
         // Navigate to specific unit
@@ -584,26 +584,26 @@
             const unitCounter = document.getElementById('unitCounter');
 
             // Update counter
-            unitCounter.textContent = `單元 ${currentUnit} / ${totalUnits}`;
+            unitCounter.textContent = `Unit ${currentUnit} / ${totalUnits}`;
 
             // Update previous button
             if (currentUnit > 1) {
                 prevBtn.disabled = false;
                 const prevUnit = unitInfo[currentUnit - 1];
-                prevTooltip.textContent = `單元 ${currentUnit - 1}: ${prevUnit.name}`;
+                prevTooltip.textContent = `Unit ${currentUnit - 1}: ${prevUnit.name}`;
             } else {
                 prevBtn.disabled = true;
-                prevTooltip.textContent = '已經是第一個單元';
+                prevTooltip.textContent = 'This is already the first unit';
             }
 
             // Update next button
             if (currentUnit < totalUnits) {
                 nextBtn.disabled = false;
                 const nextUnit = unitInfo[currentUnit + 1];
-                nextTooltip.textContent = `單元 ${currentUnit + 1}: ${nextUnit.name}`;
+                nextTooltip.textContent = `Unit ${currentUnit + 1}: ${nextUnit.name}`;
             } else {
                 nextBtn.disabled = true;
-                nextTooltip.textContent = '已經是最後一個單元';
+                nextTooltip.textContent = 'This is already the last unit';
             }
         }
 
@@ -648,10 +648,10 @@
         // Update page content based on unit number
         function updatePageContent() {
             const unit = unitInfo[currentUnit];
-            const unitText = `單元 #${currentUnit}`;
+            const unitText = `Unit #${currentUnit}`;
             const unitFullTitle = `${unitText}: ${unit.name}`;
-            const subtitleText = `單元 ${currentUnit} 作業`;
-            const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
+            const subtitleText = `Unit ${currentUnit} Assignment`;
+            const titleText = `${unitFullTitle} - Project Details | 2026 AI`;
 
             // Update page title
             document.title = titleText;
@@ -667,7 +667,7 @@
         }
 
         // Generate images array for current unit
-        // 檢查圖片是否存在
+        // Check whether an image exists
         function checkImageExists(src) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -677,9 +677,9 @@
             });
         }
 
-        // 讀取 URL{N}_{i}.txt（若存在）
-        // 第一行：取代圖片下方原本顯示的單元名稱
-        // 第二行（若有）：補充的 demo URL，會顯示在下一行並可點選
+        // Read URL{N}_{i}.txt (if present)
+        // Line 1: replaces the unit name normally shown under the image
+        // Line 2 (optional): a demo URL, shown on the next line as a clickable link
         function loadImageNote(unitNum, index) {
             return fetch(`URL/URL${unitNum}_${index}.txt`)
                 .then(response => {
@@ -696,14 +696,14 @@
                 .catch(() => null);
         }
 
-        // 依序偵測 pic/unit{N}_1.jpg, _2.jpg... 直到找不到為止
-        // 若完全沒有對應圖片，則改用 pic/no.jpg 顯示一張預設圖
+        // Sequentially probe pic/unit{N}_1.jpg, _2.jpg... until one is missing
+        // If no matching images exist at all, fall back to pic/no.jpg as a placeholder
         async function generateImages() {
             const unit = unitInfo[currentUnit];
             images = [];
 
             let i = 1;
-            const maxCheck = 30; // 安全上限，避免無止盡偵測
+            const maxCheck = 30; // safety cap to avoid probing indefinitely
             while (i <= maxCheck) {
                 const src = `pic/unit${currentUnit}_${i}.jpg`;
                 const exists = await checkImageExists(src);
@@ -712,29 +712,29 @@
                 images.push({
                     src: src,
                     index: i,
-                    title: `${unit.name} - 圖片 ${i}`,
-                    description: `單元 #${currentUnit}: ${unit.name} 作業圖片 ${i}`,
+                    title: `${unit.name} - Image ${i}`,
+                    description: `Unit #${currentUnit}: ${unit.name} assignment image ${i}`,
                     caption: unit.name,
                     demoUrl: null
                 });
                 i++;
             }
 
-            // 找不到任何對應圖片時，顯示預設圖
+            // Fall back to a placeholder image when no matching images are found
             if (images.length === 0) {
                 images.push({
                     src: 'pic/no.jpg',
                     index: null,
-                    title: `${unit.name} - 尚無圖片`,
-                    description: `單元 #${currentUnit}: ${unit.name} 目前尚未上傳作業圖片`,
+                    title: `${unit.name} - No Image Yet`,
+                    description: `Unit #${currentUnit}: ${unit.name} has no assignment image uploaded yet`,
                     caption: unit.name,
                     demoUrl: null
                 });
             }
 
-            // 針對每張實際存在的圖片，檢查是否有對應的 URL{N}_{i}.txt 說明檔
+            // For each existing image, check whether a matching URL{N}_{i}.txt note file exists
             await Promise.all(images.map(async (image) => {
-                if (!image.index) return; // no.jpg 預設圖不檢查
+                if (!image.index) return; // skip the no.jpg placeholder
                 const note = await loadImageNote(currentUnit, image.index);
                 if (note) {
                     if (note.caption) image.caption = note.caption;
@@ -759,7 +759,7 @@
 
                 return `
                     <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(${index})">
-                        <img src="${image.src}" alt="單元 ${currentUnit} - 圖片 ${index + 1}">
+                        <img src="${image.src}" alt="Unit ${currentUnit} - Image ${index + 1}">
                         <div class="gallery-overlay">
                             <h5>${fileName}</h5>
                             <p>${captionText}</p>

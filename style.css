@@ -59,35 +59,6 @@ a { text-decoration: none; }
     transform: translateY(-2px);
 }
 
-/* ---------------- Language switcher ---------------- */
-.lang-switch {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: 12px;
-}
-.lang-btn {
-    background: transparent;
-    border: 1px solid rgba(241, 236, 221, 0.5);
-    color: #f1ecdd;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-.lang-btn:hover { border-color: var(--gold); color: var(--gold-light); }
-.lang-btn.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--navy-deep);
-}
-.lang-sep { color: rgba(241, 236, 221, 0.5); }
-@media (max-width: 991px) {
-    .lang-switch { margin: 1rem 0 0; }
-}
-
 /* ---------------- Hero ---------------- */
 .hero {
     background: var(--gradient-navy);

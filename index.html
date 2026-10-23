@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Prof. Pin Luarn | 2026 AI Personal Site</title>
+    <title>Prof. Pin Luarn | 2026 AI Personal Site</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -24,27 +24,21 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#home" data-i18n="nav.home"></a>
+                        <a class="nav-link" href="#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#about" data-i18n="nav.about"></a>
+                        <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#projects" data-i18n="nav.projects"></a>
+                        <a class="nav-link" href="#projects">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact" data-i18n="nav.contact"></a>
+                        <a class="nav-link" href="#contact">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="student.html" data-i18n="nav.students"></a>
+                        <a class="nav-link" href="student.html">Student Portfolio</a>
                     </li>
                 </ul>
-                <!-- Language switcher -->
-                <div class="lang-switch" role="group" aria-label="Language switch">
-                    <button type="button" class="lang-btn" data-lang="en" id="langBtnEn">EN</button>
-                    <span class="lang-sep">/</span>
-                    <button type="button" class="lang-btn" data-lang="zh" id="langBtnZh">中文</button>
-                </div>
             </div>
         </div>
     </nav>
@@ -60,19 +54,19 @@
                         <p class="subtitle title-line" id="title2"></p>
                     </div>
                     <div class="mb-3">
-                        <strong data-i18n="label.expertise"></strong>
+                        <strong>Expertise:</strong>
                         <span id="expertise"></span>
                     </div>
                     <div class="mb-3">
-                        <strong data-i18n="label.education"></strong>
+                        <strong>Education:</strong>
                         <span id="education"></span>
                     </div>
                     <div class="mb-3">
-                        <strong data-i18n="label.email"></strong>
+                        <strong>Email:</strong>
                         <a href="" class="text-white" id="email"></a>
                     </div>
                     <div class="mb-3">
-                        <strong data-i18n="label.linkedin"></strong>
+                        <strong>LinkedIn:</strong>
                         <a href="" target="_blank" class="text-white" id="linkedin">
                             <i class="fab fa-linkedin me-1"></i>
                             <span id="linkedin-text"></span>
@@ -80,10 +74,10 @@
                         </a>
                     </div>
                     <div class="mb-4 student-links">
-                        <strong data-i18n="label.studentLinks"></strong>
+                        <strong>2026 NTUST Student Project Links:</strong>
                         <div class="student-link-item">
                             <a href="student.html">
-                                <span data-i18n="label.studentPortfolio"></span>
+                                <span>• Student Personal Website Portfolio</span>
                                 <i class="fas fa-external-link-alt ms-1"></i>
                             </a>
                         </div>
@@ -99,7 +93,7 @@
     <!-- About Section -->
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="section.about"></h2>
+            <h2 class="section-title">About Me</h2>
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="card fade-in">
@@ -116,7 +110,7 @@
     <!-- Projects Section -->
     <section id="projects" class="section bg-light">
         <div class="container">
-            <h2 class="section-title" data-i18n="section.projects"></h2>
+            <h2 class="section-title">My Projects</h2>
 
             <!-- Projects are rendered dynamically by JS -->
             <div class="project-grid fade-in" id="projects-grid"></div>
@@ -126,15 +120,15 @@
     <!-- Student Portfolio Section -->
     <section id="portfolio" class="section bg-light">
         <div class="container">
-            <h2 class="section-title" data-i18n="section.portfolio"></h2>
+            <h2 class="section-title">Student Portfolio</h2>
             <div class="row justify-content-center">
                 <div class="col-lg-7">
                     <div class="portfolio-cta fade-in">
                         <i class="fas fa-graduation-cap"></i>
-                        <h4 style="color: var(--navy-deep); font-weight: 700;" data-i18n="portfolio.title"></h4>
-                        <p class="text-muted mt-2" data-i18n="portfolio.desc"></p>
+                        <h4 style="color: var(--navy-deep); font-weight: 700;">2026 NTUST Student Personal Website Portfolio</h4>
+                        <p class="text-muted mt-2">Click the button below to browse this semester's student project websites</p>
                         <a href="student.html" class="btn-elegant">
-                            <i class="fas fa-arrow-right"></i> <span data-i18n="portfolio.cta"></span>
+                            <i class="fas fa-arrow-right"></i> <span>View Student Portfolio</span>
                         </a>
                     </div>
                 </div>
@@ -145,7 +139,7 @@
     <!-- Contact Section -->
     <section id="contact" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="section.contact"></h2>
+            <h2 class="section-title">Contact</h2>
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="contact-info fade-in">
@@ -159,14 +153,14 @@
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
                             <div>
-                                <h5 data-i18n="contact.phone"></h5>
+                                <h5>Phone</h5>
                                 <p id="contact-phone"></p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
-                                <h5 data-i18n="contact.location"></h5>
+                                <h5>Location</h5>
                                 <p id="contact-location"></p>
                             </div>
                         </div>
@@ -187,75 +181,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ====== UI translations (static labels; not student-editable) ======
-        const translations = {
-            zh: {
-                'nav.home': '首頁', 'nav.about': '關於我', 'nav.projects': '我的專案',
-                'nav.contact': '聯絡我', 'nav.students': '學生作品集',
-                'label.expertise': '專長：', 'label.education': '學歷：',
-                'label.email': '聯絡信箱：', 'label.linkedin': 'LinkedIn：',
-                'label.studentLinks': '2026台科大學生作品連結：',
-                'label.studentPortfolio': '• 學生個人網頁作品集',
-                'section.about': '關於我', 'section.projects': '我的專案', 'section.portfolio': '學生作品集',
-                'section.contact': '聯絡我',
-                'portfolio.title': '2026 台科大學生個人網頁作品集',
-                'portfolio.desc': '點擊下方按鈕，瀏覽本學期所有班級同學的個人作品網站',
-                'portfolio.cta': '進入學生作品集',
-                'contact.phone': '電話', 'contact.location': '地點',
-                'project.hint': '點擊查看詳情'
-            },
-            en: {
-                'nav.home': 'Home', 'nav.about': 'About', 'nav.projects': 'Projects',
-                'nav.contact': 'Contact', 'nav.students': 'Student Portfolio',
-                'label.expertise': 'Expertise:', 'label.education': 'Education:',
-                'label.email': 'Email:', 'label.linkedin': 'LinkedIn:',
-                'label.studentLinks': '2026 NTUST Student Project Links:',
-                'label.studentPortfolio': '• Student Personal Website Portfolio',
-                'section.about': 'About Me', 'section.projects': 'My Projects', 'section.portfolio': 'Student Portfolio',
-                'section.contact': 'Contact',
-                'portfolio.title': '2026 NTUST Student Personal Website Portfolio',
-                'portfolio.desc': 'Click the button below to browse this semester\'s student project websites',
-                'portfolio.cta': 'View Student Portfolio',
-                'contact.phone': 'Phone', 'contact.location': 'Location',
-                'project.hint': 'Click for details'
-            }
-        };
-
         // Project data (unit descriptions, static)
         const projects = [
-            {id: 1, zh: '課程簡介、安裝github.io', en: 'Course introduction, setting up github.io'},
-            {id: 2, zh: 'Claude AI, Claude Cowork, Claude Code', en: 'Claude AI, Claude Cowork, Claude Code'},
-            {id: 3, zh: 'Skills 製作與設定、Claude Skills 應用', en: 'Creating & configuring Skills, Claude Skills applications'},
-            {id: 4, zh: 'OpenAI Codex', en: 'OpenAI Codex'},
-            {id: 5, zh: 'OpenAI 記憶、技能與外掛插件', en: 'OpenAI memory, skills, and plugins'},
-            {id: 6, zh: 'Google Gemini Skills', en: 'Google Gemini Skills'},
-            {id: 7, zh: 'GoogleFlow', en: 'GoogleFlow'},
-            {id: 8, zh: 'N8N 工作流自動化', en: 'N8N workflow automation'},
-            {id: 9, zh: 'N8N 工作流自動化進階', en: 'N8N workflow automation (advanced)'},
-            {id: 10, zh: '地端 Ollama, Cloudflare, Docker', en: 'Local Ollama, Cloudflare, Docker'},
-            {id: 11, zh: "所有的地端整合（含LINE、FB、What's App）", en: "Full local integration (LINE, Facebook, WhatsApp)"},
-            {id: 12, zh: '期末報告', en: 'Final project'}
+            {id: 1, description: 'Course introduction, setting up github.io'},
+            {id: 2, description: 'Claude AI, Claude Cowork, Claude Code'},
+            {id: 3, description: 'Creating & configuring Skills, Claude Skills applications'},
+            {id: 4, description: 'OpenAI Codex'},
+            {id: 5, description: 'OpenAI memory, skills, and plugins'},
+            {id: 6, description: 'Google Gemini Skills'},
+            {id: 7, description: 'GoogleFlow'},
+            {id: 8, description: 'N8N workflow automation'},
+            {id: 9, description: 'N8N workflow automation (advanced)'},
+            {id: 10, description: 'Local Ollama, Cloudflare, Docker'},
+            {id: 11, description: 'Full local integration (LINE, Facebook, WhatsApp)'},
+            {id: 12, description: 'Final project'}
         ];
 
         // Fallback profile (used if profile.txt cannot be fetched, e.g. opened via file://)
         const defaultProfile = {
-            name_zh: 'Professor 欒斌', name_en: 'Prof. Pin Luarn',
-            title1_zh: '全球前 2% 頂尖科學家', title1_en: 'Top 2% Scientist Worldwide (Stanford Ranking)',
-            title2_zh: '2024 全國師鐸獎得主', title2_en: '2024 National Teaching Award Laureate',
-            expertise_zh: '電子商務、網路行銷、AI應用', expertise_en: 'E-Commerce, Internet Marketing, AI Applications',
-            education_zh: '美國威斯康辛大學麥迪遜校區工業工程博士', education_en: 'Ph.D. in Industrial Engineering, University of Wisconsin-Madison, USA',
-            email: 'luarn@mail.ntust.edu.tw', linkedin: 'https://pse.is/8nn88y',
-            about1_zh: '欒斌教授於東海大學取得工業工程學士學位，', about1_en: "Prof. Luarn earned his B.S. in Industrial Engineering from Tunghai University,",
-            about2_zh: '於美國威斯康辛大學麥迪遜分校取得工業工程碩士及博士學位。', about2_en: 'and his M.S. and Ph.D. in Industrial Engineering from the University of Wisconsin-Madison.',
-            about3_zh: '2020~2025連續6年，史丹佛大學評選全球前2%頂尖科學家。', about3_en: "Named among the world's top 2% scientists by Stanford University for six consecutive years (2020-2025).",
-            about4_zh: '2024 榮獲總統頒發全國師鐸獎', about4_en: 'Recipient of the 2024 Presidential National Teaching Award, Taiwan',
+            name: 'Prof. Pin Luarn',
+            title1: 'Top 2% Scientist Worldwide (Stanford Ranking)',
+            title2: '2024 National Teaching Award Laureate',
+            expertise: 'E-Commerce, Internet Marketing, AI Applications',
+            education: 'Ph.D. in Industrial Engineering, University of Wisconsin-Madison, USA',
+            email: 'luarn@mail.ntust.edu.tw',
+            linkedin: 'https://pse.is/8nn88y',
+            about1: 'Prof. Luarn earned his B.S. in Industrial Engineering from Tunghai University,',
+            about2: 'and his M.S. and Ph.D. in Industrial Engineering from the University of Wisconsin-Madison.',
+            about3: "Named among the world's top 2% scientists by Stanford University for six consecutive years (2020-2025).",
+            about4: 'Recipient of the 2024 Presidential National Teaching Award, Taiwan',
             phone: '886-2-2737-6754',
-            location_zh: '台北市基隆路四段43號 台灣科技大學 T2-409',
-            location_en: 'T2-409, National Taiwan University of Science and Technology, No. 43, Sec. 4, Keelung Rd., Taipei, Taiwan'
+            location: 'T2-409, National Taiwan University of Science and Technology, No. 43, Sec. 4, Keelung Rd., Taipei, Taiwan'
         };
 
         let profileData = defaultProfile;
-        let currentLang = localStorage.getItem('siteLang') || 'en';
 
         // Parse a simple "key=value" text file, ignoring blank lines and comments
         function parseProfileTxt(text) {
@@ -289,82 +248,47 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
             await loadProfileTxt();
-            applyLanguage(currentLang);
+            applyProfileData();
             renderProjects();
             initScrollAnimations();
             initSmoothScrolling();
-            initLangSwitcher();
         });
 
-        // Apply static UI translations for the current language
-        function applyUiTranslations(lang) {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key] !== undefined) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-            document.documentElement.lang = (lang === 'zh') ? 'zh-TW' : 'en';
-            document.getElementById('pageTitle').textContent = (lang === 'zh')
-                ? '欒斌教授 | 2026 AI 個人網站'
-                : 'Prof. Pin Luarn | 2026 AI Personal Site';
-        }
-
-        // Fill in profile fields (name, titles, about text, contact info) for the current language
-        function applyProfileData(lang) {
+        // Fill in profile fields (name, titles, about text, contact info)
+        function applyProfileData() {
             const p = profileData;
-            document.getElementById('name').textContent = p[`name_${lang}`] || p.name_zh;
-            document.getElementById('title1').textContent = p[`title1_${lang}`] || p.title1_zh;
-            document.getElementById('title2').textContent = p[`title2_${lang}`] || p.title2_zh;
-            document.getElementById('expertise').textContent = p[`expertise_${lang}`] || p.expertise_zh;
-            document.getElementById('education').textContent = p[`education_${lang}`] || p.education_zh;
+            document.getElementById('name').textContent = p.name;
+            document.getElementById('title1').textContent = p.title1;
+            document.getElementById('title2').textContent = p.title2;
+            document.getElementById('expertise').textContent = p.expertise;
+            document.getElementById('education').textContent = p.education;
 
             document.getElementById('email').textContent = p.email;
             document.getElementById('email').href = `mailto:${p.email}`;
             document.getElementById('linkedin').href = p.linkedin;
             document.getElementById('linkedin-text').textContent = p.linkedin;
 
-            const aboutParts = [1, 2, 3, 4]
-                .map(n => p[`about${n}_${lang}`] || p[`about${n}_zh`])
+            const aboutParts = [p.about1, p.about2, p.about3, p.about4]
                 .filter(text => text && text.trim());
             document.getElementById('about-text').innerHTML = aboutParts.join(' ');
 
             document.getElementById('contact-email1').textContent = p.email;
             document.getElementById('contact-email1').href = `mailto:${p.email}`;
             document.getElementById('contact-phone').textContent = p.phone;
-            document.getElementById('contact-location').textContent = p[`location_${lang}`] || p.location_zh;
+            document.getElementById('contact-location').textContent = p.location;
         }
 
-        function applyLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('siteLang', lang);
-            applyUiTranslations(lang);
-            applyProfileData(lang);
-            renderProjects();
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-        }
-
-        function initLangSwitcher() {
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
-            });
-        }
-
-        // Render the project grid for the current language
+        // Render the project grid
         function renderProjects() {
             const grid = document.getElementById('projects-grid');
-            const hint = translations[currentLang]['project.hint'];
 
             grid.innerHTML = projects.map(project => {
-                const label = (currentLang === 'zh') ? '單元' : 'Unit';
                 return `
                     <div class="project-card" onclick="openProject(${project.id})">
                         <div class="project-number">${project.id}</div>
-                        <h5>${label} #${project.id}</h5>
-                        <p class="text-muted">${project[currentLang]}</p>
-                        <small class="text-primary">${hint}</small>
+                        <h5>Unit #${project.id}</h5>
+                        <p class="text-muted">${project.description}</p>
+                        <small class="text-primary">Click for details</small>
                     </div>
                 `;
             }).join('');

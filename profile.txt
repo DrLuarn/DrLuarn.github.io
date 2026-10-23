@@ -1,43 +1,27 @@
 # ============================================================
 # Personal profile data for index.html
 # Edit the values after "=" only. Do not change the keys.
-# Each bilingual field has a _zh (Traditional Chinese) and
-# an _en (English) version — fill in both.
 # Lines starting with # are comments and are ignored.
 # ============================================================
 
-name_zh=Professor 欒斌
-name_en=Prof. Pin Luarn
+name=Prof. Pin Luarn
 
-title1_zh=全球前 2% 頂尖科學家
-title1_en=Top 2% Scientist Worldwide (Stanford Ranking)
+title1=Top 2% Scientist Worldwide (Stanford Ranking)
 
-title2_zh=2024 全國師鐸獎得主
-title2_en=2024 National Teaching Award Laureate
+title2=2024 National Teaching Award Laureate
 
-expertise_zh=電子商務、網路行銷、AI應用
-expertise_en=E-Commerce, Internet Marketing, AI Applications
+expertise=E-Commerce, Internet Marketing, AI Applications
 
-education_zh=美國威斯康辛大學麥迪遜校區工業工程博士
-education_en=Ph.D. in Industrial Engineering, University of Wisconsin-Madison, USA
+education=Ph.D. in Industrial Engineering, University of Wisconsin-Madison, USA
 
-# Email and LinkedIn are not translated
 email=luarn@mail.ntust.edu.tw
 linkedin=https://pse.is/8nn88y
 
-about1_zh=欒斌教授於東海大學取得工業工程學士學位，
-about1_en=Prof. Luarn earned his B.S. in Industrial Engineering from Tunghai University,
-
-about2_zh=於美國威斯康辛大學麥迪遜分校取得工業工程碩士及博士學位。
-about2_en=and his M.S. and Ph.D. in Industrial Engineering from the University of Wisconsin-Madison.
-
-about3_zh=2020~2025連續6年，史丹佛大學評選全球前2%頂尖科學家。
-about3_en=Named among the world's top 2% scientists by Stanford University for six consecutive years (2020-2025).
-
-about4_zh=2024 榮獲總統頒發全國師鐸獎
-about4_en=Recipient of the 2024 Presidential National Teaching Award, Taiwan
+about1=Prof. Luarn earned his B.S. in Industrial Engineering from Tunghai University,
+about2=and his M.S. and Ph.D. in Industrial Engineering from the University of Wisconsin-Madison.
+about3=Named among the world's top 2% scientists by Stanford University for six consecutive years (2020-2025).
+about4=Recipient of the 2024 Presidential National Teaching Award, Taiwan
 
 phone=886-2-2737-6754
 
-location_zh=台北市基隆路四段43號 台灣科技大學 T2-409
-location_en=T2-409, National Taiwan University of Science and Technology, No. 43, Sec. 4, Keelung Rd., Taipei, Taiwan
+location=T2-409, National Taiwan University of Science and Technology, No. 43, Sec. 4, Keelung Rd., Taipei, Taiwan

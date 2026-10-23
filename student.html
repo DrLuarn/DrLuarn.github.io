@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學生作品集 | 2026 AI</title>
+    <title>Student Portfolio | 2026 AI</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -88,11 +88,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html#home">首頁</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#about">關於我</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#projects">我的專案</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#contact">聯絡我</a></li>
-                    <li class="nav-item"><a class="nav-link" href="https://forms.gle/t71zP572qqgvHotz9" target="_blank">交作業</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://forms.gle/t71zP572qqgvHotz9" target="_blank">Submit Assignment</a></li>
                 </ul>
             </div>
         </div>
@@ -102,9 +102,9 @@
     <section class="project-header">
         <div class="container">
             <a href="index.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i> 返回首頁
+                <i class="fas fa-arrow-left"></i> Back to Home
             </a>
-            <h1 class="project-title mt-3"><i class="fas fa-graduation-cap me-2"></i>學生作品集</h1>
+            <h1 class="project-title mt-3"><i class="fas fa-graduation-cap me-2"></i>Student Portfolio</h1>
             <p class="project-subtitle">Student Personal Website Portfolio — Summer 2026</p>
         </div>
     </section>
@@ -119,16 +119,16 @@
             </div>
 
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="搜尋學生姓名或學號 Search name or ID...">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search name or student ID...">
                 <i class="fas fa-search search-icon"></i>
             </div>
 
             <div class="refresh-bar">
                 <button class="refresh-btn" id="refreshBtn" onclick="fetchFromGoogleSheet()">
-                    <i class="fas fa-sync-alt"></i> 從 Google Sheet 重新載入
+                    <i class="fas fa-sync-alt"></i> Reload from Google Sheet
                 </button>
                 <a class="refresh-btn upload-btn" href="https://forms.gle/t71zP572qqgvHotz9" target="_blank">
-                    <i class="fas fa-upload"></i> 上傳我的學號與個人網址
+                    <i class="fas fa-upload"></i> Submit My Student ID &amp; Website URL
                 </a>
                 <div class="refresh-status" id="refreshStatus"></div>
             </div>
@@ -137,8 +137,8 @@
 
             <div class="no-results" id="noResults" style="display: none;">
                 <i class="fas fa-search"></i>
-                <h3>找不到符合條件的學生</h3>
-                <p>請嘗試不同的搜尋關鍵字</p>
+                <h3>No matching students found</h3>
+                <p>Please try a different search term</p>
             </div>
         </div>
     </section>
@@ -163,7 +163,7 @@
 
             btn.classList.add('loading');
             status.className = 'refresh-status';
-            status.textContent = '⏳ 排除重複並從 Google Sheet 讀取資料...';
+            status.textContent = '⏳ Loading data from Google Sheet and removing duplicates...';
 
             const oldScript = document.getElementById('gsheet-jsonp');
             if (oldScript) oldScript.remove();
@@ -198,13 +198,13 @@
                     renderStudents(students);
                     animateCards();
 
-                    const now = new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+                    const now = new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
                     status.className = 'refresh-status success';
-                    status.textContent = '✅ 成功載入 ' + students.length + ' 筆資料（已排除重複，時間：' + now + '）';
+                    status.textContent = '✅ Loaded ' + students.length + ' records (duplicates removed, at ' + now + ')';
                 } catch (err) {
                     console.error(err);
                     status.className = 'refresh-status error';
-                    status.textContent = '❌ 解析資料失敗：' + err.message;
+                    status.textContent = '❌ Failed to parse data: ' + err.message;
                 } finally {
                     btn.classList.remove('loading');
                 }
@@ -218,7 +218,7 @@
 
             script.onerror = function() {
                 status.className = 'refresh-status error';
-                status.textContent = '❌ 無法連線到 Google Sheets，請檢查網路連線或分享權限';
+                status.textContent = '❌ Could not connect to Google Sheets. Please check your network connection or sharing permissions.';
                 btn.classList.remove('loading');
             };
 
@@ -237,7 +237,7 @@
                         + '<img src="' + s.photo + '" alt="' + s.name + '" class="student-photo"'
                         + ' onerror="this.onerror=null; this.src=\'' + FALLBACK_PHOTO + '\';">'
                         + '<div class="student-name">' + s.name + '</div>'
-                        + '<div class="student-program">學號: ' + s.studentId + '</div>'
+                        + '<div class="student-program">ID: ' + s.studentId + '</div>'
                         + '<a href="' + s.website + '" target="_blank" class="website-link">'
                         + '<i class="fas fa-globe"></i> Visit Website</a>'
                         + '</div>';
