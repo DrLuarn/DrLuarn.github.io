@@ -208,7 +208,7 @@
                     </select>
 
                     <div class="button-group">
-                        <button id="startButton" class="start" onclick="startCamera()">▶ Start Camera</button>
+                        <button id="startButton" class="start" onclick="startCamera()" disabled>▶ Start Camera</button>
                         <button id="stopButton" class="stop" onclick="stopCamera()" disabled>⏹ Stop Camera</button>
                     </div>
                 </div>
@@ -579,10 +579,27 @@
             document.body.appendChild(troubleshooting);
         }
 
-        // Initialize on page load
+        // Pre-load the MediaPipe model as soon as the page opens, instead of
+        // waiting for the user to click "Start Camera". initialize() downloads
+        // and compiles the WASM/model assets; send() would otherwise do this
+        // lazily on the very first video frame, which is what made the first
+        // "Start Camera" click feel slow.
         window.addEventListener('load', () => {
-            statusDiv.textContent = '✓ Ready. Click "Start Camera" to begin.';
-            statusDiv.className = 'status ready';
+            statusDiv.textContent = '⏳ Loading MediaPipe model...';
+            statusDiv.className = 'status loading';
+
+            faceMesh.initialize()
+                .then(() => {
+                    statusDiv.textContent = '✓ Model loaded. Click "Start Camera" to begin.';
+                    statusDiv.className = 'status ready';
+                    startButton.disabled = false;
+                })
+                .catch((error) => {
+                    console.warn('Model pre-load failed, will load on first camera frame instead:', error);
+                    statusDiv.textContent = '✓ Ready. Click "Start Camera" to begin.';
+                    statusDiv.className = 'status ready';
+                    startButton.disabled = false;
+                });
         });
     </script>
 </body>
