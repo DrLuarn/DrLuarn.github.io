@@ -51,6 +51,40 @@ Submit your student ID and your new site's URL
 **Student Portfolio** button on the home page (or directly from
 `student.html`), so you show up in the class directory.
 
+## 5. Getting a fix Prof. Luarn makes later
+
+Occasionally Prof. Luarn will update one of the **shared** files in the
+course site — `index.html`, `style.css`, `unit.html`, or `student.html`. If
+you already created your site before such an update, it won't reach you
+automatically. Since these files never contain your personal content (that
+all lives in `profile.txt`, `mypic.jpg`, `pic/`, `URL/`, and `p1/`, which
+you'll keep either way), it's always safe to just replace them with the
+latest version.
+
+**Easiest way — no git needed, directly on GitHub.com:**
+
+1. Open the file on the instructor's repo, e.g.
+   <https://github.com/DrLuarn/DrLuarn.github.io/blob/main/index.html>.
+2. Click the **Raw** button, select all the text, and copy it.
+3. Open the same file in **your own** repo on GitHub, click the pencil
+   (✏️ Edit) icon.
+4. Select all the existing content, paste in what you copied, and click
+   **Commit changes**.
+5. Your GitHub Pages site updates automatically within a minute or two.
+
+**If you're comfortable with git/terminal**, this does the same thing for
+`index.html` in one step (run it inside your cloned repo folder):
+
+```bash
+curl -o index.html https://raw.githubusercontent.com/DrLuarn/DrLuarn.github.io/main/index.html
+git add index.html
+git commit -m "Update index.html from course template"
+git push
+```
+
+Swap `index.html` for `style.css`, `unit.html`, or `student.html` to update
+any of those the same way.
+
 ---
 
 Questions or stuck on a step? Ask in class or reach out to Prof. Luarn.
