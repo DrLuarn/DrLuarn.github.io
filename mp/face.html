@@ -4,173 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediaPipe Face Landmark Detection (468 Points)</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <style>
+        :root {
+            --navy-deep:  #3d2f52;
+            --navy-mid:   #574571;
+            --navy-soft:  #9a89b3;
+            --gold:       #f5c451;
+            --gold-light: #ffe29a;
+            --cream:      #fdf6e3;
+            --panel:      #f1e9ef;
+        }
+        * { box-sizing: border-box; }
         body {
             margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            padding: 90px 20px 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-soft) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
+
+        .topbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 24px;
+            background: rgba(61,47,82,0.92);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
-        
+        .topbar .brand { color: var(--gold); font-weight: 700; letter-spacing: 0.04em; font-size: 1.1rem; text-decoration: none; }
+        .topbar .back-link {
+            color: #f1ecdd; text-decoration: none; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.08); padding: 8px 18px; border-radius: 30px;
+            transition: all 0.25s ease;
+        }
+        .topbar .back-link:hover { background: var(--gold); color: var(--navy-deep); }
+
+        h1 {
+            color: var(--cream);
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.3);
+        }
+
         .main-content {
             display: flex;
             gap: 20px;
             align-items: flex-start;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
+            max-width: 1100px;
         }
-        
+
         .container {
             position: relative;
-            background: white;
+            background: #fffdf8;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 14px 35px rgba(0,0,0,0.3);
         }
-        
+
         #videoElement {
-            border-radius: 8px;
+            border-radius: 10px;
             transform: scaleX(-1); /* Mirror flip */
         }
-        
+
         #canvasElement {
             position: absolute;
             top: 20px;
             left: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             transform: scaleX(-1); /* Mirror flip */
         }
-        
+
         .side-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
             width: 300px;
         }
-        
+
         .info {
-            margin-top: 20px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 0;
+            padding: 18px;
+            background: #fffdf8;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
             max-width: 640px;
         }
-        
+        .info h3 { color: var(--navy-deep); margin-top: 0; }
+        .info summary { color: var(--navy-deep); }
+        .info p { color: #2c2733; }
+
         .status {
-            padding: 10px;
+            padding: 12px 14px;
             margin-bottom: 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            border-radius: 10px;
+            font-weight: 700;
         }
-        
-        .status.loading {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .status.ready {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
+
+        .status.loading { background: #fdf3d8; color: #8a6d1d; }
+        .status.ready   { background: #dff3e6; color: #1f6b3f; }
+        .status.error   { background: #fde0dd; color: #96271d; }
+
         .controls {
             margin-top: 15px;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
+
         button {
-            padding: 10px 20px;
+            padding: 11px 20px;
             border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--navy-mid), var(--navy-deep));
+            color: #fffdf8;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
             width: 100%;
+            box-shadow: 0 4px 15px rgba(61,47,82,0.3);
+            transition: all 0.25s ease;
         }
-        
-        button:hover {
-            background-color: #0056b3;
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(61,47,82,0.4);
         }
-        
+
         button:disabled {
-            background-color: #ccc;
+            background: #cbd1db;
+            color: #8c94a3;
             cursor: not-allowed;
+            box-shadow: none;
         }
-        
+
         .webcam-controls {
             margin-bottom: 15px;
             padding: 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
+            background: var(--panel);
+            border-radius: 12px;
         }
-        
+
         .webcam-controls label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
+            font-weight: 700;
+            color: var(--navy-deep);
         }
-        
+
         .webcam-controls select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 14px;
             margin-bottom: 10px;
         }
-        
+
         .button-group {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
-        button.start {
-            background-color: #28a745;
-        }
-        
-        button.start:hover {
-            background-color: #218838;
-        }
-        
-        button.stop {
-            background-color: #dc3545;
-        }
-        
-        button.stop:hover {
-            background-color: #c82333;
-        }
+
+        button.start { background: linear-gradient(135deg, #2e7d4f, #1f5c38); }
+        button.start:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(46,125,79,0.4); }
+
+        button.stop { background: linear-gradient(135deg, #c0392b, #8e2a1f); }
+        button.stop:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(192,57,43,0.4); }
     </style>
 </head>
 <body>
+    <div class="topbar">
+        <a class="brand" href="../index.html">2026 AI</a>
+        <a class="back-link" href="../perception_demo.html">&larr; Back to Demos</a>
+    </div>
+
     <h1>MediaPipe Face Landmark Detection</h1>
-    
+
     <div id="status" class="status loading">Initializing MediaPipe...</div>
-    
+
     <div class="main-content">
         <div class="container" id="videoContainer" style="display: none;">
             <video id="videoElement" width="640" height="480" autoplay></video>
             <canvas id="canvasElement" width="640" height="480"></canvas>
         </div>
-        
+
         <div class="side-panel">
             <div class="info">
                 <div class="webcam-controls">
@@ -179,28 +206,28 @@
                         <option value="tesselation">FACEMESH_TESSELATION</option>
                         <option value="contours">FACEMESH_CONTOURS</option>
                     </select>
-                    
+
                     <div class="button-group">
                         <button id="startButton" class="start" onclick="startCamera()">▶ Start Camera</button>
                         <button id="stopButton" class="stop" onclick="stopCamera()" disabled>⏹ Stop Camera</button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="info">
                 <h3>Detection Info</h3>
                 <p>Draw Mode: <span id="currentModel">FACEMESH_TESSELATION</span></p>
                 <p>Detected Faces: <span id="faceCount">0</span></p>
                 <p>Landmarks per Face: <span id="landmarkCount">468</span></p>
                 <p>FPS: <span id="fps">0</span></p>
-                
+
                 <div class="controls">
                     <button id="toggleButton" onclick="toggleDetection()" disabled>Pause Detection</button>
                     <button onclick="togglePoints()" disabled id="togglePointsButton">Hide Landmarks</button>
                     <button onclick="toggleBackground()" disabled id="toggleBgButton">Black Background</button>
                 </div>
             </div>
-            
+
             <div class="info">
                 <details style="margin-top: 0;">
                     <summary style="cursor: pointer; font-weight: bold;">About Draw Modes</summary>
@@ -237,7 +264,7 @@
         const videoContainer = document.getElementById('videoContainer');
         const modelSelect = document.getElementById('modelSelect');
         const currentModelSpan = document.getElementById('currentModel');
-        
+
         let isDetecting = true;
         let showPoints = true;
         let lastTime = Date.now();
@@ -268,11 +295,11 @@
         // Process Face Mesh results
         function onResults(results) {
             if (!isDetecting || !currentStream) return;
-            
+
             // Clear canvas
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            
+
             // Draw background - either video or black
             if (useBlackBackground) {
                 canvasCtx.fillStyle = '#000000';
@@ -280,17 +307,17 @@
             } else {
                 canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
             }
-            
+
             if (results.multiFaceLandmarks) {
                 // Update detected face count
                 faceCountSpan.textContent = results.multiFaceLandmarks.length;
-                
+
                 // Draw landmarks for each face
                 for (const landmarks of results.multiFaceLandmarks) {
                     if (showPoints) {
                         // Draw all 468 landmarks
                         drawLandmarks(landmarks);
-                        
+
                         if (drawMode === 'tesselation') {
                             // FACEMESH_TESSELATION mode - full mesh with all triangles
                             drawConnectors(landmarks, FACEMESH_TESSELATION, {color: '#C0C0C070', lineWidth: 1});
@@ -298,25 +325,25 @@
                             // FACEMESH_CONTOURS mode - only contours
                             // Draw face oval
                             drawConnectors(landmarks, FACEMESH_FACE_OVAL, {color: '#E0E0E0', lineWidth: 2});
-                            
+
                             // Draw lips
                             drawConnectors(landmarks, FACEMESH_LIPS, {color: '#E0E0E0', lineWidth: 2});
-                            
+
                             // Draw left eye
                             drawConnectors(landmarks, FACEMESH_LEFT_EYE, {color: '#FF3030', lineWidth: 2});
-                            
+
                             // Draw left eyebrow
                             drawConnectors(landmarks, FACEMESH_LEFT_EYEBROW, {color: '#FF3030', lineWidth: 2});
-                            
+
                             // Draw left iris
                             drawConnectors(landmarks, FACEMESH_LEFT_IRIS, {color: '#FF3030', lineWidth: 2});
-                            
+
                             // Draw right eye
                             drawConnectors(landmarks, FACEMESH_RIGHT_EYE, {color: '#30FF30', lineWidth: 2});
-                            
+
                             // Draw right eyebrow
                             drawConnectors(landmarks, FACEMESH_RIGHT_EYEBROW, {color: '#30FF30', lineWidth: 2});
-                            
+
                             // Draw right iris
                             drawConnectors(landmarks, FACEMESH_RIGHT_IRIS, {color: '#30FF30', lineWidth: 2});
                         }
@@ -325,7 +352,7 @@
             } else {
                 faceCountSpan.textContent = '0';
             }
-            
+
             canvasCtx.restore();
             updateFPS();
         }
@@ -346,7 +373,7 @@
             for (const landmark of landmarks) {
                 const x = landmark.x * canvasElement.width;
                 const y = landmark.y * canvasElement.height;
-                
+
                 canvasCtx.beginPath();
                 canvasCtx.arc(x, y, 1, 0, 2 * Math.PI);
                 canvasCtx.fillStyle = '#00FF00';
@@ -360,7 +387,7 @@
             for (const connection of connections) {
                 const start = landmarks[connection[0]];
                 const end = landmarks[connection[1]];
-                
+
                 ctx.beginPath();
                 ctx.moveTo(start.x * canvasElement.width, start.y * canvasElement.height);
                 ctx.lineTo(end.x * canvasElement.width, end.y * canvasElement.height);
@@ -373,7 +400,7 @@
         // Update draw mode
         function updateDrawMode() {
             drawMode = modelSelect.value;
-            
+
             if (drawMode === 'tesselation') {
                 currentModelSpan.textContent = 'FACEMESH_TESSELATION';
             } else {
@@ -403,7 +430,7 @@
 
                 currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                 videoElement.srcObject = currentStream;
-                
+
                 // Wait for video to load
                 await new Promise((resolve) => {
                     videoElement.onloadedmetadata = () => {
@@ -424,9 +451,9 @@
                     }
                     animationFrameId = requestAnimationFrame(processFrame);
                 };
-                
+
                 processFrame();
-                
+
                 // Update UI
                 statusDiv.textContent = '✓ Detection active';
                 statusDiv.className = 'status ready';
@@ -435,10 +462,10 @@
                 toggleButton.disabled = false;
                 togglePointsButton.disabled = false;
                 toggleBgButton.disabled = false;
-                
+
             } catch (error) {
                 console.error('Camera start failed:', error);
-                
+
                 let errorMessage = '✗ Error: ';
                 if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
                     errorMessage += 'Camera permission denied. Please allow camera access and try again.';
@@ -453,7 +480,7 @@
                 } else {
                     errorMessage += error.message || 'Cannot access camera';
                 }
-                
+
                 statusDiv.textContent = errorMessage;
                 statusDiv.className = 'status error';
                 showTroubleshootingInfo();
@@ -496,9 +523,9 @@
         // Toggle detection
         function toggleDetection() {
             if (!currentStream) return;
-            
+
             isDetecting = !isDetecting;
-            
+
             if (isDetecting) {
                 toggleButton.textContent = 'Pause Detection';
                 statusDiv.textContent = '✓ Detection active';
@@ -526,7 +553,7 @@
         function showTroubleshootingInfo() {
             // Check if already shown
             if (document.getElementById('troubleshooting')) return;
-            
+
             const troubleshooting = document.createElement('div');
             troubleshooting.id = 'troubleshooting';
             troubleshooting.className = 'info';

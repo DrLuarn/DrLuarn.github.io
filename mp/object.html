@@ -4,198 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Object Detection with COCO-SSD</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <style>
+        :root {
+            --navy-deep:  #3d2f52;
+            --navy-mid:   #574571;
+            --navy-soft:  #9a89b3;
+            --gold:       #f5c451;
+            --gold-light: #ffe29a;
+            --cream:      #fdf6e3;
+            --panel:      #f1e9ef;
+        }
+        * { box-sizing: border-box; }
         body {
             margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            padding: 90px 20px 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-soft) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
+
+        .topbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 24px;
+            background: rgba(61,47,82,0.92);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
-        
+        .topbar .brand { color: var(--gold); font-weight: 700; letter-spacing: 0.04em; font-size: 1.1rem; text-decoration: none; }
+        .topbar .back-link {
+            color: #f1ecdd; text-decoration: none; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.08); padding: 8px 18px; border-radius: 30px;
+            transition: all 0.25s ease;
+        }
+        .topbar .back-link:hover { background: var(--gold); color: var(--navy-deep); }
+
+        h1 {
+            color: var(--cream);
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.3);
+        }
+
         .main-content {
             display: flex;
             gap: 20px;
             align-items: flex-start;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
+            max-width: 1100px;
         }
-        
+
         .container {
             position: relative;
-            background: white;
+            background: #fffdf8;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 14px 35px rgba(0,0,0,0.3);
         }
-        
+
         #videoElement {
-            border-radius: 8px;
+            border-radius: 10px;
         }
-        
+
         #canvasElement {
             position: absolute;
             top: 20px;
             left: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
         }
-        
+
         .side-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
             width: 300px;
         }
-        
+
         .info {
             margin-top: 0;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 18px;
+            background: #fffdf8;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
         }
-        
+        .info h3 { color: var(--navy-deep); margin-top: 0; }
+        .info summary { color: var(--navy-deep); }
+        .info p { color: #2c2733; }
+
         .status {
-            padding: 10px;
+            padding: 12px 14px;
             margin-bottom: 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            border-radius: 10px;
+            font-weight: 700;
         }
-        
-        .status.loading {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .status.ready {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
+
+        .status.loading { background: #fdf3d8; color: #8a6d1d; }
+        .status.ready   { background: #dff3e6; color: #1f6b3f; }
+        .status.error   { background: #fde0dd; color: #96271d; }
+
         .controls {
             margin-top: 15px;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
+
         button {
-            padding: 10px 20px;
+            padding: 11px 20px;
             border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--navy-mid), var(--navy-deep));
+            color: #fffdf8;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
             width: 100%;
+            box-shadow: 0 4px 15px rgba(61,47,82,0.3);
+            transition: all 0.25s ease;
         }
-        
-        button:hover {
-            background-color: #0056b3;
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(61,47,82,0.4);
         }
-        
+
         button:disabled {
-            background-color: #ccc;
+            background: #cbd1db;
+            color: #8c94a3;
             cursor: not-allowed;
+            box-shadow: none;
         }
-        
+
         .webcam-controls {
             margin-bottom: 0;
             padding: 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
+            background: var(--panel);
+            border-radius: 12px;
         }
-        
+
         .button-group {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
-        button.start {
-            background-color: #28a745;
-        }
-        
-        button.start:hover {
-            background-color: #218838;
-        }
-        
-        button.stop {
-            background-color: #dc3545;
-        }
-        
-        button.stop:hover {
-            background-color: #c82333;
-        }
-        
+
+        button.start { background: linear-gradient(135deg, #2e7d4f, #1f5c38); }
+        button.start:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(46,125,79,0.4); }
+
+        button.stop { background: linear-gradient(135deg, #c0392b, #8e2a1f); }
+        button.stop:hover:not(:disabled) { box-shadow: 0 8px 20px rgba(192,57,43,0.4); }
+
         .detection-list {
             max-height: 300px;
             overflow-y: auto;
             margin-top: 10px;
         }
-        
+
         .detection-item {
-            padding: 8px;
+            padding: 8px 10px;
             margin: 5px 0;
-            background: #f8f9fa;
-            border-radius: 5px;
-            border-left: 4px solid #007bff;
+            background: var(--panel);
+            border-radius: 10px;
+            border-left: 4px solid var(--gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .detection-name {
             font-weight: bold;
             text-transform: capitalize;
+            color: var(--navy-deep);
         }
-        
+
         .detection-confidence {
-            background: #007bff;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 3px;
+            background: linear-gradient(135deg, var(--navy-mid), var(--navy-deep));
+            color: #fffdf8;
+            padding: 2px 10px;
+            border-radius: 12px;
             font-size: 12px;
+            font-weight: 600;
         }
-        
+
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #e9ecef;
+            background: var(--panel);
             border-radius: 4px;
             overflow: hidden;
             margin-top: 10px;
         }
-        
+
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #007bff, #0056b3);
+            background: linear-gradient(90deg, var(--gold), var(--navy-mid));
             width: 0%;
             transition: width 0.3s ease;
         }
-        
+
         .loading-details {
             font-size: 12px;
-            color: #666;
+            color: #8a6d1d;
             margin-top: 5px;
         }
     </style>
 </head>
 <body>
+    <div class="topbar">
+        <a class="brand" href="../index.html">2026 AI</a>
+        <a class="back-link" href="../perception_demo.html">&larr; Back to Demos</a>
+    </div>
+
     <h1>Object Detection with COCO-SSD</h1>
-    
+
     <div id="status" class="status loading">
         Initializing TensorFlow.js model...
         <div class="progress-bar">
@@ -203,13 +232,13 @@
         </div>
         <div class="loading-details" id="loadingDetails">Preparing environment...</div>
     </div>
-    
+
     <div class="main-content">
         <div class="container" id="videoContainer" style="display: none;">
             <video id="videoElement" width="640" height="480" autoplay></video>
             <canvas id="canvasElement" width="640" height="480"></canvas>
         </div>
-        
+
         <div class="side-panel">
             <div class="info">
                 <div class="webcam-controls">
@@ -219,25 +248,25 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="info">
                 <h3>Detection Info</h3>
                 <p>Detected Objects: <span id="objectCount">0</span></p>
                 <p>FPS: <span id="fps">0</span></p>
-                
+
                 <div class="controls">
                     <button id="toggleButton" onclick="toggleDetection()" disabled>Pause Detection</button>
                     <button onclick="toggleBoxes()" disabled id="toggleBoxesButton">Hide Boxes</button>
                 </div>
             </div>
-            
+
             <div class="info">
                 <h3>Detected Objects</h3>
                 <div class="detection-list" id="detectionList">
                     <p style="color: #999; text-align: center;">No objects detected</p>
                 </div>
             </div>
-            
+
             <div class="info">
                 <details style="margin-top: 0;">
                     <summary style="cursor: pointer; font-weight: bold;">About COCO-SSD</summary>
@@ -268,7 +297,7 @@
         const detectionListDiv = document.getElementById('detectionList');
         const progressFill = document.getElementById('progressFill');
         const loadingDetails = document.getElementById('loadingDetails');
-        
+
         let isDetecting = true;
         let showBoxes = true;
         let lastTime = Date.now();
@@ -283,19 +312,19 @@
                 // Simulate loading stages for better UX
                 updateLoadingProgress(0, 'Loading TensorFlow.js...');
                 await new Promise(resolve => setTimeout(resolve, 500));
-                
+
                 updateLoadingProgress(30, 'Initializing model architecture...');
                 await new Promise(resolve => setTimeout(resolve, 500));
-                
+
                 updateLoadingProgress(50, 'Downloading COCO-SSD weights...');
                 model = await cocoSsd.load();
-                
+
                 updateLoadingProgress(90, 'Finalizing setup...');
                 await new Promise(resolve => setTimeout(resolve, 300));
-                
+
                 updateLoadingProgress(100, 'Ready!');
                 await new Promise(resolve => setTimeout(resolve, 300));
-                
+
                 statusDiv.innerHTML = '✓ Ready. Click "Start Camera" to begin.';
                 statusDiv.className = 'status ready';
             } catch (error) {
@@ -304,7 +333,7 @@
                 statusDiv.className = 'status error';
             }
         }
-        
+
         function updateLoadingProgress(percentage, message) {
             if (progressFill) {
                 progressFill.style.width = percentage + '%';
@@ -317,25 +346,25 @@
         // Detect objects in video frame
         async function detectObjects() {
             if (!isDetecting || !currentStream || !model) return;
-            
+
             try {
                 // Clear canvas
                 canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-                
+
                 // Run detection
                 const predictions = await model.detect(videoElement);
-                
+
                 // Update object count
                 objectCountSpan.textContent = predictions.length;
-                
+
                 // Update detection list
                 updateDetectionList(predictions);
-                
+
                 // Draw bounding boxes if enabled
                 if (showBoxes) {
                     drawPredictions(predictions);
                 }
-                
+
                 updateFPS();
             } catch (error) {
                 console.error('Detection error:', error);
@@ -345,21 +374,21 @@
         // Draw predictions on canvas
         function drawPredictions(predictions) {
             canvasCtx.font = '16px Arial';
-            
+
             predictions.forEach(prediction => {
                 const [x, y, width, height] = prediction.bbox;
                 const text = `${prediction.class} (${Math.round(prediction.score * 100)}%)`;
-                
+
                 // Draw bounding box
                 canvasCtx.strokeStyle = '#00FF00';
                 canvasCtx.lineWidth = 3;
                 canvasCtx.strokeRect(x, y, width, height);
-                
+
                 // Draw label background
                 const textWidth = canvasCtx.measureText(text).width;
                 canvasCtx.fillStyle = '#00FF00';
                 canvasCtx.fillRect(x, y - 25, textWidth + 10, 25);
-                
+
                 // Draw label text
                 canvasCtx.fillStyle = '#000000';
                 canvasCtx.fillText(text, x + 5, y - 7);
@@ -372,10 +401,10 @@
                 detectionListDiv.innerHTML = '<p style="color: #999; text-align: center;">No objects detected</p>';
                 return;
             }
-            
+
             // Sort by confidence
             const sortedPredictions = [...predictions].sort((a, b) => b.score - a.score);
-            
+
             let html = '';
             sortedPredictions.forEach(pred => {
                 const confidence = Math.round(pred.score * 100);
@@ -386,7 +415,7 @@
                     </div>
                 `;
             });
-            
+
             detectionListDiv.innerHTML = html;
         }
 
@@ -427,7 +456,7 @@
 
                 currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                 videoElement.srcObject = currentStream;
-                
+
                 await new Promise((resolve) => {
                     videoElement.onloadedmetadata = () => {
                         resolve();
@@ -445,17 +474,17 @@
                     }
                     animationFrameId = requestAnimationFrame(detectFrame);
                 };
-                
+
                 detectFrame();
-                
+
                 startButton.disabled = true;
                 stopButton.disabled = false;
                 toggleButton.disabled = false;
                 toggleBoxesButton.disabled = false;
-                
+
             } catch (error) {
                 console.error('Camera start failed:', error);
-                
+
                 let errorMessage = '✗ Error: ';
                 if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
                     errorMessage += 'Camera permission denied. Please allow camera access and try again.';
@@ -470,7 +499,7 @@
                 } else {
                     errorMessage += error.message || 'Cannot access camera';
                 }
-                
+
                 statusDiv.textContent = errorMessage;
                 statusDiv.className = 'status error';
             }
@@ -506,9 +535,9 @@
         // Toggle detection
         function toggleDetection() {
             if (!currentStream) return;
-            
+
             isDetecting = !isDetecting;
-            
+
             if (isDetecting) {
                 toggleButton.textContent = 'Pause Detection';
                 statusDiv.textContent = '✓ Detection active';
