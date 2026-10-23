@@ -61,7 +61,17 @@ all lives in `profile.txt`, `mypic.jpg`, `pic/`, `URL/`, and `p1/`, which
 you'll keep either way), it's always safe to just replace them with the
 latest version.
 
-**Easiest way — no git needed, directly on GitHub.com:**
+**If Prof. Luarn sends you the updated file directly** (e.g. a new
+`index.html`), this is the simplest way to apply it — no git needed:
+
+1. Open your own repo on GitHub (`https://github.com/your-username/your-username.github.io`).
+2. Click **"Add file" → "Upload files"**.
+3. Drag in the file you were sent, keeping the **exact same filename**
+   (e.g. `index.html`). GitHub will overwrite the existing file with that name.
+4. Scroll down and click **"Commit changes"**.
+5. Your GitHub Pages site updates automatically within a minute or two.
+
+**If you'd rather grab the latest version yourself**, no git needed either:
 
 1. Open the file on the instructor's repo, e.g.
    <https://github.com/DrLuarn/DrLuarn.github.io/blob/main/index.html>.
