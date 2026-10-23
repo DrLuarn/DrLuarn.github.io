@@ -181,8 +181,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Project data (unit descriptions, static)
-        const projects = [
+        const totalUnits = 12;
+
+        // Fallback project descriptions (used if projects.txt cannot be fetched, e.g. opened via file://)
+        const defaultProjects = [
             {id: 1, description: 'Course introduction, setting up github.io'},
             {id: 2, description: 'Claude AI, Claude Cowork, Claude Code'},
             {id: 3, description: 'Creating & configuring Skills, Claude Skills applications'},
@@ -197,10 +199,31 @@
             {id: 12, description: 'Final project'}
         ];
 
+        let projects = defaultProjects;
+
+        async function loadProjectsTxt() {
+            try {
+                const res = await fetch('projects.txt', { cache: 'no-store' });
+                if (!res.ok) throw new Error('projects.txt not found');
+                const text = await res.text();
+                const parsed = parseProfileTxt(text);
+                const loaded = [];
+                for (let i = 1; i <= totalUnits; i++) {
+                    const description = parsed[`unit${i}`];
+                    if (description) loaded.push({id: i, description});
+                }
+                // Only use the loaded list if every unit was found; otherwise keep defaults
+                projects = (loaded.length === totalUnits) ? loaded : defaultProjects;
+            } catch (err) {
+                console.warn('Could not load projects.txt, using built-in defaults.', err);
+                projects = defaultProjects;
+            }
+        }
+
         // Fallback profile (used if profile.txt cannot be fetched, e.g. opened via file://)
         const defaultProfile = {
             name: 'Prof. Pin Luarn',
-            title1: 'Top 2% Scientist Worldwide (Stanford/Elsevier)',
+            title1: 'Top 2% Scientist Worldwide (2020-2026)',
             title2: '2024 National Teaching Award Laureate',
             expertise: 'E-Commerce, Internet Marketing, AI Applications',
             education: 'Ph.D. in Industrial Engineering, University of Wisconsin-Madison, USA',
@@ -208,7 +231,7 @@
             linkedin: 'https://pse.is/8nn88y',
             about1: 'Prof. Luarn earned his B.S. in Industrial Engineering from Tunghai University,',
             about2: 'and his M.S. and Ph.D. in Industrial Engineering from the University of Wisconsin-Madison.',
-            about3: "Named among the world's top 2% scientists by Stanford University for seven consecutive years (2020-2026).",
+            about3: "Named among the world's top 2% scientists by Stanford University & Elsevier for seven consecutive years (2020-2026).",
             about4: 'Recipient of the 2024 Presidential National Teaching Award, Taiwan',
             phone: '+886-2-2737-6754',
             location: 'T2-409, National Taiwan University of Science and Technology, No. 43, Sec. 4, Keelung Rd., Taipei, Taiwan'
@@ -247,7 +270,7 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', async function() {
-            await loadProfileTxt();
+            await Promise.all([loadProfileTxt(), loadProjectsTxt()]);
             applyProfileData();
             renderProjects();
             initScrollAnimations();
