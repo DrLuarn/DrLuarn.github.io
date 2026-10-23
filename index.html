@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Prof. Pin Luarn | 2026 AI Personal Site</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- chatbot temporarily disabled; uncomment to enable and confirm the filename is chatbot.js -->
+    <!-- <script src="chatbot.js"></script> -->
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">2026 AI</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home" data-i18n="nav.home"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about" data-i18n="nav.about"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects" data-i18n="nav.projects"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact" data-i18n="nav.contact"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="student.html" data-i18n="nav.students"></a>
+                    </li>
+                </ul>
+                <!-- Language switcher -->
+                <div class="lang-switch" role="group" aria-label="Language switch">
+                    <button type="button" class="lang-btn" data-lang="en" id="langBtnEn">EN</button>
+                    <span class="lang-sep">/</span>
+                    <button type="button" class="lang-btn" data-lang="zh" id="langBtnZh">中文</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content fade-in">
+                    <h1 id="name"></h1>
+                    <div class="titles-container">
+                        <p class="subtitle title-line" id="title1"></p>
+                        <p class="subtitle title-line" id="title2"></p>
+                    </div>
+                    <div class="mb-3">
+                        <strong data-i18n="label.expertise"></strong>
+                        <span id="expertise"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong data-i18n="label.education"></strong>
+                        <span id="education"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong data-i18n="label.email"></strong>
+                        <a href="" class="text-white" id="email"></a>
+                    </div>
+                    <div class="mb-3">
+                        <strong data-i18n="label.linkedin"></strong>
+                        <a href="" target="_blank" class="text-white" id="linkedin">
+                            <i class="fab fa-linkedin me-1"></i>
+                            <span id="linkedin-text"></span>
+                            <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="mb-4 student-links">
+                        <strong data-i18n="label.studentLinks"></strong>
+                        <div class="student-link-item">
+                            <a href="student.html">
+                                <span data-i18n="label.studentPortfolio"></span>
+                                <i class="fas fa-external-link-alt ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center fade-in">
+                    <img src="mypic.jpg" alt="profile photo" class="profile-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title" data-i18n="section.about"></h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card fade-in">
+                        <div class="card-body p-4">
+                            <p class="lead text-center" id="about-text">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title" data-i18n="section.projects"></h2>
+
+            <!-- Projects are rendered dynamically by JS -->
+            <div class="project-grid fade-in" id="projects-grid"></div>
+        </div>
+    </section>
+
+    <!-- Student Portfolio Section -->
+    <section id="portfolio" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title" data-i18n="section.portfolio"></h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="portfolio-cta fade-in">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h4 style="color: var(--navy-deep); font-weight: 700;" data-i18n="portfolio.title"></h4>
+                        <p class="text-muted mt-2" data-i18n="portfolio.desc"></p>
+                        <a href="student.html" class="btn-elegant">
+                            <i class="fas fa-arrow-right"></i> <span data-i18n="portfolio.cta"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title" data-i18n="section.contact"></h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="contact-info fade-in">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h5>Email</h5>
+                                <a id="contact-email1" href=""></a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h5 data-i18n="contact.phone"></h5>
+                                <p id="contact-phone"></p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h5 data-i18n="contact.location"></h5>
+                                <p id="contact-location"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Dr. Pin Luarn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ====== UI translations (static labels; not student-editable) ======
+        const translations = {
+            zh: {
+                'nav.home': '首頁', 'nav.about': '關於我', 'nav.projects': '我的專案',
+                'nav.contact': '聯絡我', 'nav.students': '學生作品集',
+                'label.expertise': '專長：', 'label.education': '學歷：',
+                'label.email': '聯絡信箱：', 'label.linkedin': 'LinkedIn：',
+                'label.studentLinks': '2026台科大學生作品連結：',
+                'label.studentPortfolio': '• 學生個人網頁作品集',
+                'section.about': '關於我', 'section.projects': '我的專案', 'section.portfolio': '學生作品集',
+                'section.contact': '聯絡我',
+                'portfolio.title': '2026 台科大學生個人網頁作品集',
+                'portfolio.desc': '點擊下方按鈕，瀏覽本學期所有班級同學的個人作品網站',
+                'portfolio.cta': '進入學生作品集',
+                'contact.phone': '電話', 'contact.location': '地點',
+                'project.hint': '點擊查看詳情'
+            },
+            en: {
+                'nav.home': 'Home', 'nav.about': 'About', 'nav.projects': 'Projects',
+                'nav.contact': 'Contact', 'nav.students': 'Student Portfolio',
+                'label.expertise': 'Expertise:', 'label.education': 'Education:',
+                'label.email': 'Email:', 'label.linkedin': 'LinkedIn:',
+                'label.studentLinks': '2026 NTUST Student Project Links:',
+                'label.studentPortfolio': '• Student Personal Website Portfolio',
+                'section.about': 'About Me', 'section.projects': 'My Projects', 'section.portfolio': 'Student Portfolio',
+                'section.contact': 'Contact',
+                'portfolio.title': '2026 NTUST Student Personal Website Portfolio',
+                'portfolio.desc': 'Click the button below to browse this semester\'s student project websites',
+                'portfolio.cta': 'View Student Portfolio',
+                'contact.phone': 'Phone', 'contact.location': 'Location',
+                'project.hint': 'Click for details'
+            }
+        };
+
+        // Project data (unit descriptions, static)
+        const projects = [
+            {id: 1, zh: '課程簡介、安裝github.io', en: 'Course introduction, setting up github.io'},
+            {id: 2, zh: 'Claude AI, Claude Cowork, Claude Code', en: 'Claude AI, Claude Cowork, Claude Code'},
+            {id: 3, zh: 'Skills 製作與設定、Claude Skills 應用', en: 'Creating & configuring Skills, Claude Skills applications'},
+            {id: 4, zh: 'OpenAI Codex', en: 'OpenAI Codex'},
+            {id: 5, zh: 'OpenAI 記憶、技能與外掛插件', en: 'OpenAI memory, skills, and plugins'},
+            {id: 6, zh: 'Google Gemini Skills', en: 'Google Gemini Skills'},
+            {id: 7, zh: 'GoogleFlow', en: 'GoogleFlow'},
+            {id: 8, zh: 'N8N 工作流自動化', en: 'N8N workflow automation'},
+            {id: 9, zh: 'N8N 工作流自動化進階', en: 'N8N workflow automation (advanced)'},
+            {id: 10, zh: '地端 Ollama, Cloudflare, Docker', en: 'Local Ollama, Cloudflare, Docker'},
+            {id: 11, zh: "所有的地端整合（含LINE、FB、What's App）", en: "Full local integration (LINE, Facebook, WhatsApp)"},
+            {id: 12, zh: '期末報告', en: 'Final project'}
+        ];
+
+        // Fallback profile (used if profile.txt cannot be fetched, e.g. opened via file://)
+        const defaultProfile = {
+            name_zh: 'Professor 欒斌', name_en: 'Prof. Pin Luarn',
+            title1_zh: '全球前 2% 頂尖科學家', title1_en: 'Top 2% Scientist Worldwide (Stanford Ranking)',
+            title2_zh: '2024 全國師鐸獎得主', title2_en: '2024 National Teaching Award Laureate',
+            expertise_zh: '電子商務、網路行銷、AI應用', expertise_en: 'E-Commerce, Internet Marketing, AI Applications',
+            education_zh: '美國威斯康辛大學麥迪遜校區工業工程博士', education_en: 'Ph.D. in Industrial Engineering, University of Wisconsin-Madison, USA',
+            email: 'luarn@mail.ntust.edu.tw', linkedin: 'https://pse.is/8nn88y',
+            about1_zh: '欒斌教授於東海大學取得工業工程學士學位，', about1_en: "Prof. Luarn earned his B.S. in Industrial Engineering from Tunghai University,",
+            about2_zh: '於美國威斯康辛大學麥迪遜分校取得工業工程碩士及博士學位。', about2_en: 'and his M.S. and Ph.D. in Industrial Engineering from the University of Wisconsin-Madison.',
+            about3_zh: '2020~2025連續6年，史丹佛大學評選全球前2%頂尖科學家。', about3_en: "Named among the world's top 2% scientists by Stanford University for six consecutive years (2020-2025).",
+            about4_zh: '2024 榮獲總統頒發全國師鐸獎', about4_en: 'Recipient of the 2024 Presidential National Teaching Award, Taiwan',
+            phone: '886-2-2737-6754',
+            location_zh: '台北市基隆路四段43號 台灣科技大學 T2-409',
+            location_en: 'T2-409, National Taiwan University of Science and Technology, No. 43, Sec. 4, Keelung Rd., Taipei, Taiwan'
+        };
+
+        let profileData = defaultProfile;
+        let currentLang = localStorage.getItem('siteLang') || 'en';
+
+        // Parse a simple "key=value" text file, ignoring blank lines and comments
+        function parseProfileTxt(text) {
+            const data = {};
+            text.split(/\r?\n/).forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed || trimmed.startsWith('#')) return;
+                const idx = trimmed.indexOf('=');
+                if (idx === -1) return;
+                const key = trimmed.slice(0, idx).trim();
+                const value = trimmed.slice(idx + 1).trim();
+                data[key] = value;
+            });
+            return data;
+        }
+
+        async function loadProfileTxt() {
+            try {
+                const res = await fetch('profile.txt', { cache: 'no-store' });
+                if (!res.ok) throw new Error('profile.txt not found');
+                const text = await res.text();
+                const parsed = parseProfileTxt(text);
+                // Merge over defaults so missing keys still fall back gracefully
+                profileData = Object.assign({}, defaultProfile, parsed);
+            } catch (err) {
+                console.warn('Could not load profile.txt, using built-in defaults.', err);
+                profileData = defaultProfile;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadProfileTxt();
+            applyLanguage(currentLang);
+            renderProjects();
+            initScrollAnimations();
+            initSmoothScrolling();
+            initLangSwitcher();
+        });
+
+        // Apply static UI translations for the current language
+        function applyUiTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key] !== undefined) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = (lang === 'zh') ? 'zh-TW' : 'en';
+            document.getElementById('pageTitle').textContent = (lang === 'zh')
+                ? '欒斌教授 | 2026 AI 個人網站'
+                : 'Prof. Pin Luarn | 2026 AI Personal Site';
+        }
+
+        // Fill in profile fields (name, titles, about text, contact info) for the current language
+        function applyProfileData(lang) {
+            const p = profileData;
+            document.getElementById('name').textContent = p[`name_${lang}`] || p.name_zh;
+            document.getElementById('title1').textContent = p[`title1_${lang}`] || p.title1_zh;
+            document.getElementById('title2').textContent = p[`title2_${lang}`] || p.title2_zh;
+            document.getElementById('expertise').textContent = p[`expertise_${lang}`] || p.expertise_zh;
+            document.getElementById('education').textContent = p[`education_${lang}`] || p.education_zh;
+
+            document.getElementById('email').textContent = p.email;
+            document.getElementById('email').href = `mailto:${p.email}`;
+            document.getElementById('linkedin').href = p.linkedin;
+            document.getElementById('linkedin-text').textContent = p.linkedin;
+
+            const aboutParts = [1, 2, 3, 4]
+                .map(n => p[`about${n}_${lang}`] || p[`about${n}_zh`])
+                .filter(text => text && text.trim());
+            document.getElementById('about-text').innerHTML = aboutParts.join(' ');
+
+            document.getElementById('contact-email1').textContent = p.email;
+            document.getElementById('contact-email1').href = `mailto:${p.email}`;
+            document.getElementById('contact-phone').textContent = p.phone;
+            document.getElementById('contact-location').textContent = p[`location_${lang}`] || p.location_zh;
+        }
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('siteLang', lang);
+            applyUiTranslations(lang);
+            applyProfileData(lang);
+            renderProjects();
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+        }
+
+        function initLangSwitcher() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+            });
+        }
+
+        // Render the project grid for the current language
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            const hint = translations[currentLang]['project.hint'];
+
+            grid.innerHTML = projects.map(project => {
+                const label = (currentLang === 'zh') ? '單元' : 'Unit';
+                return `
+                    <div class="project-card" onclick="openProject(${project.id})">
+                        <div class="project-number">${project.id}</div>
+                        <h5>${label} #${project.id}</h5>
+                        <p class="text-muted">${project[currentLang]}</p>
+                        <small class="text-primary">${hint}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open project details
+        function openProject(id) {
+            window.open(`unit.html?unit=${id}`, '_blank');
+        }
+
+        // Scroll-triggered fade-in animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Smooth scrolling for in-page navigation links
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        const headerOffset = 70;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255,255,255,0.98)';
+            } else {
+                navbar.style.background = 'rgba(255,255,255,0.95)';
+            }
+        });
+    </script>
+</body>
+</html>

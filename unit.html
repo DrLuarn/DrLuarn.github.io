@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>單元詳情 | 2026 AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* 清爽專業漸層背景 */
+        body {
+            background: linear-gradient(135deg, #3d2f52 0%, #574571 50%, #9a89b3 100%);
+            background-attachment: fixed;
+            color: #2d3748;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* 柔和光點背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(201, 162, 39, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 85% 80%, rgba(189, 195, 199, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 35%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 導航列 */
+        .navbar {
+            background: rgba(61, 47, 82, 0.9) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(202, 164, 164, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            color: #caa4a4 !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.95) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #caa4a4 !important;
+        }
+
+        /* Unit Navigation Styles */
+        .unit-nav-container {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .unit-nav-left {
+            left: 20px;
+        }
+
+        .unit-nav-right {
+            right: 20px;
+        }
+
+        .unit-nav-btn {
+            background: rgba(87, 69, 113, 0.9);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .unit-nav-btn:hover {
+            background: #caa4a4;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(201, 162, 39, 0.5);
+        }
+
+        .unit-nav-btn:disabled {
+            background: rgba(91, 101, 115, 0.5);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .unit-nav-btn:disabled:hover {
+            transform: none;
+            background: rgba(91, 101, 115, 0.5);
+        }
+
+        /* Unit Info Tooltip */
+        .unit-nav-tooltip {
+            position: absolute;
+            background: rgba(61, 47, 82, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1001;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .unit-nav-left .unit-nav-tooltip {
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .unit-nav-right .unit-nav-tooltip {
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .unit-nav-btn:hover .unit-nav-tooltip {
+            opacity: 1;
+        }
+
+        /* Unit Counter */
+        .unit-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(87, 69, 113, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        /* Keyboard Navigation Hint */
+        .keyboard-hint {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #3d2f52;
+            z-index: 999;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            opacity: 0;
+            animation: fadeInHint 0.5s ease 2s forwards;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInHint {
+            to { opacity: 1; }
+        }
+
+        .keyboard-hint .hint-close {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: #5b6573;
+            cursor: pointer;
+        }
+
+        /* Project Header */
+        .project-header {
+            background: transparent;
+            padding: 120px 0 40px;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-item {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .breadcrumb-item a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            color: #caa4a4;
+        }
+
+        .breadcrumb-item.active {
+            color: #caa4a4;
+        }
+
+        .project-title {
+            color: white !important;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-top: 1rem;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-subtitle {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: #caa4a4 !important;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(201, 162, 39, 0.4);
+        }
+
+        /* Image Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(201, 162, 39, 0.3);
+            border-color: #caa4a4;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .gallery-overlay {
+            padding: 1.5rem;
+        }
+
+        .gallery-overlay h5 {
+            color: #3d2f52;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-overlay p {
+            color: #574571;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #caa4a4;
+            font-weight: 600;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .demo-link:hover {
+            color: #3d2f52;
+            text-decoration: underline;
+        }
+
+        /* Badge 樣式 */
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .bg-primary {
+            background: linear-gradient(135deg, #574571 0%, #3d2f52 100%) !important;
+            color: white !important;
+        }
+
+        .bg-success {
+            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%) !important;
+            color: white !important;
+        }
+
+        .bg-warning {
+            background: linear-gradient(135deg, #e3c9c9 0%, #caa4a4 100%) !important;
+            color: white !important;
+        }
+
+        .bg-secondary {
+            background: linear-gradient(135deg, #bdc3c7 0%, #5b6573 100%) !important;
+            color: white !important;
+        }
+
+        /* Modal */
+        .modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .modal-title {
+            color: #3d2f52;
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .unit-nav-container {
+                position: fixed;
+                top: auto;
+                bottom: 100px;
+                transform: none;
+            }
+
+            .unit-nav-left {
+                left: 20px;
+            }
+
+            .unit-nav-right {
+                right: 20px;
+            }
+
+            .unit-nav-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+
+            .unit-nav-tooltip {
+                display: none;
+            }
+
+            .unit-counter {
+                bottom: 20px;
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+            .keyboard-hint {
+                display: none;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">2026 AI</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">首頁</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#about">關於我</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#projects">我的專案</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">聯絡我</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Unit Navigation - Left -->
+    <div class="unit-nav-container unit-nav-left">
+        <button class="unit-nav-btn" id="prevUnitBtn" onclick="navigateToUnit(currentUnit - 1)">
+            <i class="fas fa-chevron-left"></i>
+            <div class="unit-nav-tooltip" id="prevUnitTooltip">單元 1</div>
+        </button>
+    </div>
+
+    <!-- Unit Navigation - Right -->
+    <div class="unit-nav-container unit-nav-right">
+        <button class="unit-nav-btn" id="nextUnitBtn" onclick="navigateToUnit(currentUnit + 1)">
+            <i class="fas fa-chevron-right"></i>
+            <div class="unit-nav-tooltip" id="nextUnitTooltip">單元 3</div>
+        </button>
+    </div>
+
+    <!-- Unit Counter -->
+    <div class="unit-counter" id="unitCounter">
+        單元 1 / 12
+    </div>
+
+    <!-- Keyboard Navigation Hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        <button class="hint-close" onclick="closeHint()">&times;</button>
+        💡 使用 ← → 鍵快速切換單元
+    </div>
+
+    <!-- Project Header -->
+    <section class="project-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
+                <div>
+                    <nav aria-label="breadcrumb" class="mt-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="index.html">首頁</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="index.html#projects">專案</a>
+                            </li>
+                            <li class="breadcrumb-item active" id="breadcrumb-unit">單元</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="project-title" id="project-title">單元</h1>
+                    <p class="project-subtitle" id="project-subtitle">
+                        單元作業
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Image Gallery -->
+        <section class="content-section fade-in">
+            <h2 class="section-title">作業相簿</h2>
+            <div class="image-gallery">
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Images will be dynamically generated -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalTitle">專案圖片</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="專案圖片" class="img-fluid rounded mb-3">
+                    <p id="imageDescription" class="mt-2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentUnit = 1;
+        let images = [];
+        const totalUnits = 12;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get unit number from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            currentUnit = parseInt(urlParams.get('unit')) || 1;
+
+            // Validate unit number (1-12)
+            if (currentUnit < 1 || currentUnit > totalUnits) {
+                currentUnit = 1;
+            }
+
+            // Update page title and content
+            updatePageContent();
+
+            // Show a temporary loading state while we probe for images
+            const galleryGrid = document.getElementById('gallery-grid');
+            if (galleryGrid) {
+                galleryGrid.innerHTML = '<div class="text-center text-white py-5"><i class="fas fa-spinner fa-spin me-2"></i>偵測圖片中...</div>';
+            }
+
+            // Generate images for this unit (動態偵測有幾張圖), then render
+            generateImages().then(() => {
+                renderGallery();
+            });
+
+            // Update navigation
+            updateNavigation();
+
+            initScrollAnimations();
+            initKeyboardNavigation();
+        });
+
+        // Unit information with names and attributes
+        const unitInfo = {
+            1: { name: "課程簡介、安裝github.io", attributes: [] },
+            2: { name: "Claude AI, Claude Cowork, Claude Code", attributes: [] },
+            3: { name: "Skills 製作與設定、Claude Skills 應用", attributes: [] },
+            4: { name: "OpenAI Codex", attributes: [] },
+            5: { name: "OpenAI 記憶、技能與外掛插件", attributes: [] },
+            6: { name: "Google Gemini Skills", attributes: [] },
+            7: { name: "GoogleFlow", attributes: [] },
+            8: { name: "N8N 工作流自動化", attributes: [] },
+            9: { name: "N8N 工作流自動化進階", attributes: [] },
+            10: { name: "地端 Ollama, Cloudflare, Docker", attributes: [] },
+            11: { name: "所有的地端整合（含LINE、FB、What's App）", attributes: [] },
+            12: { name: "期末報告", attributes: [] }
+        };
+
+        // Navigate to specific unit
+        function navigateToUnit(unitNumber) {
+            if (unitNumber >= 1 && unitNumber <= totalUnits && unitNumber !== currentUnit) {
+                window.location.href = `unit.html?unit=${unitNumber}`;
+            }
+        }
+
+        // Update navigation buttons and tooltips
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevUnitBtn');
+            const nextBtn = document.getElementById('nextUnitBtn');
+            const prevTooltip = document.getElementById('prevUnitTooltip');
+            const nextTooltip = document.getElementById('nextUnitTooltip');
+            const unitCounter = document.getElementById('unitCounter');
+
+            // Update counter
+            unitCounter.textContent = `單元 ${currentUnit} / ${totalUnits}`;
+
+            // Update previous button
+            if (currentUnit > 1) {
+                prevBtn.disabled = false;
+                const prevUnit = unitInfo[currentUnit - 1];
+                prevTooltip.textContent = `單元 ${currentUnit - 1}: ${prevUnit.name}`;
+            } else {
+                prevBtn.disabled = true;
+                prevTooltip.textContent = '已經是第一個單元';
+            }
+
+            // Update next button
+            if (currentUnit < totalUnits) {
+                nextBtn.disabled = false;
+                const nextUnit = unitInfo[currentUnit + 1];
+                nextTooltip.textContent = `單元 ${currentUnit + 1}: ${nextUnit.name}`;
+            } else {
+                nextBtn.disabled = true;
+                nextTooltip.textContent = '已經是最後一個單元';
+            }
+        }
+
+        // Initialize keyboard navigation
+        function initKeyboardNavigation() {
+            document.addEventListener('keydown', function(e) {
+                // Ignore if user is typing in an input field
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        if (currentUnit > 1) {
+                            navigateToUnit(currentUnit - 1);
+                        }
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        if (currentUnit < totalUnits) {
+                            navigateToUnit(currentUnit + 1);
+                        }
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        navigateToUnit(1);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        navigateToUnit(totalUnits);
+                        break;
+                }
+            });
+        }
+
+        // Close keyboard hint
+        function closeHint() {
+            document.getElementById('keyboardHint').style.display = 'none';
+        }
+
+        // Update page content based on unit number
+        function updatePageContent() {
+            const unit = unitInfo[currentUnit];
+            const unitText = `單元 #${currentUnit}`;
+            const unitFullTitle = `${unitText}: ${unit.name}`;
+            const subtitleText = `單元 ${currentUnit} 作業`;
+            const titleText = `${unitFullTitle} - 專案詳情 | 2026 AI`;
+
+            // Update page title
+            document.title = titleText;
+
+            // Update breadcrumb
+            document.getElementById('breadcrumb-unit').textContent = unitFullTitle;
+
+            // Update project title
+            document.getElementById('project-title').textContent = unitFullTitle;
+
+            // Update project subtitle
+            document.getElementById('project-subtitle').textContent = subtitleText;
+        }
+
+        // Generate images array for current unit
+        // 檢查圖片是否存在
+        function checkImageExists(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = src;
+            });
+        }
+
+        // 讀取 URL{N}_{i}.txt（若存在）
+        // 第一行：取代圖片下方原本顯示的單元名稱
+        // 第二行（若有）：補充的 demo URL，會顯示在下一行並可點選
+        function loadImageNote(unitNum, index) {
+            return fetch(`URL/URL${unitNum}_${index}.txt`)
+                .then(response => {
+                    if (!response.ok) throw new Error("No note file.");
+                    return response.text();
+                })
+                .then(text => {
+                    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                    const note = {};
+                    if (lines[0]) note.caption = lines[0];
+                    if (lines[1]) note.demoUrl = lines[1];
+                    return note;
+                })
+                .catch(() => null);
+        }
+
+        // 依序偵測 pic/unit{N}_1.jpg, _2.jpg... 直到找不到為止
+        // 若完全沒有對應圖片，則改用 pic/no.jpg 顯示一張預設圖
+        async function generateImages() {
+            const unit = unitInfo[currentUnit];
+            images = [];
+
+            let i = 1;
+            const maxCheck = 30; // 安全上限，避免無止盡偵測
+            while (i <= maxCheck) {
+                const src = `pic/unit${currentUnit}_${i}.jpg`;
+                const exists = await checkImageExists(src);
+                if (!exists) break;
+
+                images.push({
+                    src: src,
+                    index: i,
+                    title: `${unit.name} - 圖片 ${i}`,
+                    description: `單元 #${currentUnit}: ${unit.name} 作業圖片 ${i}`,
+                    caption: unit.name,
+                    demoUrl: null
+                });
+                i++;
+            }
+
+            // 找不到任何對應圖片時，顯示預設圖
+            if (images.length === 0) {
+                images.push({
+                    src: 'pic/no.jpg',
+                    index: null,
+                    title: `${unit.name} - 尚無圖片`,
+                    description: `單元 #${currentUnit}: ${unit.name} 目前尚未上傳作業圖片`,
+                    caption: unit.name,
+                    demoUrl: null
+                });
+            }
+
+            // 針對每張實際存在的圖片，檢查是否有對應的 URL{N}_{i}.txt 說明檔
+            await Promise.all(images.map(async (image) => {
+                if (!image.index) return; // no.jpg 預設圖不檢查
+                const note = await loadImageNote(currentUnit, image.index);
+                if (note) {
+                    if (note.caption) image.caption = note.caption;
+                    if (note.demoUrl) image.demoUrl = note.demoUrl;
+                }
+            }));
+        }
+
+        // Render gallery based on current unit
+        function renderGallery() {
+            const galleryGrid = document.getElementById('gallery-grid');
+            const unit = unitInfo[currentUnit];
+
+            galleryGrid.innerHTML = images.map((image, index) => {
+                const fileName = image.src.split('/').pop().replace(/\.[^.]+$/, '');
+                const captionText = image.caption || unit.name;
+                const demoLinkHtml = image.demoUrl
+                    ? `<a href="${image.demoUrl}" target="_blank" rel="noopener" class="demo-link" onclick="event.stopPropagation()">
+                           <i class="fas fa-external-link-alt"></i> ${image.demoUrl}
+                       </a>`
+                    : '';
+
+                return `
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(${index})">
+                        <img src="${image.src}" alt="單元 ${currentUnit} - 圖片 ${index + 1}">
+                        <div class="gallery-overlay">
+                            <h5>${fileName}</h5>
+                            <p>${captionText}</p>
+                            ${demoLinkHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Show image in modal
+        function showImage(index) {
+            const image = images[index];
+            const modalImage = document.getElementById('modalImage');
+            const imageDescription = document.getElementById('imageDescription');
+
+            modalImage.src = image.src;
+            imageDescription.textContent = image.description;
+        }
+
+        // Scroll animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 70;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(61,47,82,0.98)';
+            } else {
+                navbar.style.background = 'rgba(61,47,82,0.9)';
+            }
+        });
+    </script>
+
+
+</body>
+</html>
