@@ -718,7 +718,7 @@
         // Check whether an image exists via a lightweight HEAD request (no image
         // body is downloaded, unlike probing with `new Image()`)
         function checkImageExists(src) {
-            return fetch(src, { method: 'HEAD' })
+            return fetch(src, { method: 'HEAD', cache: 'no-store' })
                 .then(res => res.ok)
                 .catch(() => false);
         }
@@ -742,7 +742,21 @@
                 .catch(() => null);
         }
 
-        // Probe pic/unit{N}_1.jpg, _2.jpg... in parallel (HEAD requests are cheap),
+        // Accepted file extensions for assignment images, checked in this order
+        const IMAGE_EXTENSIONS = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG'];
+
+        // Find pic/unit{N}_{i}.<ext> for whichever extension the student used
+        async function findImageForIndex(unitNum, i) {
+            const results = await Promise.all(
+                IMAGE_EXTENSIONS.map(ext => {
+                    const src = `pic/unit${unitNum}_${i}.${ext}`;
+                    return checkImageExists(src).then(exists => exists ? src : null);
+                })
+            );
+            return results.find(src => src !== null) || null;
+        }
+
+        // Probe pic/unit{N}_1.*, _2.*... in parallel (HEAD requests are cheap),
         // then keep the contiguous run starting at 1. This used to check images one
         // at a time, awaiting a full image download for each probe before starting
         // the next — slow, especially over a real network connection.
@@ -753,13 +767,12 @@
             const maxCheck = 12; // realistic upper bound on images per unit
             const checks = await Promise.all(
                 Array.from({ length: maxCheck }, (_, k) => k + 1).map(i =>
-                    checkImageExists(`pic/unit${currentUnit}_${i}.jpg`).then(exists => ({ i, exists }))
+                    findImageForIndex(currentUnit, i).then(src => ({ i, src }))
                 )
             );
 
-            for (const { i, exists } of checks) {
-                if (!exists) break; // stop at the first gap to preserve ordering
-                const src = `pic/unit${currentUnit}_${i}.jpg`;
+            for (const { i, src } of checks) {
+                if (!src) break; // stop at the first gap to preserve ordering
                 images.push({
                     src: src,
                     index: i,
