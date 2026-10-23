@@ -38,7 +38,7 @@ and serves two purposes:
 ├── profile.txt                Editable personal info for index.html
 ├── projects.txt                 The 12 unit titles, read from the instructor's site
 ├── mypic.jpg                      Profile photo shown on index.html
-├── favicon.ico                     Site icon (Pforzheim University mark)
+├── favicon.ico                     Site icon (Dr. Luarn's cartoon mascot)
 ├── perception_demo.html    Landing page for the four AI perception demos
 ├── mediapipeCC.html         Standalone MediaPipe hand/pose "info wall" demo
 ├── chatbot.js                Optional n8n-backed chat widget (currently disabled)
@@ -108,8 +108,7 @@ and serves two purposes:
 - **`mypic.jpg`** — The profile photo shown in the hero section of
   `index.html`. Replace with your own photo (same filename).
 
-- **`favicon.ico`** — The browser-tab icon, sourced from Pforzheim
-  University's own site.
+- **`favicon.ico`** — The browser-tab icon: Dr. Luarn's cartoon mascot avatar.
 
 - **`pic/`** — Screenshots/photos for each unit's assignment gallery, named
   `unit{N}_{i}.<ext>` (e.g. `unit1_1.jpg`, `unit1_2.png`). `unit.html` detects
