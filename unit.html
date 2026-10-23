@@ -578,9 +578,7 @@
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadUnitInfo();
-
+        document.addEventListener('DOMContentLoaded', function() {
             // Get unit number from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             currentUnit = parseInt(urlParams.get('unit')) || 1;
@@ -590,8 +588,11 @@
                 currentUnit = 1;
             }
 
-            // Update page title and content
+            // Render immediately with the built-in unit names so the page doesn't
+            // wait on the cross-origin projects.txt fetch; refresh in place once
+            // the instructor's latest names have loaded (see loadUnitInfo below).
             updatePageContent();
+            updateNavigation();
 
             // Show a temporary loading state while we probe for images
             const galleryGrid = document.getElementById('gallery-grid');
@@ -604,8 +605,12 @@
                 renderGallery();
             });
 
-            // Update navigation
-            updateNavigation();
+            // Fetch the live unit names in the background and re-render the title/
+            // breadcrumb/nav tooltips once available, without blocking initial paint
+            loadUnitInfo().then(() => {
+                updatePageContent();
+                updateNavigation();
+            });
 
             initScrollAnimations();
             initKeyboardNavigation();
@@ -710,14 +715,12 @@
         }
 
         // Generate images array for current unit
-        // Check whether an image exists
+        // Check whether an image exists via a lightweight HEAD request (no image
+        // body is downloaded, unlike probing with `new Image()`)
         function checkImageExists(src) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
-                img.src = src;
-            });
+            return fetch(src, { method: 'HEAD' })
+                .then(res => res.ok)
+                .catch(() => false);
         }
 
         // Read URL{N}_{i}.txt (if present)
@@ -739,19 +742,24 @@
                 .catch(() => null);
         }
 
-        // Sequentially probe pic/unit{N}_1.jpg, _2.jpg... until one is missing
-        // If no matching images exist at all, fall back to pic/no.jpg as a placeholder
+        // Probe pic/unit{N}_1.jpg, _2.jpg... in parallel (HEAD requests are cheap),
+        // then keep the contiguous run starting at 1. This used to check images one
+        // at a time, awaiting a full image download for each probe before starting
+        // the next — slow, especially over a real network connection.
         async function generateImages() {
             const unit = unitInfo[currentUnit];
             images = [];
 
-            let i = 1;
-            const maxCheck = 30; // safety cap to avoid probing indefinitely
-            while (i <= maxCheck) {
-                const src = `pic/unit${currentUnit}_${i}.jpg`;
-                const exists = await checkImageExists(src);
-                if (!exists) break;
+            const maxCheck = 12; // realistic upper bound on images per unit
+            const checks = await Promise.all(
+                Array.from({ length: maxCheck }, (_, k) => k + 1).map(i =>
+                    checkImageExists(`pic/unit${currentUnit}_${i}.jpg`).then(exists => ({ i, exists }))
+                )
+            );
 
+            for (const { i, exists } of checks) {
+                if (!exists) break; // stop at the first gap to preserve ordering
+                const src = `pic/unit${currentUnit}_${i}.jpg`;
                 images.push({
                     src: src,
                     index: i,
@@ -760,7 +768,6 @@
                     caption: unit.name,
                     demoUrl: null
                 });
-                i++;
             }
 
             // Fall back to a placeholder image when no matching images are found
