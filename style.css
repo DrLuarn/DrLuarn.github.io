@@ -106,19 +106,19 @@ a { text-decoration: none; }
 
 .title-line {
     position: relative;
-    padding-left: 1.6rem;
+    padding-left: 0;
     font-weight: 600;
-    color: var(--gold-light) !important;
+    color: #fdf6e3 !important;
     margin-bottom: 0.3rem !important;
     display: flex;
     align-items: center;
 }
 .title-line:before {
     content: "◆";
-    color: var(--gold);
-    font-size: 0.7em;
-    margin-right: 0.6rem;
-    text-shadow: 0 0 6px rgba(201,162,39,0.5);
+    color: #f5c451;
+    font-size: 0.8em;
+    margin-right: 0.5rem;
+    text-shadow: 0 0 8px rgba(245,196,81,0.6);
 }
 .title-line:last-child { margin-bottom: 0 !important; }
 
