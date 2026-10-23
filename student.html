@@ -76,6 +76,39 @@
         .website-link:hover { transform: scale(1.05); color: var(--gold-light); }
         .no-results { text-align: center; padding: 60px 20px; color: var(--ink-soft); }
         .no-results i { font-size: 4rem; color: var(--cream-deep); margin-bottom: 20px; }
+
+        /* Photo Gallery */
+        .gallery-subtitle { text-align: center; color: var(--ink-soft); margin-top: -1.5rem; margin-bottom: 2rem; }
+        .photo-gallery-container {
+            background: #fffdf8; border-radius: 15px; padding: 1.5rem;
+            box-shadow: 0 6px 20px var(--shadow-navy);
+        }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .photo-thumbnail {
+            width: 100%; height: 180px; border-radius: 12px; cursor: pointer;
+            background-size: cover; background-position: center; background-color: var(--cream-deep);
+            box-shadow: 0 4px 15px rgba(61,47,82,0.15); transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .photo-thumbnail:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(61,47,82,0.3); }
+        .photo-thumbnail::after {
+            content: '\f002'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.92); color: var(--navy-deep);
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .photo-thumbnail:hover::after { opacity: 1; }
+        .photo-number {
+            position: absolute; top: 8px; right: 8px;
+            background: rgba(61,47,82,0.75); color: #fffdf8;
+            padding: 4px 10px; border-radius: 14px; font-size: 11px; font-weight: 600;
+        }
+        .no-photos { text-align: center; padding: 40px 20px; color: var(--ink-soft); grid-column: 1 / -1; }
+        #photoModal .modal-content { border-radius: 15px; }
+        #photoModal .modal-header { background: var(--gradient-navy); color: #fffdf8; border-radius: 15px 15px 0 0; }
+        #photoModal .btn-close { filter: invert(1); }
     </style>
 </head>
 <body>
@@ -141,6 +174,40 @@
             </div>
         </div>
     </section>
+
+    <!-- Photo Gallery -->
+    <section class="section bg-light">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-camera me-2"></i>Photo Gallery</h2>
+            <p class="gallery-subtitle">Click a thumbnail to view the full-size photo</p>
+            <div class="photo-gallery-container">
+                <div class="photo-grid" id="photoGrid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Viewer Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalTitle">Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="photoModalImage" src="" alt="Photo" class="img-fluid rounded">
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" id="photoPrevBtn" onclick="showPhoto(currentPhotoIndex - 1)">
+                        <i class="fas fa-chevron-left"></i> Prev
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" id="photoNextBtn" onclick="showPhoto(currentPhotoIndex + 1)">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -277,7 +344,74 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('searchInput').addEventListener('input', filterStudents);
             fetchFromGoogleSheet();
+            loadPhotoGallery();
         });
+
+        /* ============ Photo Gallery ============ */
+        const PHOTO_FOLDER = 'p1/';
+        const PHOTO_EXTENSIONS = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG'];
+        const PHOTO_MAX_CHECK = 60; // upper bound to probe; gaps in numbering are fine
+
+        let galleryPhotos = []; // [{num, src}], populated after probing
+        let currentPhotoIndex = 0;
+
+        function checkFileExists(src) {
+            return fetch(src, { method: 'HEAD', cache: 'no-store' })
+                .then(res => res.ok)
+                .catch(() => false);
+        }
+
+        // Find p1/p{i}.<ext> for whichever extension was used, trying all of them in parallel
+        async function findPhotoForIndex(i) {
+            const results = await Promise.all(
+                PHOTO_EXTENSIONS.map(ext => {
+                    const src = `${PHOTO_FOLDER}p${i}.${ext}`;
+                    return checkFileExists(src).then(exists => exists ? src : null);
+                })
+            );
+            return results.find(src => src !== null) || null;
+        }
+
+        // Probe p1/p1.*, p1/p2.*, ... in parallel; unlike the unit gallery this one
+        // does not stop at the first gap, since class photos may not be numbered
+        // perfectly sequentially.
+        async function loadPhotoGallery() {
+            const checks = await Promise.all(
+                Array.from({ length: PHOTO_MAX_CHECK }, (_, k) => k + 1).map(i =>
+                    findPhotoForIndex(i).then(src => ({ i, src }))
+                )
+            );
+            galleryPhotos = checks.filter(c => c.src).map(c => ({ num: c.i, src: c.src }));
+            renderPhotoGrid();
+        }
+
+        function renderPhotoGrid() {
+            const grid = document.getElementById('photoGrid');
+            if (galleryPhotos.length === 0) {
+                grid.innerHTML = '<p class="no-photos">No photos yet.</p>';
+                return;
+            }
+            grid.innerHTML = galleryPhotos.map((photo, idx) => `
+                <div class="photo-thumbnail" style="background-image: url('${photo.src}')" onclick="openPhoto(${idx})">
+                    <div class="photo-number">${String(photo.num).padStart(2, '0')}</div>
+                </div>
+            `).join('');
+        }
+
+        function openPhoto(idx) {
+            showPhoto(idx);
+            new bootstrap.Modal(document.getElementById('photoModal')).show();
+        }
+
+        function showPhoto(idx) {
+            if (idx < 0 || idx >= galleryPhotos.length) return;
+            currentPhotoIndex = idx;
+            const photo = galleryPhotos[idx];
+            document.getElementById('photoModalImage').src = photo.src;
+            document.getElementById('photoModalTitle').textContent = `Photo ${photo.num}`;
+            document.getElementById('photoPrevBtn').disabled = (idx === 0);
+            document.getElementById('photoNextBtn').disabled = (idx === galleryPhotos.length - 1);
+        }
     </script>
 </body>
 </html>
