@@ -74,7 +74,7 @@
                         </a>
                     </div>
                     <div class="mb-4 student-links">
-                        <strong>2026 NTUST Student Project Links:</strong>
+                        <strong>2026 Pforzheim Student Project Links:</strong>
                         <div class="student-link-item">
                             <a href="student.html">
                                 <span>• Student Personal Website Portfolio</span>
@@ -125,7 +125,7 @@
                 <div class="col-lg-7">
                     <div class="portfolio-cta fade-in">
                         <i class="fas fa-graduation-cap"></i>
-                        <h4 style="color: var(--navy-deep); font-weight: 700;">2026 NTUST Student Personal Website Portfolio</h4>
+                        <h4 style="color: var(--navy-deep); font-weight: 700;">2026 Pforzheim Student Personal Website Portfolio</h4>
                         <p class="text-muted mt-2">Click the button below to browse this semester's student project websites</p>
                         <a href="student.html" class="btn-elegant">
                             <i class="fas fa-arrow-right"></i> <span>View Student Portfolio</span>
@@ -201,9 +201,14 @@
 
         let projects = defaultProjects;
 
+        // Always read projects.txt from the instructor's own site so every student
+        // fork (even hosted on a different github.io domain) shows the same, current
+        // unit list rather than whatever projects.txt happens to ship in their repo.
+        const PROJECTS_TXT_URL = 'https://drluarn.github.io/projects.txt';
+
         async function loadProjectsTxt() {
             try {
-                const res = await fetch('projects.txt', { cache: 'no-store' });
+                const res = await fetch(PROJECTS_TXT_URL, { cache: 'no-store' });
                 if (!res.ok) throw new Error('projects.txt not found');
                 const text = await res.text();
                 const parsed = parseProfileTxt(text);

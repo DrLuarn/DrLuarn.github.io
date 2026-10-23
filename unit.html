@@ -520,8 +520,67 @@
         let images = [];
         const totalUnits = 12;
 
+        // Always read projects.txt from the instructor's own site so every student
+        // fork (even hosted on a different github.io domain) shows the same, current
+        // unit list rather than whatever projects.txt happens to ship in their repo.
+        const PROJECTS_TXT_URL = 'https://drluarn.github.io/projects.txt';
+
+        // Fallback unit names (used if projects.txt cannot be fetched, e.g. opened via file://)
+        const defaultUnitInfo = {
+            1: { name: "Course introduction, setting up github.io", attributes: [] },
+            2: { name: "Claude AI, Claude Cowork, Claude Code", attributes: [] },
+            3: { name: "Creating & configuring Skills, Claude Skills applications", attributes: [] },
+            4: { name: "OpenAI Codex", attributes: [] },
+            5: { name: "OpenAI memory, skills, and plugins", attributes: [] },
+            6: { name: "Google Gemini Skills", attributes: [] },
+            7: { name: "GoogleFlow", attributes: [] },
+            8: { name: "N8N workflow automation", attributes: [] },
+            9: { name: "N8N workflow automation (advanced)", attributes: [] },
+            10: { name: "Local Ollama, Cloudflare, Docker", attributes: [] },
+            11: { name: "Full local integration (LINE, Facebook, WhatsApp)", attributes: [] },
+            12: { name: "Final project", attributes: [] }
+        };
+
+        let unitInfo = defaultUnitInfo;
+
+        // Parse a simple "key=value" text file, ignoring blank lines and comments
+        function parseKeyValueTxt(text) {
+            const data = {};
+            text.split(/\r?\n/).forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed || trimmed.startsWith('#')) return;
+                const idx = trimmed.indexOf('=');
+                if (idx === -1) return;
+                const key = trimmed.slice(0, idx).trim();
+                const value = trimmed.slice(idx + 1).trim();
+                data[key] = value;
+            });
+            return data;
+        }
+
+        async function loadUnitInfo() {
+            try {
+                const res = await fetch(PROJECTS_TXT_URL, { cache: 'no-store' });
+                if (!res.ok) throw new Error('projects.txt not found');
+                const text = await res.text();
+                const parsed = parseKeyValueTxt(text);
+                const loaded = {};
+                for (let i = 1; i <= totalUnits; i++) {
+                    const name = parsed[`unit${i}`];
+                    if (name) loaded[i] = { name, attributes: [] };
+                }
+                // Only use the loaded list if every unit was found; otherwise keep defaults
+                unitInfo = (Object.keys(loaded).length === totalUnits) ? loaded : defaultUnitInfo;
+            } catch (err) {
+                console.warn('Could not load projects.txt, using built-in defaults.', err);
+                unitInfo = defaultUnitInfo;
+            }
+        }
+
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadUnitInfo();
+
             // Get unit number from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             currentUnit = parseInt(urlParams.get('unit')) || 1;
@@ -551,22 +610,6 @@
             initScrollAnimations();
             initKeyboardNavigation();
         });
-
-        // Unit information with names and attributes
-        const unitInfo = {
-            1: { name: "Course introduction, setting up github.io", attributes: [] },
-            2: { name: "Claude AI, Claude Cowork, Claude Code", attributes: [] },
-            3: { name: "Creating & configuring Skills, Claude Skills applications", attributes: [] },
-            4: { name: "OpenAI Codex", attributes: [] },
-            5: { name: "OpenAI memory, skills, and plugins", attributes: [] },
-            6: { name: "Google Gemini Skills", attributes: [] },
-            7: { name: "GoogleFlow", attributes: [] },
-            8: { name: "N8N workflow automation", attributes: [] },
-            9: { name: "N8N workflow automation (advanced)", attributes: [] },
-            10: { name: "Local Ollama, Cloudflare, Docker", attributes: [] },
-            11: { name: "Full local integration (LINE, Facebook, WhatsApp)", attributes: [] },
-            12: { name: "Final project", attributes: [] }
-        };
 
         // Navigate to specific unit
         function navigateToUnit(unitNumber) {
