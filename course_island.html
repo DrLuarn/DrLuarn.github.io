@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pforzheim AI Course Islands by Prof Luarn</title>
+  <!-- Three.js and OrbitControls from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    /* =========================================================
+       CSS Custom Properties & Themes
+       ========================================================= */
+    :root {
+      --bg-gradient-top: #fce7f3;
+      --bg-gradient-mid: #ede9fe;
+      --bg-gradient-bottom: #e0f2fe;
+      --surface-glass: rgba(255, 255, 255, 0.88);
+      --surface-border: rgba(255, 255, 255, 0.85);
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --text-accent: #6366f1;
+      --accent-bg: #e0e7ff;
+      --card-shadow: 0 16px 36px rgba(99, 102, 241, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04);
+      --item-hover: rgba(99, 102, 241, 0.08);
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --panel-width: 440px;
+      --body-letter-spacing: 0px;
+      --body-font-size: 15px;
+    }
+
+    /* Low-Stimulation Mode */
+    body.low-stim {
+      --bg-gradient-top: #f5f5f4;
+      --bg-gradient-mid: #f5f5f4;
+      --bg-gradient-bottom: #e7e5e4;
+      --surface-glass: #ffffff;
+      --surface-border: #d6d3d1;
+      --text-main: #292524;
+      --text-muted: #57534e;
+      --text-accent: #44403c;
+      --accent-bg: #e7e5e4;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --item-hover: #f5f5f4;
+      --body-letter-spacing: 0.25px;
+      --body-font-size: 16px;
+      filter: saturate(0.65) brightness(0.98);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--bg-gradient-top) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-bottom) 100%);
+      color: var(--text-main);
+      font-size: var(--body-font-size);
+      letter-spacing: var(--body-letter-spacing);
+      transition: background 0.4s ease, filter 0.4s ease;
+    }
+
+    /* Accessibility Skip Link */
+    .skip-link {
+      position: absolute;
+      top: -60px;
+      left: 16px;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 1000;
+      transition: top 0.2s ease;
+      text-decoration: none;
+    }
+    .skip-link:focus {
+      top: 16px;
+      outline: 3px solid #6366f1;
+    }
+
+    #webgl-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: none;
+    }
+
+    /* Fallback Banner for WebGL failure */
+    #webgl-fallback {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--surface-glass);
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      max-width: 450px;
+      z-index: 50;
+    }
+
+    /* Top App Header */
+    header {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+      gap: 16px;
+    }
+
+    .brand-title {
+      background: var(--surface-glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--surface-border);
+      padding: 10px 20px;
+      border-radius: 999px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .main-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .prof-tag {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--accent-bg);
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      flex-wrap: wrap;
+    }
+
+    .control-pill {
+      background: var(--surface-glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--surface-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .control-pill:hover, .control-pill:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      outline: 2px solid var(--text-accent);
+    }
+
+    .control-pill.active {
+      background: var(--text-accent);
+      color: #ffffff;
+      border-color: var(--text-accent);
+    }
+    .control-pill.active .pill-icon {
+      filter: brightness(1.5);
+    }
+
+    /* Sound Control Group with Volume Slider */
+    .sound-group {
+      background: var(--surface-glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--surface-border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      box-shadow: var(--card-shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sound-group input[type="range"] {
+      width: 65px;
+      cursor: pointer;
+      accent-color: var(--text-accent);
+    }
+
+    /* Bottom How-to Hint & Island Navigation */
+    .bottom-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+      z-index: 10;
+      width: calc(100% - 40px);
+      max-width: 680px;
+    }
+
+    .usage-hint {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      pointer-events: auto;
+      text-align: center;
+    }
+
+    .island-nav {
+      background: var(--surface-glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--surface-border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      gap: 6px;
+      pointer-events: auto;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover, .nav-btn:focus-visible {
+      color: var(--text-main);
+      background: var(--item-hover);
+      outline: 2px solid var(--text-accent);
+    }
+
+    .nav-btn.active {
+      background: var(--text-accent);
+      color: #ffffff;
+    }
+
+    /* Island Detail Side Panel */
+    .island-panel {
+      position: absolute;
+      top: 80px;
+      right: 24px;
+      width: var(--panel-width);
+      max-width: calc(100vw - 48px);
+      max-height: calc(100vh - 120px);
+      background: var(--surface-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--surface-border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--card-shadow);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow-y: auto;
+      transform: translateX(calc(var(--panel-width) + 40px));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+
+    .island-panel.open {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .panel-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      background: var(--accent-bg);
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .icon-close-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .icon-close-btn:hover, .icon-close-btn:focus-visible {
+      background: #e2e8f0;
+      color: var(--text-main);
+      outline: 2px solid var(--text-accent);
+    }
+
+    .panel-intro {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Lesson List Accordion / Card */
+    .lesson-section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lesson-card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 12px;
+      padding: 10px 14px;
+      transition: background 0.2s;
+    }
+
+    body.low-stim .lesson-card {
+      background: #fafaf9;
+      border-color: #d6d3d1;
+    }
+
+    .lesson-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .lesson-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* Interactive Activity Box */
+    .activity-section {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid var(--accent-bg);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    body.low-stim .activity-section {
+      background: #fafaf9;
+      border-color: #d6d3d1;
+    }
+
+    .activity-header {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .activity-prompt {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .action-choice-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-choice-btn:hover, .action-choice-btn:focus-visible {
+      border-color: var(--text-accent);
+      background: var(--item-hover);
+      outline: none;
+    }
+
+    .action-choice-btn.selected {
+      border-color: var(--text-accent);
+      background: var(--accent-bg);
+      color: var(--text-accent);
+    }
+
+    .feedback-box {
+      font-size: 0.84rem;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-radius: 10px;
+      line-height: 1.45;
+      color: var(--text-main);
+      display: none;
+      border-left: 3px solid var(--text-accent);
+    }
+
+    .back-btn {
+      background: #f1f5f9;
+      border: none;
+      color: var(--text-main);
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover, .back-btn:focus-visible {
+      background: #e2e8f0;
+      outline: 2px solid var(--text-accent);
+    }
+
+    /* Text-Only Outline Modal (Accessibility) */
+    .outline-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      padding: 24px;
+      overflow-y: auto;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .outline-modal.open {
+      display: flex;
+    }
+
+    .outline-content {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 28px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Mobile Responsive Adjustments */
+    @media (max-width: 768px) {
+      header {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+      }
+      .brand-title {
+        padding: 8px 14px;
+      }
+      .main-title {
+        font-size: 0.98rem;
+      }
+      .prof-tag {
+        font-size: 0.75rem;
+      }
+      .island-panel {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 24px 24px 0 0;
+        max-height: 70vh;
+        transform: translateY(100%);
+      }
+      .island-panel.open {
+        transform: translateY(0);
+      }
+      .bottom-bar {
+        bottom: 12px;
+      }
+      .usage-hint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Accessibility Skip Links -->
+  <a href="#mainContent" class="skip-link" onclick="openOutlineModal()">Skip 3D View to Course Syllabus</a>
+
+  <!-- 3D WebGL Canvas -->
+  <canvas id="webgl-canvas" role="region" aria-label="Interactive 3D Course Islands for Pforzheim AI Course" tabindex="0"></canvas>
+
+  <!-- WebGL Fallback -->
+  <div id="webgl-fallback" role="alert">
+    <h3>WebGL Not Supported</h3>
+    <p style="margin-top:8px;font-size:0.9rem;color:#64748b;">
+      Your browser or hardware does not support WebGL. Please use our complete text-only course navigator below.
+    </p>
+    <button class="back-btn" style="margin-top:14px;width:100%;" onclick="openOutlineModal()">Open Text Syllabus</button>
+  </div>
+
+  <!-- Top App Header -->
+  <header>
+    <div class="brand-title">
+      <h1 class="main-title">Pforzheim AI Course Islands</h1>
+      <span class="prof-tag">by Prof Luarn</span>
+    </div>
+
+    <div class="top-controls">
+      <!-- Low-Stimulation Mode Toggle -->
+      <button id="lowStimBtn" class="control-pill" aria-pressed="false" title="Switch to low-stimulation mode (soft tones, no animations)">
+        <span class="pill-icon">🍃</span>
+        <span id="lowStimLabel">Low-stimulation mode</span>
+      </button>
+
+      <!-- Music Toggle & Volume -->
+      <div class="sound-group" title="Ambient background music controls">
+        <button id="bgmBtn" class="control-pill" style="border:none;box-shadow:none;padding:4px 8px;" aria-pressed="false">
+          <span id="bgmIcon">🔇</span>
+          <span id="bgmLabel">Music: Off</span>
+        </button>
+        <label for="volSlider" style="display:none;">Volume</label>
+        <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" title="Music Volume">
+      </div>
+
+      <!-- Text Syllabus Modal Button -->
+      <button class="control-pill" onclick="openOutlineModal()" title="View full text list of all units and lessons">
+        <span class="pill-icon">📋</span>
+        <span>Syllabus</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bottom Navigation & Hint -->
+  <div class="bottom-bar">
+    <div class="usage-hint" id="usageHint">
+      Drag to rotate, scroll to zoom, click an island to explore • Use Tab & Enter for keyboard nav
+    </div>
+
+    <nav class="island-nav" aria-label="Course Islands Quick Navigation">
+      <button class="nav-btn" data-index="0" onclick="selectIslandByIndex(0)" aria-label="Island A: Getting Started with Perceptual AI">Island A</button>
+      <button class="nav-btn" data-index="1" onclick="selectIslandByIndex(1)" aria-label="Island B: MediaPipe Vision Tasks">Island B</button>
+      <button class="nav-btn" data-index="2" onclick="selectIslandByIndex(2)" aria-label="Island C: Real-Time Models and Creative AI">Island C</button>
+      <button class="nav-btn" data-index="3" onclick="selectIslandByIndex(3)" aria-label="Island D: Gemini and Multimodal Workflows">Island D</button>
+      <button class="nav-btn" data-index="4" onclick="selectIslandByIndex(4)" aria-label="Island E: AI Agents">Island E</button>
+      <button class="nav-btn" data-index="5" onclick="selectIslandByIndex(5)" aria-label="Island F: The Next Wave of AI Tools">Island F</button>
+    </nav>
+  </div>
+
+  <!-- Island Content Side Panel -->
+  <aside id="islandPanel" class="island-panel" role="dialog" aria-modal="true" aria-labelledby="panelHeading">
+    <div class="panel-header">
+      <div>
+        <span id="panelPill" class="panel-pill">ISLAND A • UNIT 1</span>
+        <h2 id="panelHeading" class="panel-title">Getting Started with Perceptual AI</h2>
+      </div>
+      <button class="icon-close-btn" onclick="resetOverview()" aria-label="Close island details (Esc)">✕</button>
+    </div>
+
+    <p id="panelIntro" class="panel-intro">
+      Welcome to your perceptual AI journey at Pforzheim University! This unit provides an easy on-ramp from basic web setup to hands-on computer vision with Google tools.
+    </p>
+
+    <div>
+      <div class="lesson-section-title">Unit Curriculum</div>
+      <div id="lessonList" class="lesson-list">
+        <!-- Lessons injected dynamically -->
+      </div>
+    </div>
+
+    <div class="activity-section" id="activityBox">
+      <!-- Activity injected dynamically -->
+    </div>
+
+    <button class="back-btn" onclick="resetOverview()">← Back to Overview</button>
+  </aside>
+
+  <!-- Accessible Text-Only Syllabus Modal -->
+  <div id="outlineModal" class="outline-modal" role="dialog" aria-modal="true" aria-labelledby="outlineHeading">
+    <div class="outline-content" id="mainContent">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 id="outlineHeading" style="font-size:1.3rem;font-weight:800;">Pforzheim AI Course Syllabus</h2>
+        <button class="icon-close-btn" onclick="closeOutlineModal()" aria-label="Close outline modal">✕</button>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted);">
+        A complete text-accessible directory of all 6 course units by Prof Luarn.
+      </p>
+      <div id="syllabusContainer" style="display:flex;flex-direction:column;gap:16px;">
+        <!-- Injected via JS -->
+      </div>
+      <button class="back-btn" onclick="closeOutlineModal()">Close Syllabus</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. COURSE DATA (EXACT LESSON TITLES & TAILORED ACTIVITIES)
+       ========================================================= */
+    const COURSE_ISLANDS = [
+      {
+        id: 'A',
+        unitNumber: 1,
+        title: 'Getting Started with Perceptual AI',
+        pos: { x: -16, y: 1.2, z: 10 },
+        color: 0xffb5b0, // soft peach
+        landmark: 'cameraTower',
+        intro: 'Begin your perceptual AI journey at Pforzheim University. You will discover how computers perceive vision, set up your personal website, and train your very first recognition models without complicated math.',
+        lessons: [
+          { title: '1.1 Build your own personal web page and course introduction', desc: 'Create your digital portfolio and get oriented with our course syllabus, tools, and semester milestones.' },
+          { title: '1.2 Introduction to Google MediaPipe Tasks (perceptual AI)', desc: 'Explore lightweight on-device vision pipelines that bring real-time AI perception into the browser.' },
+          { title: '1.3 Train your own recognition model with Teachable Machine', desc: 'Capture webcam samples and train instant image and pose classifiers in an intuitive visual dashboard.' },
+          { title: '1.4 Image object recognition with Google Antigravity', desc: 'Run zero-setup object localization and boundary labeling on static photos and graphic assets.' },
+          { title: '1.5 Video object recognition with Google Antigravity', desc: 'Scale object recognition from still pictures to smooth real-time video stream feeds.' }
+        ],
+        activity: {
+          title: 'Matching Game: Match Tool to Task',
+          prompt: 'Match the best tool to this project scenario: "You need to quickly classify handwritten design sketches with 5 minutes of webcam training."',
+          options: [
+            { text: 'A. Teachable Machine', correct: true, feedback: 'Spot on! Teachable Machine is designed for rapid web-based training without code in minutes.' },
+            { text: 'B. MediaPipe C++ Source', correct: false, feedback: 'Too heavy for a 5-minute prototype. Teachable Machine is much faster for this task.' },
+            { text: 'C. Static HTML parser', correct: false, feedback: 'HTML parsers cannot train visual recognition models.' }
+          ]
+        }
+      },
+      {
+        id: 'B',
+        unitNumber: 2,
+        title: 'MediaPipe Vision Tasks',
+        pos: { x: 13, y: 2.0, z: 12 },
+        color: 0xa8e6cf, // soft mint
+        landmark: 'faceHill',
+        intro: 'Dive deep into real-time perceptual intelligence. Learn how computers track 468 facial points, full-body poses, hand gestures, and pixel-precise body contours with zero server lag.',
+        lessons: [
+          { title: '2.1 MediaPipe Face Landmark Detection', desc: 'Detect 468 3D facial coordinates to track expressions, eye gazes, and head orientations.' },
+          { title: '2.2 MediaPipe Video Face Landmark Detection', desc: 'Process live webcam video frames continuously with temporal smoothing and minimal jitter.' },
+          { title: '2.3 MediaPipe Pose Landmark Detection', desc: 'Track 33 full-body skeletal keypoints for sports form coaching, fitness apps, and ergonomics.' },
+          { title: '2.4 MediaPipe Gesture Recognition', desc: 'Recognize hand signs (thumbs up, victory, open palm) for touchless UI control.' },
+          { title: '2.5 MediaPipe Image Segmentation', desc: 'Separate foreground human subjects from background scenery for virtual background replacement.' },
+          { title: '2.6 MediaPipe Face Detection', desc: 'Fast, lightweight bounding-box face locator optimized for mobile devices and edge hardware.' }
+        ],
+        activity: {
+          title: 'Which Task Would You Use?',
+          prompt: 'Scenario: "A Pforzheim student wants to build a touchless presentation slide clicker using their webcam."',
+          options: [
+            { text: 'A. MediaPipe Gesture Recognition', correct: true, feedback: 'Correct! Hand gestures (like open palm or point) are the ideal touchless trigger.' },
+            { text: 'B. Image Segmentation', correct: false, feedback: 'Segmentation extracts silhouettes (e.g. background blur), not gesture commands.' },
+            { text: 'C. Teachable Audio Spectrogram', correct: false, feedback: 'Audio tracks sounds, but the scenario specifies webcam hand controls.' }
+          ]
+        }
+      },
+      {
+        id: 'C',
+        unitNumber: 3,
+        title: 'Real-Time Models and Creative AI',
+        pos: { x: 18, y: -0.8, z: -8 },
+        color: 0xc4d7f2, // soft sky blue
+        landmark: 'creativeStudio',
+        intro: 'Bridge computer vision with creative production. Explore real-time object detection with YOLO, artistic neural style transfer, and conversational AI integrations via Gemini API.',
+        lessons: [
+          { title: '3.1 Teachable Machine Real-Time Object Classifier', desc: 'Deploy an exported browser model for real-time inference on physical classroom objects.' },
+          { title: '3.2 YOLO', desc: 'Understand the You Only Look Once architecture for blazing-fast multi-object detection in crowded scenes.' },
+          { title: '3.3 Neural Style Transfer', desc: 'Synthesize artistic masterworks with modern photos by blending content and artistic style representations.' },
+          { title: '3.4 Simple Chat App Built with a Gemini API Key', desc: 'Connect a web interface to Google Gemini models to create interactive AI chat assistants.' }
+        ],
+        activity: {
+          title: 'Pipeline Order: Real-Time Detection',
+          prompt: 'What is the correct logical flow for a real-time YOLO or Teachable Machine vision pipeline?',
+          options: [
+            { text: 'A. Camera Input → Model Inference → Output Overlay', correct: true, feedback: 'Exactly right! Frames are captured, fed through the neural network, and bounding boxes are rendered.' },
+            { text: 'B. Output Overlay → Camera Input → Model Inference', correct: false, feedback: 'You cannot render bounding boxes before you acquire and process the video frame.' },
+            { text: 'C. Model Training → Output Overlay → Camera Input', correct: false, feedback: 'Inference runtime order requires live frame input before producing outputs.' }
+          ]
+        }
+      },
+      {
+        id: 'D',
+        unitNumber: 4,
+        title: 'Gemini and Multimodal Workflows',
+        pos: { x: 2, y: 2.2, z: -19 },
+        color: 0xffd3b6, // soft pastel apricot
+        landmark: 'geminiDiamond',
+        intro: 'Unleash multimodal reasoning across text, code, audio, and visual data. Learn how Gemini tools coordinate notebooks, interactive canvases, connectors, and scheduled background workers.',
+        lessons: [
+          { title: '4.1 Use a multimodal model to let Ollama recognize images', desc: 'Run open-weight multimodal vision models locally on your laptop using Ollama.' },
+          { title: '4.2 Gemini', desc: 'Master foundational multimodal prompting strategies and capabilities in modern LLMs.' },
+          { title: '4.3 Gemini Notebook', desc: 'Organize research references, analyze documents, and synthesize summaries in structured notes.' },
+          { title: '4.4 Gemini Canvas', desc: 'Collaborate visually on writing, code refactoring, and prototype ideation on an open workspace.' },
+          { title: '4.5 Gemini Skills', desc: 'Extend model capabilities with custom reusable instructions and specialized domain competencies.' },
+          { title: '4.6 Gemini Connectors', desc: 'Bridge Gemini to external services, workspace documents, APIs, and cloud databases.' },
+          { title: '4.7 Gemini Scheduled Tasks', desc: 'Automate periodic summaries, alert triggers, and recurring background intelligence workflows.' },
+          { title: '4.8 Gemini Multi-Agent Skills', desc: 'Orchestrate specialized sub-agents working together to resolve complex multidisciplinary tasks.' }
+        ],
+        activity: {
+          title: 'Design Your Own Helper',
+          prompt: 'Pick your student project goal to see which Gemini features to combine:',
+          customHelper: true
+        }
+      },
+      {
+        id: 'E',
+        unitNumber: 5,
+        title: 'AI Agents',
+        pos: { x: -17, y: 0.8, z: -11 },
+        color: 0xd8d3f8, // soft lavender
+        landmark: 'agentRobot',
+        intro: 'Move beyond simple question-and-answer prompts to autonomous agents. Understand tool use, code execution loops, coworker delegation, and multi-step problem solving.',
+        lessons: [
+          { title: '5.1 OpenAI Agent (Codex, Work)', desc: 'Examine autonomous code generation, sandbox execution, and iterative debugging agents.' },
+          { title: '5.2 Claude Agent (Code, Cowork)', desc: 'Explore agentic workflows for software architecture, file editing, and long-context collaboration.' },
+          { title: '5.3 OpenClaw', desc: 'Study open-source agentic frameworks that connect LLMs to computer actions and browsers.' },
+          { title: '5.4 Hermes Agent', desc: 'Investigate flexible open agent architectures optimized for specialized function calling.' }
+        ],
+        activity: {
+          title: 'Agent or Chatbot Sorting',
+          prompt: 'Scenario: "An AI reads your email, searches flight options via API, books the seat, and updates your calendar."',
+          options: [
+            { text: 'A. Autonomous AI Agent', correct: true, feedback: 'Correct! An agent perceives, reasons, calls external tools, and performs actions without manual intermediate prompts.' },
+            { text: 'B. Standard Chatbot', correct: false, feedback: 'Chatbots only respond with text; they do not autonomously plan and execute multi-tool actions.' },
+            { text: 'C. Static Spreadsheet', correct: false, feedback: 'Spreadsheets calculate cells, not autonomous agentic workflows.' }
+          ]
+        }
+      },
+      {
+        id: 'F',
+        unitNumber: 6,
+        title: 'The Next Wave of AI Tools',
+        pos: { x: 0, y: -2.0, z: 0 },
+        color: 0xfed2d9, // soft rose
+        landmark: 'futureBeacon',
+        intro: 'Peer into emerging industry tools shaping the future of design, engineering, and enterprise productivity. Evaluate new paradigms critically and prepare for your semester capstone.',
+        lessons: [
+          { title: '6.1 Meta Muse', desc: 'Explore in class: Emerging creative synthesis and multimodal ideation environment.' },
+          { title: '6.2 Manus Cue!', desc: 'Explore in class: Context-aware interactive automation and workflow accelerator.' },
+          { title: '6.3 Hark Pro', desc: 'Explore in class: Advanced voice and auditory intelligence processing suite.' },
+          { title: '6.4 OpenAI Dots', desc: 'Explore in class: Visual collaboration and conceptual intelligence mapping interface.' },
+          { title: '6.5 Claude Duet', desc: 'Explore in class: Pair-programming and co-creative reasoning companion.' },
+          { title: '6.6 Grok Bots', desc: 'Explore in class: Real-time query synthesis and conversational data exploration agents.' }
+        ],
+        activity: {
+          title: 'Tool Explorer Card Flip',
+          prompt: 'Select two tools to compare for your future semester project:',
+          toolExplorer: true
+        }
+      }
+    ];
+
+    /* =========================================================
+       2. THREE.JS 3D SCENE & CUTE LOW-POLY ISLANDS
+       ========================================================= */
+    const canvas = document.getElementById('webgl-canvas');
+    let renderer, scene, camera, controls;
+    let islandMeshes = [];
+    let isLowStim = false;
+    let selectedIsland = null;
+    let cameraAnim = null;
+
+    // Check WebGL availability
+    function initWebGL() {
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'default' });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      } catch (e) {
+        document.getElementById('webgl-fallback').style.display = 'block';
+        return false;
+      }
+
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0xf5f3f9, 0.014);
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 800);
+      camera.position.set(0, 32, 42);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.minDistance = 8;
+      controls.maxDistance = 75;
+      controls.maxPolarAngle = Math.PI / 2.15; // Don't go completely below horizon
+      controls.target.set(0, 0, 0);
+
+      // Soft Lighting for comfort
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xfff7ed, 0.65);
+      dirLight.position.set(24, 40, 24);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 512;
+      dirLight.shadow.mapSize.height = 512;
+      scene.add(dirLight);
+
+      const fillLight = new THREE.DirectionalLight(0xe0e7ff, 0.35);
+      fillLight.position.set(-20, 25, -20);
+      scene.add(fillLight);
+
+      buildCourseIslands();
+      buildBackgroundElements();
+
+      return true;
+    }
+
+    // Helper: Create Text Billboard Sprite for Island Title
+    function makeIslandSprite(name, labelText) {
+      const cvs = document.createElement('canvas');
+      cvs.width = 440;
+      cvs.height = 130;
+      const ctx = cvs.getContext('2d');
+
+      // Rounded background pill
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+      ctx.beginPath();
+      ctx.roundRect(14, 14, 412, 102, 32);
+      ctx.fill();
+
+      // Border outline
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.25)';
+      ctx.stroke();
+
+      // Island Name
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 36px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(name, 220, 56);
+
+      // Short Unit Subtitle
+      ctx.fillStyle = '#64748b';
+      ctx.font = '600 20px -apple-system, sans-serif';
+      const truncated = labelText.length > 25 ? labelText.slice(0, 23) + '...' : labelText;
+      ctx.fillText(truncated, 220, 94);
+
+      const texture = new THREE.CanvasTexture(cvs);
+      const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(spriteMat);
+      sprite.scale.set(5.5, 1.62, 1);
+      return sprite;
+    }
+
+    // Cute Landmark Builders
+    function createLandmarkMesh(type, colorHex) {
+      const g = new THREE.Group();
+      const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 });
+      const accentMat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.5 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.6 });
+
+      if (type === 'cameraTower') {
+        // Camera observatory tower
+        const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, 1.6, 8), whiteMat);
+        tower.position.y = 0.8;
+        const lensBox = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.5, 0.6), accentMat);
+        lensBox.position.set(0, 1.7, 0);
+        const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.3, 12), darkMat);
+        lens.rotation.x = Math.PI / 2;
+        lens.position.set(0, 1.7, 0.35);
+        g.add(tower, lensBox, lens);
+      } else if (type === 'faceHill') {
+        // Cute face-shaped hill / landmark
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.9, 12, 10), accentMat);
+        head.position.y = 1.0;
+        head.scale.set(1.1, 0.9, 1.1);
+        const eye1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), darkMat);
+        eye1.position.set(0.32, 1.1, 0.85);
+        const eye2 = eye1.clone();
+        eye2.position.set(-0.32, 1.1, 0.85);
+        const blush = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 8), new THREE.MeshStandardMaterial({ color: 0xf472b6 }));
+        blush.position.set(0.48, 0.9, 0.78);
+        const blush2 = blush.clone();
+        blush2.position.set(-0.48, 0.9, 0.78);
+        g.add(head, eye1, eye2, blush, blush2);
+      } else if (type === 'creativeStudio') {
+        // Creative studio hut / palette
+        const hut = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.9, 1.2), whiteMat);
+        hut.position.y = 0.45;
+        const roof = new THREE.Mesh(new THREE.ConeGeometry(1.0, 0.7, 4), accentMat);
+        roof.position.y = 1.25;
+        roof.rotation.y = Math.PI / 4;
+        const easel = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.5, 0.05), new THREE.MeshStandardMaterial({ color: 0xf87171 }));
+        easel.position.set(0.9, 0.5, 0.4);
+        g.add(hut, roof, easel);
+      } else if (type === 'geminiDiamond') {
+        // Floating Gemini twin crystal diamond
+        const dia1 = new THREE.Mesh(new THREE.OctahedronGeometry(0.7, 0), accentMat);
+        dia1.position.set(-0.35, 1.2, 0);
+        const dia2 = new THREE.Mesh(new THREE.OctahedronGeometry(0.55, 0), whiteMat);
+        dia2.position.set(0.35, 1.4, 0);
+        g.add(dia1, dia2);
+      } else if (type === 'agentRobot') {
+        // Cute agent robot with antennas
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.55, 0.9, 8), whiteMat);
+        body.position.y = 0.5;
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.45, 10, 8), accentMat);
+        head.position.y = 1.25;
+        const antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.4), darkMat);
+        antenna.position.set(0, 1.75, 0);
+        const antBall = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshStandardMaterial({ color: 0xfacc15 }));
+        antBall.position.set(0, 1.95, 0);
+        g.add(body, head, antenna, antBall);
+      } else {
+        // Future beacon observatory
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 0.6, 8), whiteMat);
+        base.position.y = 0.3;
+        const dome = new THREE.Mesh(new THREE.SphereGeometry(0.65, 12, 10, 0, Math.PI * 2, 0, Math.PI * 0.5), accentMat);
+        dome.position.y = 0.6;
+        const spire = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.9, 6), darkMat);
+        spire.position.y = 1.45;
+        g.add(base, dome, spire);
+      }
+      return g;
+    }
+
+    function buildCourseIslands() {
+      const islandRoot = new THREE.Group();
+      scene.add(islandRoot);
+
+      COURSE_ISLANDS.forEach((data, index) => {
+        const singleIsland = new THREE.Group();
+        singleIsland.position.set(data.pos.x, data.pos.y, data.pos.z);
+        singleIsland.userData = { index, data };
+
+        // Rounded Island Planet Hemisphere
+        const baseGeo = new THREE.SphereGeometry(3.5, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.52);
+        const baseMat = new THREE.MeshStandardMaterial({
+          color: data.color,
+          roughness: 0.65,
+          metalness: 0.02,
+          flatShading: true
+        });
+        const hemisphere = new THREE.Mesh(baseGeo, baseMat);
+        hemisphere.castShadow = true;
+        hemisphere.receiveShadow = true;
+        singleIsland.add(hemisphere);
+
+        // Lower bedrock cone
+        const coneGeo = new THREE.ConeGeometry(3.4, 3.0, 10);
+        const coneMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.8, flatShading: true });
+        const cone = new THREE.Mesh(coneGeo, coneMat);
+        cone.rotation.x = Math.PI;
+        cone.position.y = -0.1;
+        singleIsland.add(cone);
+
+        // Landmark
+        const landmark = createLandmarkMesh(data.landmark, data.color);
+        landmark.position.set(0, 0.4, 0);
+        singleIsland.add(landmark);
+
+        // Cute low-poly trees
+        const treeCount = 3 + (index % 3);
+        for (let t = 0; t < treeCount; t++) {
+          const angle = (t / treeCount) * Math.PI * 2 + (index * 0.8);
+          const dist = 1.4 + Math.sin(t) * 0.9;
+          const tx = Math.cos(angle) * dist;
+          const tz = Math.sin(angle) * dist;
+
+          const trunk = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.1, 0.14, 0.6, 5),
+            new THREE.MeshStandardMaterial({ color: 0xcdb4db, roughness: 0.9 })
+          );
+          trunk.position.set(tx, 0.3, tz);
+
+          const foliage = new THREE.Mesh(
+            new THREE.DodecahedronGeometry(0.55),
+            new THREE.MeshStandardMaterial({ color: 0x93c5fd, roughness: 0.5, flatShading: true })
+          );
+          foliage.position.set(tx, 0.9, tz);
+          singleIsland.add(trunk, foliage);
+        }
+
+        // Floating Title Sprite
+        const sprite = makeIslandSprite(`Island ${data.id}`, `Unit ${data.unitNumber}`);
+        sprite.position.set(0, 4.6, 0);
+        singleIsland.add(sprite);
+
+        // Soft halo ring (glow indicator on focus/hover)
+        const haloGeo = new THREE.RingGeometry(3.8, 4.3, 32);
+        const haloMat = new THREE.MeshBasicMaterial({
+          color: 0x6366f1,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0
+        });
+        const halo = new THREE.Mesh(haloGeo, haloMat);
+        halo.rotation.x = Math.PI / 2;
+        halo.position.y = 0.1;
+        singleIsland.add(halo);
+        singleIsland.userData.halo = halo;
+
+        // Invisible Raycast Hitbox
+        const hitbox = new THREE.Mesh(
+          new THREE.SphereGeometry(4.6, 10, 10),
+          new THREE.MeshBasicMaterial({ visible: false })
+        );
+        singleIsland.add(hitbox);
+
+        islandRoot.add(singleIsland);
+        islandMeshes.push(singleIsland);
+      });
+    }
+
+    let particleField, centerRing;
+    function buildBackgroundElements() {
+      // Gentle center orbital track
+      const ringGeo = new THREE.RingGeometry(18, 18.2, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0xcbd5e1, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
+      centerRing = new THREE.Mesh(ringGeo, ringMat);
+      centerRing.rotation.x = Math.PI / 2;
+      scene.add(centerRing);
+
+      // Ambient slow-drifting soft particles / star-clouds
+      const pCount = 50;
+      const pGeo = new THREE.BufferGeometry();
+      const pPos = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount * 3; i += 3) {
+        pPos[i] = (Math.random() - 0.5) * 80;
+        pPos[i + 1] = Math.random() * 30 - 5;
+        pPos[i + 2] = (Math.random() - 0.5) * 80;
+      }
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+      const pMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7, transparent: true, opacity: 0.4 });
+      particleField = new THREE.Points(pGeo, pMat);
+      scene.add(particleField);
+    }
+
+    /* =========================================================
+       3. AMBIENT WEB AUDIO SYNTHESIZER (NO EXTERNAL MP3)
+       ========================================================= */
+    let audioCtx = null;
+    let isBgmOn = false;
+    let bgmTimer = null;
+    let bgmMasterGain = null;
+
+    // Peaceful pentatonic frequencies (warm, cozy pads)
+    const PENTATONIC_CHORDS = [
+      [261.63, 329.63, 392.00, 523.25], // C maj
+      [220.00, 261.63, 329.63, 440.00], // A min
+      [174.61, 220.00, 261.63, 349.23], // F maj
+      [196.00, 246.94, 293.66, 392.00]  // G maj
+    ];
+    let chordStep = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        bgmMasterGain = audioCtx.createGain();
+        bgmMasterGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        bgmMasterGain.connect(audioCtx.destination);
+      }
+    }
+
+    function playCalmChord() {
+      if (!isBgmOn || !audioCtx || isLowStim) return;
+      const notes = PENTATONIC_CHORDS[chordStep];
+      chordStep = (chordStep + 1) % PENTATONIC_CHORDS.length;
+
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const noteGain = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(550, audioCtx.currentTime);
+
+        const startTime = audioCtx.currentTime + idx * 0.3;
+        const duration = 5.2;
+
+        noteGain.gain.setValueAtTime(0.0001, startTime);
+        noteGain.gain.linearRampToValueAtTime(0.04, startTime + 1.2);
+        noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+        osc.connect(filter);
+        filter.connect(noteGain);
+        noteGain.connect(bgmMasterGain);
+
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      });
+    }
+
+    const bgmBtn = document.getElementById('bgmBtn');
+    const bgmLabel = document.getElementById('bgmLabel');
+    const bgmIcon = document.getElementById('bgmIcon');
+    const volSlider = document.getElementById('volSlider');
+
+    function toggleMusic(forceState) {
+      initAudio();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isBgmOn = forceState !== undefined ? forceState : !isBgmOn;
+      sessionStorage.setItem('pforzheim_bgm_on', isBgmOn ? 'true' : 'false');
+
+      if (isBgmOn && !isLowStim) {
+        bgmBtn.setAttribute('aria-pressed', 'true');
+        bgmLabel.textContent = 'Music: On';
+        bgmIcon.textContent = '🎵';
+        playCalmChord();
+        if (bgmTimer) clearInterval(bgmTimer);
+        bgmTimer = setInterval(playCalmChord, 4600);
+      } else {
+        bgmBtn.setAttribute('aria-pressed', 'false');
+        bgmLabel.textContent = 'Music: Off';
+        bgmIcon.textContent = '🔇';
+        if (bgmTimer) clearInterval(bgmTimer);
+      }
+    }
+
+    bgmBtn.addEventListener('click', () => toggleMusic());
+    volSlider.addEventListener('input', (e) => {
+      initAudio();
+      const val = parseFloat(e.target.value);
+      bgmMasterGain.gain.setValueAtTime(val, audioCtx.currentTime);
+      sessionStorage.setItem('pforzheim_bgm_vol', val);
+    });
+
+    /* =========================================================
+       4. LOW-STIMULATION MODE & REDUCED MOTION PREFERENCES
+       ========================================================= */
+    const lowStimBtn = document.getElementById('lowStimBtn');
+    const lowStimLabel = document.getElementById('lowStimLabel');
+
+    function setLowStimulationMode(active) {
+      isLowStim = active;
+      document.body.classList.toggle('low-stim', active);
+      lowStimBtn.classList.toggle('active', active);
+      lowStimBtn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      lowStimLabel.textContent = active ? 'Low-stim: ON' : 'Low-stimulation mode';
+
+      if (active) {
+        // Stop music if running
+        if (isBgmOn) toggleMusic(false);
+        particleField.visible = false;
+        scene.fog.color.setHex(0xe7e5e4);
+      } else {
+        particleField.visible = true;
+        scene.fog.color.setHex(0xf5f3f9);
+      }
+    }
+
+    lowStimBtn.addEventListener('click', () => {
+      setLowStimulationMode(!isLowStim);
+    });
+
+    // Detect OS prefers-reduced-motion automatically
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motionQuery.matches) {
+      setLowStimulationMode(true);
+    }
+    motionQuery.addEventListener('change', (e) => {
+      if (e.matches) setLowStimulationMode(true);
+    });
+
+    /* =========================================================
+       5. SMOOTH CAMERA FLY-TO & INTERACTION HANDLERS
+       ========================================================= */
+    const OVERVIEW_CAM = { x: 0, y: 32, z: 42 };
+    const OVERVIEW_TARGET = { x: 0, y: 0, z: 0 };
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    function moveCamera(targetPos, lookAtPos, callback) {
+      if (isLowStim) {
+        // Instant / ultra-short transition for low-stim mode
+        camera.position.set(targetPos.x, targetPos.y, targetPos.z);
+        controls.target.set(lookAtPos.x, lookAtPos.y, lookAtPos.z);
+        if (callback) callback();
+        return;
+      }
+
+      const startPos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+      const startTarget = { x: controls.target.x, y: controls.target.y, z: controls.target.z };
+      const duration = 1100;
+      const startTime = performance.now();
+
+      function step() {
+        const now = performance.now();
+        const progress = Math.min((now - startTime) / duration, 1);
+        // Smooth Cubic Ease-Out
+        const ease = 1 - Math.pow(1 - progress, 3);
+
+        camera.position.x = startPos.x + (targetPos.x - startPos.x) * ease;
+        camera.position.y = startPos.y + (targetPos.y - startPos.y) * ease;
+        camera.position.z = startPos.z + (targetPos.z - startPos.z) * ease;
+
+        controls.target.x = startTarget.x + (lookAtPos.x - startTarget.x) * ease;
+        controls.target.y = startTarget.y + (lookAtPos.y - startTarget.y) * ease;
+        controls.target.z = startTarget.z + (lookAtPos.z - startTarget.z) * ease;
+
+        if (progress < 1) {
+          cameraAnim = requestAnimationFrame(step);
+        } else {
+          cameraAnim = null;
+          if (callback) callback();
+        }
+      }
+
+      if (cameraAnim) cancelAnimationFrame(cameraAnim);
+      cameraAnim = requestAnimationFrame(step);
+    }
+
+    function selectIslandByIndex(index) {
+      if (index < 0 || index >= COURSE_ISLANDS.length) return;
+      selectedIsland = index;
+
+      // Update Nav buttons
+      document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+
+      // Highlight island halo
+      islandMeshes.forEach((m, i) => {
+        if (m.userData.halo) {
+          m.userData.halo.material.opacity = (i === index) ? 0.8 : 0;
+        }
+      });
+
+      const island = COURSE_ISLANDS[index];
+      // Offset camera nicely to leave room for the side panel without obscuring island
+      const isMobile = window.innerWidth <= 768;
+      const camTarget = {
+        x: island.pos.x + (isMobile ? 0 : 7),
+        y: island.pos.y + (isMobile ? 8 : 6),
+        z: island.pos.z + (isMobile ? 14 : 11)
+      };
+      const lookTarget = {
+        x: island.pos.x,
+        y: island.pos.y + 1,
+        z: island.pos.z
+      };
+
+      moveCamera(camTarget, lookTarget, () => {
+        renderPanelContent(island);
+        const panel = document.getElementById('islandPanel');
+        panel.classList.add('open');
+        panel.focus();
+      });
+    }
+
+    function resetOverview() {
+      selectedIsland = null;
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      islandMeshes.forEach(m => {
+        if (m.userData.halo) m.userData.halo.material.opacity = 0;
+      });
+
+      document.getElementById('islandPanel').classList.remove('open');
+      moveCamera(OVERVIEW_CAM, OVERVIEW_TARGET);
+    }
+
+    // Canvas Click / Tap Raycaster
+    window.addEventListener('click', (event) => {
+      // Don't intercept if clicking UI panels or buttons
+      if (event.target.closest('header') || event.target.closest('.island-panel') || event.target.closest('.bottom-bar') || event.target.closest('.outline-modal')) {
+        return;
+      }
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(islandMeshes, true);
+      if (intersects.length > 0) {
+        let parentObj = intersects[0].object;
+        while (parentObj && (parentObj.userData.index === undefined)) {
+          parentObj = parentObj.parent;
+        }
+        if (parentObj && parentObj.userData.index !== undefined) {
+          selectIslandByIndex(parentObj.userData.index);
+        }
+      }
+    });
+
+    // Hover Highlight
+    window.addEventListener('mousemove', (event) => {
+      if (selectedIsland !== null) return;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(islandMeshes, true);
+      let hoveredIndex = -1;
+      if (intersects.length > 0) {
+        let p = intersects[0].object;
+        while (p && p.userData.index === undefined) p = p.parent;
+        if (p) hoveredIndex = p.userData.index;
+      }
+
+      islandMeshes.forEach((mesh, idx) => {
+        if (mesh.userData.halo) {
+          mesh.userData.halo.material.opacity = (idx === hoveredIndex) ? 0.5 : 0;
+        }
+      });
+      document.body.style.cursor = hoveredIndex !== -1 ? 'pointer' : 'default';
+    });
+
+    // Keyboard Support: Tab/Enter/Esc
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('outlineModal').classList.contains('open')) {
+          closeOutlineModal();
+        } else {
+          resetOverview();
+        }
+      }
+    });
+
+    /* =========================================================
+       6. ISLAND PANEL CONTENT & DYNAMIC MICRO-ACTIVITIES
+       ========================================================= */
+    function renderPanelContent(island) {
+      document.getElementById('panelPill').textContent = `ISLAND ${island.id} • UNIT ${island.unitNumber}`;
+      document.getElementById('panelHeading').textContent = island.title;
+      document.getElementById('panelIntro').textContent = island.intro;
+
+      // Render Lessons List
+      const lessonList = document.getElementById('lessonList');
+      lessonList.innerHTML = island.lessons.map(l => `
+        <div class="lesson-card">
+          <div class="lesson-title">${l.title}</div>
+          <div class="lesson-desc">${l.desc}</div>
+        </div>
+      `).join('');
+
+      // Render Activity
+      const actBox = document.getElementById('activityBox');
+      const act = island.activity;
+
+      if (act.customHelper) {
+        // Island D: Design Your Own Helper
+        actBox.innerHTML = `
+          <div class="activity-header">🛠️ ${act.title}</div>
+          <p class="activity-prompt">${act.prompt}</p>
+          <div style="display:flex;flex-direction:column;gap:6px;margin:6px 0;">
+            <label style="font-size:0.84rem;display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" id="featNotebook" checked> Gemini Notebook (Source grounding & notes)
+            </label>
+            <label style="font-size:0.84rem;display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" id="featCanvas" checked> Gemini Canvas (Visual prototyping & drafting)
+            </label>
+            <label style="font-size:0.84rem;display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" id="featSkills"> Gemini Skills (Specialized prompt templates)
+            </label>
+            <label style="font-size:0.84rem;display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" id="featConnectors"> Gemini Connectors (External API & file sync)
+            </label>
+            <label style="font-size:0.84rem;display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" id="featScheduled"> Scheduled Tasks (Recurring automated reminders)
+            </label>
+          </div>
+          <button class="action-choice-btn" style="text-align:center;" onclick="summarizeHelperStack()">
+            ✨ Assemble My Gemini Helper
+          </button>
+          <div id="helperSummary" class="feedback-box"></div>
+        `;
+      } else if (act.toolExplorer) {
+        // Island F: Tool Explorer Card Flip
+        actBox.innerHTML = `
+          <div class="activity-header">🔍 ${act.title}</div>
+          <p class="activity-prompt">${act.prompt}</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+            <button class="action-choice-btn" onclick="toggleToolCompare('Meta Muse', this)">Meta Muse</button>
+            <button class="action-choice-btn" onclick="toggleToolCompare('Manus Cue!', this)">Manus Cue!</button>
+            <button class="action-choice-btn" onclick="toggleToolCompare('Hark Pro', this)">Hark Pro</button>
+            <button class="action-choice-btn" onclick="toggleToolCompare('OpenAI Dots', this)">OpenAI Dots</button>
+            <button class="action-choice-btn" onclick="toggleToolCompare('Claude Duet', this)">Claude Duet</button>
+            <button class="action-choice-btn" onclick="toggleToolCompare('Grok Bots', this)">Grok Bots</button>
+          </div>
+          <div id="compareSummary" class="feedback-box"></div>
+        `;
+      } else {
+        // Standard Multiple-Choice Scenario
+        actBox.innerHTML = `
+          <div class="activity-header">💡 ${act.title}</div>
+          <p class="activity-prompt">${act.prompt}</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${act.options.map((opt, oIdx) => `
+              <button class="action-choice-btn" onclick="checkAnswer(${island.unitNumber}, ${oIdx}, this)">
+                ${opt.text}
+              </button>
+            `).join('')}
+          </div>
+          <div id="actFeedback" class="feedback-box"></div>
+        `;
+      }
+    }
+
+    // Activity Handlers
+    window.checkAnswer = function(unitNum, optIndex, btn) {
+      const island = COURSE_ISLANDS[unitNum - 1];
+      const opt = island.activity.options[optIndex];
+      const fb = document.getElementById('actFeedback');
+
+      btn.parentElement.querySelectorAll('.action-choice-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      fb.style.display = 'block';
+      fb.innerHTML = `<b>${opt.correct ? '🎉 Great choice!' : '💡 Keep exploring:'}</b> ${opt.feedback}`;
+    };
+
+    window.summarizeHelperStack = function() {
+      const picked = [];
+      if (document.getElementById('featNotebook').checked) picked.push('Gemini Notebook');
+      if (document.getElementById('featCanvas').checked) picked.push('Canvas');
+      if (document.getElementById('featSkills').checked) picked.push('Custom Skills');
+      if (document.getElementById('featConnectors').checked) picked.push('Connectors');
+      if (document.getElementById('featScheduled').checked) picked.push('Scheduled Tasks');
+
+      const box = document.getElementById('helperSummary');
+      box.style.display = 'block';
+      if (picked.length === 0) {
+        box.innerHTML = 'Please check at least one feature to construct your helper.';
+      } else {
+        box.innerHTML = `<b>Your Custom Assistant Stack:</b> Combining <b>${picked.join(', ')}</b> will deliver an end-to-end multimodal pipeline for your Pforzheim project!`;
+      }
+    };
+
+    let selectedTools = [];
+    window.toggleToolCompare = function(toolName, btn) {
+      if (selectedTools.includes(toolName)) {
+        selectedTools = selectedTools.filter(t => t !== toolName);
+        btn.classList.remove('selected');
+      } else {
+        if (selectedTools.length >= 2) {
+          alert('Please pick exactly two tools to compare.');
+          return;
+        }
+        selectedTools.push(toolName);
+        btn.classList.add('selected');
+      }
+
+      const box = document.getElementById('compareSummary');
+      if (selectedTools.length === 2) {
+        box.style.display = 'block';
+        box.innerHTML = `<b>Comparing: ${selectedTools[0]} vs ${selectedTools[1]}</b><br>
+          <i>"Explore in class: evaluate how their interaction models differ for your semester design workflow."</i>`;
+      } else {
+        box.style.display = 'none';
+      }
+    };
+
+    /* =========================================================
+       7. TEXT-ACCESSIBLE SYLLABUS DIRECTORY
+       ========================================================= */
+    function populateSyllabusModal() {
+      const container = document.getElementById('syllabusContainer');
+      container.innerHTML = COURSE_ISLANDS.map((isle, i) => `
+        <div style="border-bottom:1px solid #e2e8f0;padding-bottom:12px;">
+          <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-accent);">
+            Island ${isle.id}: Unit ${isle.unitNumber} - ${isle.title}
+          </h3>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin:4px 0 8px 0;">${isle.intro}</p>
+          <ul style="padding-left:18px;font-size:0.83rem;color:var(--text-main);line-height:1.5;">
+            ${isle.lessons.map(l => `<li><b>${l.title}</b>: ${l.desc}</li>`).join('')}
+          </ul>
+          <button class="action-choice-btn" style="margin-top:8px;padding:6px 12px;font-size:0.8rem;" onclick="closeOutlineModal();selectIslandByIndex(${i});">
+            🚀 Jump to 3D View of Island ${isle.id}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    window.openOutlineModal = function() {
+      populateSyllabusModal();
+      document.getElementById('outlineModal').classList.add('open');
+    };
+
+    window.closeOutlineModal = function() {
+      document.getElementById('outlineModal').classList.remove('open');
+    };
+
+    /* =========================================================
+       8. ANIMATION LOOP & RESIZE HANDLING
+       ========================================================= */
+    const clock = new THREE.Clock();
+
+    function renderLoop() {
+      requestAnimationFrame(renderLoop);
+      const elapsed = clock.getElapsedTime();
+
+      // Gentle floating bobbing (disabled in low-stimulation mode)
+      if (!isLowStim) {
+        islandMeshes.forEach((mesh, idx) => {
+          mesh.position.y = COURSE_ISLANDS[idx].pos.y + Math.sin(elapsed * 0.75 + idx * 1.1) * 0.35;
+        });
+        if (particleField) particleField.rotation.y = elapsed * 0.015;
+        if (centerRing) centerRing.rotation.z = elapsed * 0.03;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      if (!camera || !renderer) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Startup Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      const ok = initWebGL();
+      if (ok) {
+        renderLoop();
+      }
+
+      // Check stored audio settings
+      if (sessionStorage.getItem('pforzheim_bgm_on') === 'true') {
+        // Keep ready for user touch
+      }
+    });
+  </script>
+</body>
+</html>
