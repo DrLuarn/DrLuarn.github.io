@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraVision G1 — Smart Glasses for the German Market</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background-color: #f8fafc;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation Bar */
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+    }
+    .logo span {
+      color: #059669;
+    }
+    .nav-cta {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    .nav-cta:hover {
+      background-color: #1e293b;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background-color: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      font-size: 2.75rem;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #0f172a;
+      max-width: 850px;
+      margin: 0 auto 20px;
+      letter-spacing: -1px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #475569;
+      max-width: 720px;
+      margin: 0 auto 36px;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background-color: #059669;
+      color: #ffffff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      background-color: #047857;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: #ffffff;
+      color: #1e293b;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      transition: background-color 0.2s;
+    }
+    .btn-secondary:hover {
+      background-color: #f8fafc;
+    }
+
+    /* Key Specs Bar */
+    .specs-bar {
+      padding: 30px 0;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+    .spec-item h4 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .spec-item p {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Selling Points Section */
+    .features {
+      padding: 80px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-header h2 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .section-header p {
+      font-size: 1.1rem;
+      color: #64748b;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+    .feature-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 36px 32px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+    .feature-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background-color: #f0fdf4;
+      color: #16a34a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+    }
+    .feature-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .feature-card p {
+      color: #475569;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    /* Comparison Table Section */
+    .comparison {
+      padding: 60px 0 80px;
+      background-color: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 36px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: #f8fafc;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    tr.highlight {
+      background-color: #f0fdf4;
+      font-weight: 600;
+    }
+    tr.highlight td {
+      color: #065f46;
+      border-color: #bbf7d0;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 80px 0;
+      text-align: center;
+      background-color: #0f172a;
+      color: #ffffff;
+    }
+    .cta-box h2 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .cta-box p {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+    .cta-box .btn-primary {
+      padding: 16px 36px;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #090d16;
+      color: #64748b;
+      padding: 40px 0;
+      font-size: 0.88rem;
+      border-top: 1px solid #1e293b;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-note {
+      color: #94a3b8;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .specs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="container nav-inner">
+      <div class="logo">AuraVision <span>G1</span></div>
+      <a href="#preorder" class="nav-cta">Pre-Order</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="badge">GDPR Compliant &bull; 100% Camera-Free &bull; German Certified</div>
+        <h1>The Smart Glasses Built for the German Boardroom and Beyond</h1>
+        <p>Experience instant teleprompting, live translation, and subtle heads-up alerts on a featherweight titanium frame. No intrusive cameras, 100% GDPR compliant, and engineered for German professionals.</p>
+        <div class="hero-actions">
+          <a href="#preorder" class="btn-primary">Reserve Your Founder Edition — €549</a>
+          <a href="#features" class="btn-secondary">Explore Corporate Privacy Specs</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specs Bar -->
+    <section class="specs-bar">
+      <div class="container specs-grid">
+        <div class="spec-item">
+          <h4>38g</h4>
+          <p>Aerospace Titanium</p>
+        </div>
+        <div class="spec-item">
+          <h4>0 Cameras</h4>
+          <p>100% GDPR Compliant</p>
+        </div>
+        <div class="spec-item">
+          <h4>Micro-LED</h4>
+          <p>Invisible Waveguide HUD</p>
+        </div>
+        <div class="spec-item">
+          <h4>Fielmann / Apollo</h4>
+          <p>Native Prescription Ready</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Features Section -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-header">
+          <h2>Intelligence in Plain Sight. Zero Privacy Compromise.</h2>
+          <p>Engineered to resolve the fundamental friction holding smart eyewear back in Germany.</p>
+        </div>
+
+        <div class="feature-grid">
+          <!-- Card 1 -->
+          <div class="feature-card">
+            <div class="feature-icon">&check;</div>
+            <h3>100% Camera-Free & Works Council Compliant</h3>
+            <p>Unlike conventional smart glasses that record bystanders and trigger office bans, AuraVision G1 features zero optical cameras or audio eavesdropping. Fully compliant with German <em>Betriebsrat</em> workplace regulations and Section 201a privacy requirements. Wear it freely into client boardrooms and production floors.</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="feature-card">
+            <div class="feature-icon">&#9678;</div>
+            <h3>Invisible Micro-LED Optical Waveguide Display</h3>
+            <p>Powered by a dual-eye monochrome green waveguide display, your critical notes, teleprompter cues, and turn-by-turn navigation float discreetly at infinite focus. Only you can see the display—it remains entirely invisible to observers sitting directly across the table.</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feature-card">
+            <div class="feature-icon">&harr;</div>
+            <h3>Real-Time Multilingual Translation & Teleprompting</h3>
+            <p>Deliver high-stakes keynote presentations without ever looking down at cue cards. In cross-border negotiations, read live real-time German-to-English or French-to-German text translations floating seamlessly beside your conversation partner.</p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feature-card">
+            <div class="feature-icon">&oplus;</div>
+            <h3>Master Optician Prescription & Bauhaus Titanium</h3>
+            <p>Weighing just 38 grams, AuraVision G1 is forged from hypoallergenic aerospace titanium. Designed in the minimalist Bauhaus tradition, it blends indistinguishably into high-end executive eyewear and pairs seamlessly with custom prescription lenses from top German optical partners.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table Section -->
+    <section class="comparison">
+      <div class="container">
+        <div class="section-header">
+          <h2>How AuraVision G1 Compares</h2>
+          <p>Tailored specifically for European regulatory standards and executive workflow.</p>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature / Dimension</th>
+                <th>Ray-Ban Meta</th>
+                <th>AR Goggles (XREAL)</th>
+                <th>AuraVision G1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="highlight">
+                <td>German Privacy & Works Council</td>
+                <td>High friction (office bans)</td>
+                <td>Sensors present</td>
+                <td>100% Certified Compliant</td>
+              </tr>
+              <tr>
+                <td>Built-in Camera</td>
+                <td>Yes (12 MP, LED indicator)</td>
+                <td>Tracking sensors</td>
+                <td>None (Camera-Free)</td>
+              </tr>
+              <tr>
+                <td>Weight & Form Factor</td>
+                <td>~50g plastic frame</td>
+                <td>75g–90g bulky visor</td>
+                <td>38g Aerospace Titanium</td>
+              </tr>
+              <tr>
+                <td>Discreet Heads-Up Display</td>
+                <td>None (audio only)</td>
+                <td>Color Birdbath (cable tether)</td>
+                <td>Monochrome Waveguide HUD</td>
+              </tr>
+              <tr>
+                <td>Prescription Optical Integration</td>
+                <td>Third-party ordering</td>
+                <td>Clip-in insert</td>
+                <td>Certified Optician Partners</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pre-Order CTA Section -->
+    <section class="cta-section" id="preorder">
+      <div class="container cta-box">
+        <h2>Elevate Your Daily Focus with German Engineered Optical AI</h2>
+        <p>Backed by a 30-day corporate trial, German customer support, and full GDPR compliance documentation.</p>
+        <a href="#preorder" class="btn-primary">Pre-Order AuraVision G1 — €549</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="copyright">&copy; 2026 AuraVision Technologies GmbH. All rights reserved.</div>
+      <div class="footer-note">Demo prototype developed for venture team coordination demonstration.</div>
+    </div>
+  </footer>
+
+</body>
+</html>
