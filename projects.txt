@@ -6,15 +6,9 @@
 # project card for that unit number (1-12).
 # ============================================================
 
-unit1=Course introduction, setting up github.io
-unit2=Claude AI, Claude Cowork, Claude Code
-unit3=Creating & configuring Skills, Claude Skills applications
-unit4=OpenAI Codex
-unit5=OpenAI memory, skills, and plugins
-unit6=Google Gemini Skills
-unit7=GoogleFlow
-unit8=N8N workflow automation
-unit9=N8N workflow automation (advanced)
-unit10=Local Ollama, Cloudflare, Docker
-unit11=Full local integration (LINE, Facebook, WhatsApp)
-unit12=Final project
+unit1=Introduction to AI, setting up github.io
+unit2MediaPipe Solutions
+unit3=Teachable Machine, YOLO, Neural Style Transfer, Simple Chat App, Island Builder
+unit4=Ollama, Gemini
+unit5=N8N, OpenAI Agent, Claude Agent, OpenClaw, Hermes Agent
+unit6=Meta Muse, Manus CUE!, Hark Pro, OpenAI Dots, Grok Bot, Claude Duet
