@@ -1,2 +1,2 @@
-Mediapipe Tasks
+MediaPipe Tasks
 https://drluarn.github.io/

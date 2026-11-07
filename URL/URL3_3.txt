@@ -1,2 +1,2 @@
-This is assignment 3_3
+Neural Style Transfer
 https://drluarn.github.io/

@@ -1,2 +1,2 @@
-This is assignment 11_1
+Face detection
 https://drluarn.github.io/

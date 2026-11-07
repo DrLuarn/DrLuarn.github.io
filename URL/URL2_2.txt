@@ -1,2 +1,2 @@
-This is assignment 2_2
+Video Face landmark detection
 https://drluarn.github.io/

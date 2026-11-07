@@ -1,2 +1,2 @@
-This is assignment 2_1
+Face landmark detection
 https://drluarn.github.io/

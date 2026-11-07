@@ -1,2 +1,2 @@
-This is assignment 3_1
+Teachable Machine Object Classifier
 https://drluarn.github.io/

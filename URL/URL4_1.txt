@@ -1,2 +1,2 @@
-This is assignment 4_1
+Ollama
 https://drluarn.github.io/

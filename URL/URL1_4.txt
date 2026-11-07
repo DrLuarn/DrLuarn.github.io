@@ -1,2 +1,2 @@
-This is assignment 1_4
+Object recognition
 https://drluarn.github.io/
