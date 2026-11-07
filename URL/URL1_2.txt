@@ -1,2 +1,2 @@
-This is assignment 1_2
+Mediapipe Tasks
 https://drluarn.github.io/
