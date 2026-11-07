@@ -24,6 +24,7 @@ and serves two purposes:
 | Unit detail pages | <https://drluarn.github.io/unit.html?unit=1> … `?unit=6` |
 | Perception AI demo hub | <https://drluarn.github.io/perception_demo.html> |
 | MediaPipe "Info Wall" demo | <https://drluarn.github.io/mediapipeCC.html> |
+| Interactive 3D course map | <https://drluarn.github.io/course_island.html> |
 
 ---
 
@@ -41,6 +42,7 @@ and serves two purposes:
 ├── favicon.ico                     Site icon (Dr. Luarn's cartoon mascot)
 ├── perception_demo.html    Landing page for the four AI perception demos
 ├── mediapipeCC.html         Standalone MediaPipe hand/pose "info wall" demo
+├── course_island.html        Interactive 3D map of the 6 course units (Three.js)
 ├── chatbot.js                Optional n8n-backed chat widget (currently disabled)
 ├── mp/                         Four browser-only AI perception demos
 │   ├── face.html                 MediaPipe Face Mesh (468 landmarks)
@@ -165,6 +167,18 @@ the device.
 - **`mediapipeCC.html`** — A standalone, full-screen "info wall" demo:
   MediaPipe hand + pose tracking driving a particle animation (shapes/colors
   switch on a fist→open-palm gesture) alongside a live clock and info panel.
+
+### Interactive course map
+
+- **`course_island.html`** — "Pforzheim AI Course Islands": a standalone,
+  Three.js-powered 3D scene with one floating island per course unit
+  (Island A–F, matching units 1–6). Drag to rotate, scroll to zoom, and
+  click an island (or use the bottom nav bar / Tab+Enter) to open a detail
+  panel listing that unit's lessons, plus a small interactive activity per
+  island (a matching game, a scenario-choice/pipeline-order exercise, a
+  flip-card tool explorer, …). Includes a "low-stimulation mode" toggle
+  that swaps in a calmer, desaturated color palette and reduced motion.
+  Not linked from any other page yet — open it directly via its URL.
 
 ### Optional / supporting
 
