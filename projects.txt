@@ -2,12 +2,12 @@
 # Project / unit data for index.html
 # Edit the values after "=" only. Do not change the keys.
 # Lines starting with # are comments and are ignored.
-# Each unit1..unit12 line is the description shown on the
-# project card for that unit number (1-12).
+# Each unit1..unit6 line is the description shown on the
+# project card for that unit number (1-6).
 # ============================================================
 
 unit1=Introduction to AI, setting up github.io
-unit2MediaPipe Solutions
+unit2=MediaPipe Solutions
 unit3=Teachable Machine, YOLO, Neural Style Transfer, Simple Chat App, Island Builder
 unit4=Ollama, Gemini
 unit5=N8N, OpenAI Agent, Claude Agent, OpenClaw, Hermes Agent

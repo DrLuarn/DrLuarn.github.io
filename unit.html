@@ -518,7 +518,7 @@
     <script>
         let currentUnit = 1;
         let images = [];
-        const totalUnits = 12;
+        const totalUnits = 6;
 
         // Always read projects.txt from the instructor's own site so every student
         // fork (even hosted on a different github.io domain) shows the same, current
@@ -527,18 +527,12 @@
 
         // Fallback unit names (used if projects.txt cannot be fetched, e.g. opened via file://)
         const defaultUnitInfo = {
-            1: { name: "Course introduction, setting up github.io", attributes: [] },
-            2: { name: "Claude AI, Claude Cowork, Claude Code", attributes: [] },
-            3: { name: "Creating & configuring Skills, Claude Skills applications", attributes: [] },
-            4: { name: "OpenAI Codex", attributes: [] },
-            5: { name: "OpenAI memory, skills, and plugins", attributes: [] },
-            6: { name: "Google Gemini Skills", attributes: [] },
-            7: { name: "GoogleFlow", attributes: [] },
-            8: { name: "N8N workflow automation", attributes: [] },
-            9: { name: "N8N workflow automation (advanced)", attributes: [] },
-            10: { name: "Local Ollama, Cloudflare, Docker", attributes: [] },
-            11: { name: "Full local integration (LINE, Facebook, WhatsApp)", attributes: [] },
-            12: { name: "Final project", attributes: [] }
+            1: { name: "Introduction to AI, setting up github.io", attributes: [] },
+            2: { name: "MediaPipe Solutions", attributes: [] },
+            3: { name: "Teachable Machine, YOLO, Neural Style Transfer, Simple Chat App, Island Builder", attributes: [] },
+            4: { name: "Ollama, Gemini", attributes: [] },
+            5: { name: "N8N, OpenAI Agent, Claude Agent, OpenClaw, Hermes Agent", attributes: [] },
+            6: { name: "Meta Muse, Manus CUE!, Hark Pro, OpenAI Dots, Grok Bot, Claude Duet", attributes: [] }
         };
 
         let unitInfo = defaultUnitInfo;

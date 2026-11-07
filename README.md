@@ -7,7 +7,7 @@ The site is hosted on GitHub Pages at **[drluarn.github.io](https://drluarn.gith
 and serves two purposes:
 
 1. **The instructor's personal/course landing page** — who's teaching the course, the
-   12 weekly unit topics, and each unit's assignment gallery.
+   6 weekly unit topics, and each unit's assignment gallery.
 2. **A template every student forks** to build their own personal website as the
    course's hands-on GitHub Pages exercise. Students only need to edit a couple of
    plain-text files and drop in their own images — no HTML/CSS/JS editing required
@@ -21,7 +21,7 @@ and serves two purposes:
 |---|---|
 | Home / instructor profile | <https://drluarn.github.io/> |
 | Student portfolio directory | <https://drluarn.github.io/student.html> |
-| Unit detail pages | <https://drluarn.github.io/unit.html?unit=1> … `?unit=12` |
+| Unit detail pages | <https://drluarn.github.io/unit.html?unit=1> … `?unit=6` |
 | Perception AI demo hub | <https://drluarn.github.io/perception_demo.html> |
 | MediaPipe "Info Wall" demo | <https://drluarn.github.io/mediapipeCC.html> |
 
@@ -33,10 +33,10 @@ and serves two purposes:
 .
 ├── index.html            Home page (profile, unit grid, links)
 ├── student.html           Student portfolio directory + photo gallery
-├── unit.html               Per-unit assignment gallery (?unit=1..12)
+├── unit.html               Per-unit assignment gallery (?unit=1..6)
 ├── style.css                Shared navy/gold theme for the pages above
 ├── profile.txt                Editable personal info for index.html
-├── projects.txt                 The 12 unit titles, read from the instructor's site
+├── projects.txt                 The 6 unit titles, read from the instructor's site
 ├── mypic.jpg                      Profile photo shown on index.html
 ├── favicon.ico                     Site icon (Dr. Luarn's cartoon mascot)
 ├── perception_demo.html    Landing page for the four AI perception demos
@@ -59,7 +59,7 @@ and serves two purposes:
 ### Core pages
 
 - **`index.html`** — The course/instructor home page. Hero section, About,
-  the 12-unit project grid, student-portfolio call-to-action, and contact info.
+  the 6-unit project grid, student-portfolio call-to-action, and contact info.
   All of the editable text is pulled at runtime from `profile.txt` and
   `projects.txt` via `fetch()`, so this file itself rarely needs to change.
   English-only (no language switcher).
@@ -75,7 +75,7 @@ and serves two purposes:
     (click a thumbnail to open it in a lightbox with Prev/Next navigation).
 
 - **`unit.html`** — Shows one unit's assignment gallery, selected via
-  `?unit=1` … `?unit=12` in the URL. It:
+  `?unit=1` … `?unit=6` in the URL. It:
   - reads the unit's title from `projects.txt` (always fetched from
     `https://drluarn.github.io/projects.txt`, so every student fork shows the
     same, current unit list regardless of whose repo it's hosted on),
@@ -96,7 +96,7 @@ and serves two purposes:
   needs to edit** to turn this template into their own personal page — no code
   changes required. Lines starting with `#` are comments.
 
-- **`projects.txt`** — `unit1=` … `unit12=` lines with the course's 12 weekly
+- **`projects.txt`** — `unit1=` … `unit6=` lines with the course's 6 weekly
   topics. This file is **instructor-maintained**: `index.html` and `unit.html`
   always fetch it from `https://drluarn.github.io/projects.txt`, not from the
   student's own fork, so the unit list stays in sync across every student site
