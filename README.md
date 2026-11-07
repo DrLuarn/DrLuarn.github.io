@@ -49,7 +49,8 @@ and serves two purposes:
 │   └── object.html                     TensorFlow.js COCO-SSD object detection
 ├── pic/                        Unit assignment screenshots (unit{N}_{i}.*)
 ├── URL/                          Captions/demo links for each pic/ image
-└── p1/                             Photos shown in student.html's Photo Gallery
+├── p1/                             Photos shown in student.html's Photo Gallery
+└── assets/                          Images & data files used in class (handouts, PDFs, etc.)
 ```
 
 ---
@@ -127,6 +128,12 @@ and serves two purposes:
 - **`p1/`** — Photos for the **Photo Gallery** section on `student.html`,
   named `p1.jpg`, `p2.jpg`, … (any of `.jpg/.JPG/.jpeg/.JPEG/.png/.PNG`).
   Numbers don't need to be contiguous — any gaps are simply skipped.
+
+- **`assets/`** — Images and data files used in class (handouts, slide
+  images, PDFs, a sample spreadsheet, a sample zip, etc.). These aren't
+  wired into any page automatically; they're shared with students by
+  linking directly to the file on GitHub, e.g.
+  `https://github.com/DrLuarn/DrLuarn.github.io/blob/main/assets/<filename>`.
 
 ### AI perception demos (MediaPipe / TensorFlow.js)
 
