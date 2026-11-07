@@ -1,0 +1,39 @@
+unit1_1:This is my personal webpage
+unit1_2:MediaPipe Tasks
+unit1_3:Teachable Machine
+unit1_4:Object recognition
+unit1_5:Video object recognition 
+unit2_1:Face landmark detection
+unit2_2:Video Face landmark detection
+unit2_3:Pose landmark detection
+unit2_4:Gesture recognition
+unit2_5:Image Segmentation 
+unit2_6:Face detection
+unit2_7:Extra Credit Challenge 
+unit3_1:Teachable Machine Object Classifier
+unit3_2:YOLO
+unit3_3:Neural Style Transfer 
+unit3_4:Chat Bot
+unit3_5:Pforzheim AI Course Islands
+unit3_6:Extra Credit Challenge 
+unit4_1:Ollama
+unit4_2:Gemini
+unit4_3:Gemini Notebook
+unit4_4:Gemini Gemini Canvas
+unit4_5:Gemini Skills-1 poster-designer
+unit4_6:Gemini Skills-2 weekly-report
+unit4_7:Gemini Skills-3 multi-agent virtual team
+unit5_1:n8n AI Agent
+unit5_2:ChatGPT multi-agent scheduled task
+unit5_3:ChatGPT  Skills
+unit5_4:ChatGPT Plugins - canva 
+unit5_5:ChatGPT Sites
+unit5_6:Claude Skills
+unit5_7:OpenClaw
+unit5_8:Hermes
+unit6_1:Meta Muse
+unit6_2:CUE!
+unit6_3:Hark Pro
+unit6_4:OpenAI Dots
+unit6_5:Grok bot
+unit6_6:Claude duet
