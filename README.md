@@ -1,6 +1,6 @@
-# MMI5194E — AI Applications Course Site
+# MMI5194 — AI Applications Course Site
 
-This repository is the course website for **MMI5194E**, taught by **Prof. Pin Luarn**
+This repository is the course website for **MMI5194**, taught by **Prof. Pin Luarn**
 at the **Pforzheim University MBA program**, Winter Term 2026.
 
 The site is hosted on GitHub Pages at **[drluarn.github.io](https://drluarn.github.io/)**
