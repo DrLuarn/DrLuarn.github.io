@@ -1,6 +1,6 @@
-# MMI5192E — AI Applications Course Site
+# MMI5194E — AI Applications Course Site
 
-This repository is the course website for **MMI5192E**, taught by **Prof. Pin Luarn**
+This repository is the course website for **MMI5194E**, taught by **Prof. Pin Luarn**
 at the **Pforzheim University MBA program**, Winter Term 2026.
 
 The site is hosted on GitHub Pages at **[drluarn.github.io](https://drluarn.github.io/)**
@@ -24,7 +24,7 @@ and serves two purposes:
 | Unit detail pages | <https://drluarn.github.io/unit.html?unit=1> … `?unit=6` |
 | Perception AI demo hub | <https://drluarn.github.io/perception_demo.html> |
 | MediaPipe "Info Wall" demo | <https://drluarn.github.io/mediapipeCC.html> |
-| Interactive 3D course map | <https://drluarn.github.io/course_island.html> |
+| Interactive 3D course map | <https://drluarn.github.io/course_islands.html> |
 
 ---
 
@@ -42,7 +42,7 @@ and serves two purposes:
 ├── favicon.ico                     Site icon (Dr. Luarn's cartoon mascot)
 ├── perception_demo.html    Landing page for the four AI perception demos
 ├── mediapipeCC.html         Standalone MediaPipe hand/pose "info wall" demo
-├── course_island.html        Interactive 3D map of the 6 course units (Three.js)
+├── course_islands.html        Interactive 3D map of the 6 course units (Three.js)
 ├── chatbot.js                Optional n8n-backed chat widget (currently disabled)
 ├── mp/                         Four browser-only AI perception demos
 │   ├── face.html                 MediaPipe Face Mesh (468 landmarks)
