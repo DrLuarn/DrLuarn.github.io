@@ -261,6 +261,13 @@
                 const parsed = parseProfileTxt(text);
                 // Merge over defaults so missing keys still fall back gracefully
                 profileData = Object.assign({}, defaultProfile, parsed);
+                // The about1-4 lines are optional per-student content with no sensible
+                // instructor fallback: if a student deletes one of these keys entirely
+                // (rather than leaving it blank), show nothing instead of leaking
+                // Prof. Luarn's own bio text into the student's About Me section.
+                ['about1', 'about2', 'about3', 'about4'].forEach(key => {
+                    if (!(key in parsed)) profileData[key] = '';
+                });
             } catch (err) {
                 console.warn('Could not load profile.txt, using built-in defaults.', err);
                 profileData = defaultProfile;
@@ -287,7 +294,12 @@
 
             document.getElementById('email').textContent = p.email;
             document.getElementById('email').href = `mailto:${p.email}`;
-            document.getElementById('linkedin').href = p.linkedin;
+            // Students often paste a LinkedIn URL without the https:// prefix, which
+            // browsers then treat as a relative link instead of an external one.
+            const linkedinUrl = p.linkedin && !/^https?:\/\//i.test(p.linkedin)
+                ? `https://${p.linkedin}`
+                : p.linkedin;
+            document.getElementById('linkedin').href = linkedinUrl;
             document.getElementById('linkedin-text').textContent = p.linkedin;
 
             const aboutParts = [p.about1, p.about2, p.about3, p.about4]
