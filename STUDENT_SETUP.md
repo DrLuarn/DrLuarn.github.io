@@ -1,4 +1,4 @@
-# Student Setup Guide — MMI5192E
+# Student Setup Guide — MMI5194
 
 Follow these steps to turn this template into your own personal website,
 hosted for free on GitHub Pages.
