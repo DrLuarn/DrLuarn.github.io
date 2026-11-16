@@ -170,7 +170,7 @@ the device.
 
 ### Interactive course map
 
-- **`course_island.html`** — "Pforzheim AI Course Islands": a standalone,
+- **`course_islands.html`** — "Pforzheim AI Course Islands": a standalone,
   Three.js-powered 3D scene with one floating island per course unit
   (Island A–F, matching units 1–6). Drag to rotate, scroll to zoom, and
   click an island (or use the bottom nav bar / Tab+Enter) to open a detail
