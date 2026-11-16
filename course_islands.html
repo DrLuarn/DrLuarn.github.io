@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pforzheim AI Course Islands by Prof Luarn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Three.js and OrbitControls from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    :root {
+      --bg-sky-top: #dbeafe;
+      --bg-sky-bottom: #fdf2f8;
+      --panel-bg: rgba(255, 255, 255, 0.94);
+      --panel-border: rgba(226, 232, 240, 0.9);
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-soft: rgba(99, 102, 241, 0.12);
+      --card-bg: #f8fafc;
+      --card-border: #e2e8f0;
+      --success: #10b981;
+      --shadow-soft: 0 12px 36px rgba(15, 23, 42, 0.08);
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --island-glow: 0 0 24px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Low Stimulation Mode Overrides */
+    body.low-stim {
+      --bg-sky-top: #f1f5f9;
+      --bg-sky-bottom: #f1f5f9;
+      --panel-bg: #ffffff;
+      --panel-border: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --accent: #475569;
+      --accent-hover: #334155;
+      --accent-soft: #e2e8f0;
+      --card-bg: #f8fafc;
+      --card-border: #cbd5e1;
+      --island-glow: none;
+      letter-spacing: 0.02em;
+      line-height: 1.7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, var(--bg-sky-top) 0%, var(--bg-sky-bottom) 100%);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 3D Canvas Canvas Container */
+    #canvas-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    /* Top Floating Header */
+    header {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .brand-group {
+      pointer-events: auto;
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .brand-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-by {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.01em;
+    }
+
+    /* Header Action Controls */
+    .controls-group {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 50px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn:hover {
+      background: #ffffff;
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .btn.active:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Sound Volume Slider widget */
+    .volume-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .volume-widget input[type="range"] {
+      width: 70px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* Floating "How to use" hint pill */
+    #hint-pill {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--panel-bg);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--panel-border);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      box-shadow: var(--shadow-soft);
+      z-index: 20;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: opacity 0.5s ease;
+    }
+
+    #hint-pill button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0 4px;
+    }
+
+    /* 3D HTML Labels above islands */
+    .island-label {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      pointer-events: auto;
+      z-index: 10;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .island-label:hover, .island-label:focus-visible {
+      transform: translate(-50%, -108%) scale(1.05);
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.25);
+      outline: none;
+    }
+
+    .island-label .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    /* Side Content Panel (Drawer) */
+    #island-drawer {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      bottom: 24px;
+      width: 440px;
+      max-width: calc(100vw - 48px);
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(calc(100% + 40px));
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    #island-drawer.open {
+      transform: translateX(0);
+    }
+
+    body.low-stim #island-drawer {
+      transition: transform 0.1s ease;
+    }
+
+    .drawer-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .drawer-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drawer-island-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    .drawer-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--panel-border);
+      background: #ffffff;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      user-select: text;
+    }
+
+    .unit-intro {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+    }
+
+    .section-heading {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Lesson List Accordion / Card Style */
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lesson-card {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      transition: all 0.2s ease;
+    }
+
+    .lesson-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .lesson-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .lesson-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .lesson-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Activity Container */
+    .activity-box {
+      background: #ffffff;
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .activity-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      align-self: flex-start;
+    }
+
+    .activity-title {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .activity-instructions {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Interactive Elements inside Activities */
+    .match-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .match-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      background: #f8fafc;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .match-btn:hover { background: #f1f5f9; }
+    .match-btn.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .match-btn.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.15); color: #047857; }
+
+    .scenario-btn {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      background: #f8fafc;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+    }
+
+    .scenario-btn:hover { background: #f1f5f9; }
+    .scenario-btn.correct { background: rgba(16, 185, 129, 0.15); border-color: var(--success); color: #047857; }
+    .scenario-btn.wrong { background: rgba(239, 68, 68, 0.12); border-color: #ef4444; color: #b91c1c; }
+
+    .pipeline-order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .pipeline-step select {
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      background: #ffffff;
+      font-family: inherit;
+      font-size: 0.8rem;
+    }
+
+    .checkbox-pill-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .check-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #f8fafc;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .check-pill:hover { background: #f1f5f9; }
+
+    .feedback-banner {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      display: none;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .feedback-banner.show { display: block; }
+    .feedback-banner.success { background: rgba(16, 185, 129, 0.12); color: #065f46; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .feedback-banner.info { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(99, 102, 241, 0.3); }
+
+    /* Accessibility Skip 3D List Modal */
+    #accessible-list-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #accessible-list-modal.open { display: flex; }
+
+    .accessible-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Fallback for WebGL */
+    #webgl-fallback {
+      position: absolute;
+      inset: 0;
+      background: #f8fafc;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      z-index: 5;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+      }
+      #island-drawer {
+        top: 70px;
+        right: 12px;
+        bottom: 12px;
+        width: calc(100vw - 24px);
+      }
+      .brand-group { padding: 8px 14px; }
+      .brand-title { font-size: 0.95rem; }
+      .brand-by { font-size: 0.72rem; }
+      .btn { padding: 6px 12px; font-size: 0.75rem; }
+      #hint-pill { bottom: 12px; font-size: 0.74rem; width: 90%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Scene Container -->
+  <div id="canvas-container">
+    <div id="webgl-fallback">
+      <h2>3D Hardware Acceleration Unavailable</h2>
+      <p style="margin-top: 10px; color: var(--text-muted); max-width: 480px;">
+        Your browser does not currently support WebGL rendering. You can still access the complete course overview and all activities using the Accessible List View below:
+      </p>
+      <button class="btn active" style="margin-top: 20px;" onclick="openAccessibleModal()">Open Accessible Course List</button>
+    </div>
+  </div>
+
+  <!-- Top Floating Header -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-title">
+        <span>🏝️</span>
+        <span>Pforzheim AI Course Islands</span>
+      </div>
+      <span class="brand-by">by Prof Luarn</span>
+    </div>
+
+    <div class="controls-group">
+      <!-- Back to overview button -->
+      <button class="btn" id="btn-overview" onclick="resetToOverview()" aria-label="Reset camera to course overview">
+        <span>🌐</span>
+        <span>Overview</span>
+      </button>
+
+      <!-- Music toggle & volume -->
+      <button class="btn" id="btn-music" onclick="toggleAudio()" aria-label="Toggle ambient background music">
+        <span id="music-icon">🔇</span>
+        <span id="music-label">Music: Off</span>
+      </button>
+
+      <div class="volume-widget" id="volume-wrapper" style="display: none;">
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Vol</span>
+        <input type="range" id="volume-slider" min="0" max="100" value="40" oninput="setAudioVolume(this.value)" aria-label="Audio Volume Slider">
+      </div>
+
+      <!-- Low-stimulation Mode Toggle -->
+      <button class="btn" id="btn-low-stim" onclick="toggleLowStim()" aria-label="Toggle low stimulation mode">
+        <span>🌿</span>
+        <span>Low-stimulation mode</span>
+      </button>
+
+      <!-- Accessible Text-Only Course List -->
+      <button class="btn" onclick="openAccessibleModal()" aria-label="Open text-only course list">
+        <span>📋</span>
+        <span>Skip 3D View</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Interactive 3D Island Labels (Anchored to 3D Space) -->
+  <div id="labels-container">
+    <!-- Injected dynamically based on 6 islands -->
+  </div>
+
+  <!-- First-load Helpful Hint -->
+  <div id="hint-pill" role="status">
+    <span>✨ <strong>Navigation:</strong> Drag to rotate, scroll to zoom, click an island to explore.</span>
+    <button onclick="document.getElementById('hint-pill').style.opacity='0'; setTimeout(()=>document.getElementById('hint-pill').remove(), 500);" aria-label="Dismiss navigation hint">✕</button>
+  </div>
+
+  <!-- Island Content Drawer -->
+  <aside id="island-drawer" aria-label="Island Details Panel">
+    <div class="drawer-header">
+      <div class="drawer-title-group">
+        <div class="drawer-island-badge" id="d-badge">A</div>
+        <div>
+          <div class="drawer-title" id="d-title">Island A: Unit 1</div>
+          <div class="drawer-subtitle" id="d-subtitle">Getting Started with Perceptual AI</div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeIslandDrawer()" aria-label="Close island details panel">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Unit Introduction -->
+      <div>
+        <div class="section-heading">📖 Unit Introduction</div>
+        <div class="unit-intro" id="d-intro">Unit introduction text.</div>
+      </div>
+
+      <!-- Unit Lessons List -->
+      <div>
+        <div class="section-heading">📚 Course Lessons</div>
+        <div class="lesson-list" id="d-lessons">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Interactive Unit Activity -->
+      <div>
+        <div class="section-heading">🎯 Hands-On Activity</div>
+        <div class="activity-box" id="d-activity">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Accessible Text-Only Course Outline Modal -->
+  <div id="accessible-list-modal" role="dialog" aria-modal="true" aria-label="Course Curriculum List">
+    <div class="accessible-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 1.25rem; font-weight: 800;">Course Curriculum: Pforzheim AI Course</h2>
+        <button class="close-btn" onclick="closeAccessibleModal()" aria-label="Close curriculum outline">✕</button>
+      </div>
+      <p style="font-size: 0.86rem; color: var(--text-muted);">
+        A structured, text-accessible overview of all six course islands and units. Select any island to open its interactive activities and full details.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;" id="accessible-items-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. COURSE CURRICULUM DATA MODEL
+       ========================================================================= */
+    const COURSE_ISLANDS = [
+      {
+        id: "A",
+        unitNum: "Unit 1",
+        title: "Getting Started with Perceptual AI",
+        tagline: "Vision foundations & custom model training",
+        colorHex: 0xfb7185, // Rose pastel
+        accentCss: "#f43f5e",
+        intro: "Welcome to your first steps in applied AI! In this opening unit, you build your personal home on the web and discover Google MediaPipe Tasks—lightweight, on-device machine learning models designed to understand photos and videos. You will also train and test your own recognition model directly in the browser with Teachable Machine.",
+        lessons: [
+          { num: "1.1", title: "Build your own personal web page and course introduction", desc: "Create your personal course portfolio web page and learn the essential roadmap of AI tools." },
+          { num: "1.2", title: "Introduction to Google MediaPipe Tasks (perceptual AI)", desc: "Understand how modern edge-AI perceptual models perceive sight, sound, and movement." },
+          { num: "1.3", title: "Train your own recognition model with Teachable Machine", desc: "Collect custom training samples with your webcam and train a live classification model in minutes." },
+          { num: "1.4", title: "Image object recognition with Google Antigravity", desc: "Run state-of-the-art vision models on still photographs to locate and identify multiple objects." },
+          { num: "1.5", title: "Video object recognition with Google Antigravity", desc: "Apply detection models to continuous video streams and analyze objects across frames." }
+        ],
+        activityType: "match",
+        activity: {
+          title: "Tool to Task Matching",
+          instruction: "Match each practical AI scenario with the ideal tool from Unit 1:",
+          pairs: [
+            { task: "Quick custom model for my own gesture", tool: "Teachable Machine" },
+            { task: "On-device, cross-platform perceptual vision", tool: "Google MediaPipe" },
+            { task: "Automated multi-object bounding boxes", tool: "Antigravity Object Detection" }
+          ]
+        }
+      },
+      {
+        id: "B",
+        unitNum: "Unit 2",
+        title: "MediaPipe Vision Tasks",
+        tagline: "Landmarks, gestures & human segmentation",
+        colorHex: 0xa855f7, // Lavender / Purple pastel
+        accentCss: "#a855f7",
+        intro: "Dive deep into specialized vision intelligence! In Unit 2, we explore how MediaPipe tracks 468 3D facial landmarks, whole-body skeletal poses, and hand gestures in real time. We also cover background selfie segmentation—the core computer vision algorithm behind video conferencing background blur.",
+        lessons: [
+          { num: "2.1", title: "MediaPipe Face Landmark Detection", desc: "Map 468 precise 3D keypoints across eyes, lips, and facial geometry from a camera feed." },
+          { num: "2.2", title: "MediaPipe Video Face Landmark Detection", desc: "Track facial expressions and mesh transformations smoothly across continuous video frames." },
+          { num: "2.3", title: "MediaPipe Pose Landmark Detection", desc: "Track 33 anatomical body joints to measure movements, rep counts, and exercise posture." },
+          { num: "2.4", title: "MediaPipe Gesture Recognition", desc: "Recognize discrete and continuous hand signs (thumbs up, open palm, pointing) in real time." },
+          { num: "2.5", title: "MediaPipe Image Segmentation", desc: "Separate people from backgrounds with pixel-perfect alpha masking for virtual backdrops." },
+          { num: "2.6", title: "MediaPipe Face Detection", desc: "Rapidly detect face bounding boxes and six basic anatomical keypoints with sub-millisecond speed." }
+        ],
+        activityType: "quiz",
+        activity: {
+          title: "Which Task Would You Use?",
+          scenario: "You are building an AI fitness app that counts squats and verifies that the athlete's knees bend at a 90-degree angle. Which MediaPipe task is best?",
+          options: [
+            { text: "MediaPipe Image Segmentation", correct: false, feedback: "Segmentation isolates pixels for backgrounds, but doesn't calculate skeletal joint angles." },
+            { text: "MediaPipe Pose Landmark Detection", correct: true, feedback: "Spot on! Pose Detection tracks hip, knee, and ankle 3D coordinates to calculate body angles." },
+            { text: "MediaPipe Face Detection", correct: false, feedback: "Face Detection only finds the head, not leg joints." }
+          ]
+        }
+      },
+      {
+        id: "C",
+        unitNum: "Unit 3",
+        title: "Real-Time Models and Creative AI",
+        tagline: "YOLO, style transfer & interactive web apps",
+        colorHex: 0x14b8a6, // Teal pastel
+        accentCss: "#0d9488",
+        intro: "Step into the intersection of computer vision, generative art, and real-time inference. Learn how Ultralytics YOLO detects 80 object classes at 60+ FPS, how Neural Style Transfer re-imagines photos through historical art movements, and how to connect Gemini API keys to build conversational interfaces.",
+        lessons: [
+          { num: "3.1", title: "Teachable Machine Real-Time Object Classifier", desc: "Deploy trained classifier weights into responsive, browser-based JavaScript applications." },
+          { num: "3.2", title: "YOLO", desc: "Leverage You Only Look Once (YOLO) architectures for high-speed multi-class object detection." },
+          { num: "3.3", title: "Neural Style Transfer", desc: "Synthesize iconic artistic textures (Van Gogh, Hokusai) with everyday photos using deep neural nets." },
+          { num: "3.4", title: "Simple Chat App Built with a Gemini API Key", desc: "Create an interactive conversational UI using Google AI Studio API credentials." },
+          { num: "3.5", title: "Island Builder", desc: "Combine 3D web graphics and creative AI pipelines into immersive interactive environments." }
+        ],
+        activityType: "pipeline",
+        activity: {
+          title: "Order the Vision AI Pipeline",
+          instruction: "Select the correct sequential order of a real-time computer vision pipeline:",
+          steps: [
+            { label: "Capture frame & normalize dimensions", correctOrder: 1 },
+            { label: "Neural network forward pass (inference)", correctOrder: 2 },
+            { label: "Filter thresholds & draw bounding boxes on canvas", correctOrder: 3 }
+          ]
+        }
+      },
+      {
+        id: "D",
+        unitNum: "Unit 4",
+        title: "Gemini and Multimodal Workflows",
+        tagline: "Multimodal reasoning, Canvas & automated skills",
+        colorHex: 0x38bdf8, // Sky Blue pastel
+        accentCss: "#0284c7",
+        intro: "Multimodal AI breaks down the barrier between text, code, and images. In Unit 4, we examine local multimodal inference with Ollama and explore the Gemini ecosystem: interactive Canvas artifacts, Notebook research workflows, and custom skill scripts that automate complex multi-step reasoning.",
+        lessons: [
+          { num: "4.1", title: "Use a multimodal model to let Ollama recognize images", desc: "Run private, offline multimodal vision models locally on your computer with Ollama." },
+          { num: "4.2", title: "Gemini", desc: "Master core prompt engineering, system instructions, and multimodal context windows with Gemini." },
+          { num: "4.3", title: "Gemini Notebook", desc: "Synthesize research papers, lecture notes, and source documents into grounded study guides." },
+          { num: "4.4", title: "Gemini Canvas", desc: "Collaborate side-by-side with AI on documents, web apps, and live interactive visual artifacts." },
+          { num: "4.5", title: "Gemini Skills-1", desc: "Create modular instructions and reusable operational workflows for repeated cognitive tasks." },
+          { num: "4.6", title: "Gemini Skills-2", desc: "Integrate programmatic tool calls and structured outputs into advanced agent skills." },
+          { num: "4.7", title: "Gemini Skills-3", desc: "Chain multi-skill pipelines to solve end-to-end business and engineering workflows." }
+        ],
+        activityType: "designer",
+        activity: {
+          title: "Design Your Multimodal Helper",
+          instruction: "Pick your workflow goal and check the Gemini features you would combine:",
+          goals: ["Summarize lecture slides with diagrams", "Code a web app prototype", "Automate weekly study notes"],
+          components: [
+            "Gemini Canvas (Interactive visual UI)",
+            "Gemini Notebook (Document grounding)",
+            "Multimodal Vision (Diagram & photo reading)",
+            "Custom Skill (Automated pipeline)"
+          ]
+        }
+      },
+      {
+        id: "E",
+        unitNum: "Unit 5",
+        title: "AI Agents",
+        tagline: "Autonomous multi-agent systems & integrations",
+        colorHex: 0xf59e0b, // Amber / Honey pastel
+        accentCss: "#d97706",
+        intro: "Moving from simple prompts to autonomous agency! Unit 5 demystifies autonomous AI agents that can browse, execute code, call APIs, and coordinate with peer agents. We survey automation tools like n8n, ChatGPT multi-agent systems, and open-source autonomous agent architectures.",
+        lessons: [
+          { num: "5.1", title: "n8n", desc: "Build visual node-based automation workflows integrating LLMs, webhooks, and databases." },
+          { num: "5.2", title: "ChatGPT multi-agent", desc: "Configure teams of specialized agents with distinct roles collaborating toward a shared objective." },
+          { num: "5.3", title: "ChatGPT Skills", desc: "Equip language agents with custom capabilities, external calculators, and task recipes." },
+          { num: "5.4", title: "ChatGPT Plugins - canva", desc: "Connect language models directly to design tools for automated visual content creation." },
+          { num: "5.5", title: "ChatGPT Sites", desc: "Deploy interactive agent-powered web endpoints and interactive assistants to the web." },
+          { num: "5.6", title: "Claude Skills", desc: "Harness long-context autonomous problem-solving and structured tool-use patterns." },
+          { num: "5.7", title: "OpenClaw", desc: "Explore open-source autonomous web-crawling and information gathering agent stacks." },
+          { num: "5.8", title: "Hermes Agent", desc: "Study local and private agent orchestration frameworks for offline decision making." }
+        ],
+        activityType: "agent_sort",
+        activity: {
+          title: "Agent vs. Chatbot Sorting",
+          instruction: "Classify each scenario: is it handled by a reactive Chatbot or an autonomous Agent?",
+          items: [
+            { text: "Answer 'What is the capital of Germany?' immediately", answer: "Chatbot" },
+            { text: "Monitor flight prices daily and book automatically when below $300", answer: "Agent" },
+            { text: "Research 5 competitor websites, generate a comparison sheet, and email the team", answer: "Agent" }
+          ]
+        }
+      },
+      {
+        id: "F",
+        unitNum: "Unit 6",
+        title: "The Next Wave of AI Tools",
+        tagline: "Emerging interfaces, creative labs & horizons",
+        colorHex: 0x6366f1, // Indigo pastel
+        accentCss: "#4f46e5",
+        intro: "Explore the cutting edge! The AI tooling landscape evolves weekly with new interaction paradigms, voice agents, and creative co-pilots. In this unit, we neutrally survey emerging releases and evaluate how to evaluate, test, and adopt new tools safely as forward-thinking students.",
+        lessons: [
+          { num: "6.1", title: "Meta Muse", desc: "Explore creative multimodal ideation, storytelling, and studio design workflows in class." },
+          { num: "6.2", title: "Manus Cue!", desc: "Examine emerging interface cues, prompt automation, and workflow accelerators." },
+          { num: "6.3", title: "Hark Pro", desc: "Investigate advanced audio analysis, transcription, and speech interaction tools." },
+          { num: "6.4", title: "OpenAI Dots", desc: "Evaluate novel interface concepts and modular components in contemporary AI suites." },
+          { num: "6.5", title: "Grok Bot", desc: "Analyze real-time information processing and web-integrated conversational models." },
+          { num: "6.6", title: "Claude Duet", desc: "Explore collaborative dual-agent pairing and real-time coding co-pilot techniques." }
+        ],
+        activityType: "explorer",
+        activity: {
+          title: "Tool Explorer Card",
+          instruction: "Select two emerging tools to compare in class and reflect on what you would test first:",
+          tools: ["Meta Muse", "Manus Cue!", "Hark Pro", "OpenAI Dots", "Grok Bot", "Claude Duet"]
+        }
+      }
+    ];
+
+    /* =========================================================================
+       2. THREE.JS 3D SCENE & CUTE LOW-POLY ISLAND BUILDER
+       ========================================================================= */
+    let scene, camera, renderer, controls;
+    let islandMeshes = [];
+    let islandGroup;
+    let labelElements = [];
+    let cloudGroup;
+    let selectedIsland = null;
+    let isLowStim = false;
+    let isBobbing = true;
+
+    // Camera animation state
+    let isAnimatingCamera = false;
+    let camTargetPos = new THREE.Vector3(0, 24, 46);
+    let camLookTarget = new THREE.Vector3(0, 0, 0);
+
+    const OVERVIEW_CAM_POS = new THREE.Vector3(0, 24, 46);
+    const OVERVIEW_LOOK_TARGET = new THREE.Vector3(0, 0, 0);
+
+    function init3D() {
+      const container = document.getElementById("canvas-container");
+      
+      // Check WebGL availability
+      try {
+        const testCanvas = document.createElement("canvas");
+        const gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
+        if (!gl) throw new Error("WebGL not supported");
+      } catch (err) {
+        document.getElementById("webgl-fallback").style.display = "flex";
+        return;
+      }
+
+      // 1. Scene
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xdbeafe);
+
+      // 2. Camera
+      camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.5, 300);
+      camera.position.copy(OVERVIEW_CAM_POS);
+
+      // 3. Renderer (capped pixel ratio for smooth performance)
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      // 4. OrbitControls with smooth damping and bounded zoom
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.minDistance = 16;
+      controls.maxDistance = 70;
+      controls.maxPolarAngle = Math.PI / 2.15; // prevent going below sea level
+      controls.target.copy(OVERVIEW_LOOK_TARGET);
+
+      // 5. Lighting (soft, warm, pastel illumination)
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const hemiLight = new THREE.HemisphereLight(0xfff7ed, 0x93c5fd, 0.4);
+      hemiLight.position.set(0, 50, 0);
+      scene.add(hemiLight);
+
+      const sunLight = new THREE.DirectionalLight(0xfffaed, 0.8);
+      sunLight.position.set(30, 45, 25);
+      sunLight.castShadow = true;
+      sunLight.shadow.mapSize.width = 1024;
+      sunLight.shadow.mapSize.height = 1024;
+      sunLight.shadow.camera.near = 10;
+      sunLight.shadow.camera.far = 100;
+      const d = 35;
+      sunLight.shadow.camera.left = -d;
+      sunLight.shadow.camera.right = d;
+      sunLight.shadow.camera.top = d;
+      sunLight.shadow.camera.bottom = -d;
+      scene.add(sunLight);
+
+      // 6. Build the 6 Islands
+      islandGroup = new THREE.Group();
+      scene.add(islandGroup);
+
+      const ringRadius = 20;
+      const count = COURSE_ISLANDS.length;
+
+      COURSE_ISLANDS.forEach((data, index) => {
+        const angle = (index / count) * Math.PI * 2;
+        const x = Math.cos(angle) * ringRadius;
+        const z = Math.sin(angle) * ringRadius;
+
+        const island = createCuteIsland(data, x, z);
+        islandGroup.add(island);
+        islandMeshes.push(island);
+
+        // Create HTML floating label
+        createIslandHtmlLabel(data, island);
+      });
+
+      // 7. Ambient Soft Drifting Clouds
+      createAmbientClouds();
+
+      // 8. Event Listeners
+      window.addEventListener("resize", onWindowResize);
+      renderer.domElement.addEventListener("pointerdown", onPointerDown);
+      renderer.domElement.addEventListener("click", onSceneClick);
+
+      // Check OS reduced-motion preference
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        enableLowStimMode(true);
+      }
+
+      // Populate accessible list modal
+      populateAccessibleList();
+
+      // Start loop
+      animate();
+    }
+
+    /* Helper: Create a cute planet-like rounded low-poly island with distinct landmark */
+    function createCuteIsland(data, x, z) {
+      const group = new THREE.Group();
+      group.position.set(x, 0, z);
+      group.userData = {
+        islandData: data,
+        baseY: 0,
+        bobPhase: Math.random() * Math.PI * 2,
+        bobSpeed: 0.8 + Math.random() * 0.4
+      };
+
+      // Island base (rocky bottom + soft pastel grass cap)
+      const baseRadius = 3.6;
+      
+      // Bottom cone / dome (earth rock)
+      const rockGeo = new THREE.CylinderGeometry(baseRadius, 0.4, 3.2, 10, 1);
+      const rockMat = new THREE.MeshLambertMaterial({ color: 0x94a3b8, flatShading: true });
+      const rockMesh = new THREE.Mesh(rockGeo, rockMat);
+      rockMesh.position.y = -1.6;
+      rockMesh.castShadow = true;
+      rockMesh.receiveShadow = true;
+      group.add(rockMesh);
+
+      // Top grass mound (rounded pastel squashed sphere)
+      const moundGeo = new THREE.SphereGeometry(baseRadius, 14, 10);
+      moundGeo.scale(1, 0.45, 1);
+      const moundMat = new THREE.MeshLambertMaterial({
+        color: data.colorHex,
+        flatShading: true
+      });
+      const moundMesh = new THREE.Mesh(moundGeo, moundMat);
+      moundMesh.position.y = 0.2;
+      moundMesh.castShadow = true;
+      moundMesh.receiveShadow = true;
+      group.add(moundMesh);
+
+      // Soft glow ring / highlight disc on island top
+      const ringGeo = new THREE.RingGeometry(baseRadius * 0.9, baseRadius * 1.05, 24);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.35
+      });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      ringMesh.rotation.x = Math.PI / 2;
+      ringMesh.position.y = 0.3;
+      group.add(ringMesh);
+
+      // Cute small low-poly trees / stones on edges
+      for (let i = 0; i < 3; i++) {
+        const treeAngle = (i / 3) * Math.PI * 2 + 0.3;
+        const dist = baseRadius * 0.65;
+        const tx = Math.cos(treeAngle) * dist;
+        const tz = Math.sin(treeAngle) * dist;
+
+        // Tree trunk
+        const trunkGeo = new THREE.CylinderGeometry(0.12, 0.15, 0.6, 5);
+        const trunkMat = new THREE.MeshLambertMaterial({ color: 0x78716c });
+        const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+        trunk.position.set(tx, 0.5, tz);
+        group.add(trunk);
+
+        // Tree foliage (low-poly cone)
+        const foliageGeo = new THREE.ConeGeometry(0.55, 1.1, 6);
+        const foliageMat = new THREE.MeshLambertMaterial({ color: 0x86efac, flatShading: true });
+        const foliage = new THREE.Mesh(foliageGeo, foliageMat);
+        foliage.position.set(tx, 1.1, tz);
+        foliage.castShadow = true;
+        group.add(foliage);
+      }
+
+      // DISTINCT LANDMARKS PER ISLAND THEME
+      const landmarkGroup = new THREE.Group();
+      landmarkGroup.position.set(0, 0.3, 0);
+
+      switch (data.id) {
+        case "A": // Perceptual AI: Camera tower with perception dome & lens
+          {
+            const towerGeo = new THREE.CylinderGeometry(0.65, 0.85, 2.2, 7);
+            const towerMat = new THREE.MeshLambertMaterial({ color: 0xffedd5, flatShading: true });
+            const tower = new THREE.Mesh(towerGeo, towerMat);
+            tower.position.y = 1.1;
+            landmarkGroup.add(tower);
+
+            // Lens ring
+            const lensGeo = new THREE.TorusGeometry(0.5, 0.14, 8, 12);
+            const lensMat = new THREE.MeshLambertMaterial({ color: 0x0284c7 });
+            const lens = new THREE.Mesh(lensGeo, lensMat);
+            lens.position.set(0, 1.5, 0.55);
+            landmarkGroup.add(lens);
+
+            // Glass perception dome
+            const domeGeo = new THREE.SphereGeometry(0.5, 8, 8);
+            const domeMat = new THREE.MeshLambertMaterial({ color: 0x38bdf8 });
+            const dome = new THREE.Mesh(domeGeo, domeMat);
+            dome.position.set(0, 2.2, 0);
+            landmarkGroup.add(dome);
+          }
+          break;
+
+        case "B": // MediaPipe Vision: Expressive geometric Face Hill / sculpture
+          {
+            // Face hill
+            const faceGeo = new THREE.DodecahedronGeometry(1.2, 0);
+            const faceMat = new THREE.MeshLambertMaterial({ color: 0xe9d5ff, flatShading: true });
+            const faceMesh = new THREE.Mesh(faceGeo, faceMat);
+            faceMesh.position.y = 1.2;
+            faceMesh.scale.set(0.9, 1.3, 0.9);
+            landmarkGroup.add(faceMesh);
+
+            // Geometric eyes
+            [-0.35, 0.35].forEach(ox => {
+              const eyeGeo = new THREE.TorusGeometry(0.18, 0.05, 6, 8);
+              const eyeMat = new THREE.MeshBasicMaterial({ color: 0x6b21a8 });
+              const eye = new THREE.Mesh(eyeGeo, eyeMat);
+              eye.position.set(ox, 1.45, 0.85);
+              landmarkGroup.add(eye);
+            });
+
+            // Geometric nose
+            const noseGeo = new THREE.ConeGeometry(0.15, 0.4, 4);
+            const noseMat = new THREE.MeshLambertMaterial({ color: 0xc084fc });
+            const nose = new THREE.Mesh(noseGeo, noseMat);
+            nose.position.set(0, 1.2, 0.95);
+            nose.rotation.x = Math.PI / 2.8;
+            landmarkGroup.add(nose);
+          }
+          break;
+
+        case "C": // Real-Time & Creative AI: Artist easel, generative crystal, mini terminal
+          {
+            // Artist easel / canvas board
+            const boardGeo = new THREE.BoxGeometry(1.6, 1.2, 0.15);
+            const boardMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+            const board = new THREE.Mesh(boardGeo, boardMat);
+            board.position.set(0, 1.4, -0.2);
+            board.rotation.x = -0.15;
+            landmarkGroup.add(board);
+
+            // Easel legs
+            const legGeo = new THREE.CylinderGeometry(0.06, 0.06, 2.0, 4);
+            const legMat = new THREE.MeshLambertMaterial({ color: 0x92400e });
+            [-0.6, 0.6].forEach(ox => {
+              const leg = new THREE.Mesh(legGeo, legMat);
+              leg.position.set(ox, 1.0, -0.2);
+              leg.rotation.z = ox * -0.2;
+              landmarkGroup.add(leg);
+            });
+
+            // Glowing generative gem / creative crystal
+            const gemGeo = new THREE.OctahedronGeometry(0.5, 0);
+            const gemMat = new THREE.MeshLambertMaterial({ color: 0x2dd4bf, flatShading: true });
+            const gem = new THREE.Mesh(gemGeo, gemMat);
+            gem.position.set(0.6, 1.2, 0.5);
+            gem.rotation.y = 0.5;
+            landmarkGroup.add(gem);
+          }
+          break;
+
+        case "D": // Gemini & Multimodal: Twin glowing obelisks (Gemini dual stars) + Multimodal Notebook
+          {
+            [-0.45, 0.45].forEach((ox, idx) => {
+              const spireGeo = new THREE.ConeGeometry(0.4, 2.4, 5);
+              const spireMat = new THREE.MeshLambertMaterial({
+                color: idx === 0 ? 0x38bdf8 : 0x818cf8,
+                flatShading: true
+              });
+              const spire = new THREE.Mesh(spireGeo, spireMat);
+              spire.position.set(ox, 1.2, 0);
+              landmarkGroup.add(spire);
+            });
+
+            // Golden floating constellation ring
+            const haloGeo = new THREE.TorusGeometry(0.9, 0.06, 6, 16);
+            const haloMat = new THREE.MeshBasicMaterial({ color: 0xfde047 });
+            const halo = new THREE.Mesh(haloGeo, haloMat);
+            halo.position.set(0, 1.8, 0);
+            halo.rotation.x = Math.PI / 3;
+            landmarkGroup.add(halo);
+          }
+          break;
+
+        case "E": // AI Agents: Cozy Robot Hut with antenna & gear
+          {
+            // Robot cottage body
+            const hutGeo = new THREE.BoxGeometry(1.5, 1.3, 1.5);
+            const hutMat = new THREE.MeshLambertMaterial({ color: 0xfef08a, flatShading: true });
+            const hut = new THREE.Mesh(hutGeo, hutMat);
+            hut.position.y = 0.65;
+            landmarkGroup.add(hut);
+
+            // Roof
+            const roofGeo = new THREE.ConeGeometry(1.3, 0.8, 4);
+            const roofMat = new THREE.MeshLambertMaterial({ color: 0xd97706, flatShading: true });
+            const roof = new THREE.Mesh(roofGeo, roofMat);
+            roof.position.y = 1.7;
+            roof.rotation.y = Math.PI / 4;
+            landmarkGroup.add(roof);
+
+            // Robot antenna with ball
+            const antGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.8, 4);
+            const antMat = new THREE.MeshLambertMaterial({ color: 0x475569 });
+            const ant = new THREE.Mesh(antGeo, antMat);
+            ant.position.set(0, 2.4, 0);
+            landmarkGroup.add(ant);
+
+            const ballGeo = new THREE.SphereGeometry(0.18, 6, 6);
+            const ballMat = new THREE.MeshLambertMaterial({ color: 0xef4444 });
+            const ball = new THREE.Mesh(ballGeo, ballMat);
+            ball.position.set(0, 2.8, 0);
+            landmarkGroup.add(ball);
+          }
+          break;
+
+        case "F": // Next Wave: Futuristic Observatory dome & telescope
+          {
+            // Observatory base cylinder
+            const obsBaseGeo = new THREE.CylinderGeometry(1.1, 1.2, 1.2, 8);
+            const obsBaseMat = new THREE.MeshLambertMaterial({ color: 0xe0e7ff, flatShading: true });
+            const obsBase = new THREE.Mesh(obsBaseGeo, obsBaseMat);
+            obsBase.position.y = 0.6;
+            landmarkGroup.add(obsBase);
+
+            // Hemisphere dome
+            const domeGeo = new THREE.SphereGeometry(1.1, 8, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+            const domeMat = new THREE.MeshLambertMaterial({ color: 0x818cf8, flatShading: true });
+            const dome = new THREE.Mesh(domeGeo, domeMat);
+            dome.position.y = 1.2;
+            landmarkGroup.add(dome);
+
+            // Stargazing telescope
+            const tubeGeo = new THREE.CylinderGeometry(0.18, 0.24, 1.4, 6);
+            const tubeMat = new THREE.MeshLambertMaterial({ color: 0x4338ca });
+            const tube = new THREE.Mesh(tubeGeo, tubeMat);
+            tube.position.set(0, 1.7, 0.4);
+            tube.rotation.x = -Math.PI / 3.5;
+            landmarkGroup.add(tube);
+          }
+          break;
+      }
+
+      group.add(landmarkGroup);
+
+      // Hit-testing invisible sphere for friendly large touch targets
+      const hitSphereGeo = new THREE.SphereGeometry(baseRadius * 1.2, 8, 6);
+      const hitSphereMat = new THREE.MeshBasicMaterial({ visible: false });
+      const hitSphere = new THREE.Mesh(hitSphereGeo, hitSphereMat);
+      hitSphere.position.y = 1.2;
+      group.add(hitSphere);
+
+      return group;
+    }
+
+    /* Ambient slow drifting cloud puffs */
+    function createAmbientClouds() {
+      cloudGroup = new THREE.Group();
+      scene.add(cloudGroup);
+
+      const cloudMat = new THREE.MeshLambertMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.55,
+        flatShading: true
+      });
+
+      for (let i = 0; i < 9; i++) {
+        const cloud = new THREE.Group();
+        const puffCount = 3 + Math.floor(Math.random() * 3);
+        for (let p = 0; p < puffCount; p++) {
+          const puffGeo = new THREE.DodecahedronGeometry(1.2 + Math.random() * 0.8, 0);
+          const puff = new THREE.Mesh(puffGeo, cloudMat);
+          puff.position.set((p - 1) * 1.1, Math.random() * 0.4, (Math.random() - 0.5) * 0.8);
+          cloud.add(puff);
+        }
+
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 22 + Math.random() * 18;
+        cloud.position.set(Math.cos(angle) * radius, 6 + Math.random() * 8, Math.sin(angle) * radius);
+        cloud.userData = { speed: 0.0008 + Math.random() * 0.001, radius: radius, angle: angle };
+        cloudGroup.add(cloud);
+      }
+    }
+
+    /* Create HTML Label Element above each island */
+    function createIslandHtmlLabel(data, islandObj) {
+      const container = document.getElementById("labels-container");
+      const label = document.createElement("button");
+      label.className = "island-label";
+      label.id = `label-island-${data.id}`;
+      label.setAttribute("aria-label", `Open Island ${data.id}: ${data.title}`);
+      label.innerHTML = `
+        <span class="badge">${data.id}</span>
+        <span>${data.title}</span>
+      `;
+
+      label.addEventListener("click", () => {
+        openIsland(data.id);
+      });
+
+      container.appendChild(label);
+      labelElements.push({ element: label, object: islandObj, data: data });
+    }
+
+    /* Update HTML Label Screen Coordinates */
+    function updateHtmlLabels() {
+      if (!camera || !labelElements) return;
+
+      const tempV = new THREE.Vector3();
+      const halfW = window.innerWidth / 2;
+      const halfH = window.innerHeight / 2;
+
+      labelElements.forEach(item => {
+        // Position above the island
+        item.object.getWorldPosition(tempV);
+        tempV.y += 4.5;
+        tempV.project(camera);
+
+        // Check if behind camera or obscured
+        const isBehind = tempV.z > 1.0;
+        if (isBehind) {
+          item.element.style.display = "none";
+        } else {
+          item.element.style.display = "flex";
+          const x = (tempV.x * halfW) + halfW;
+          const y = -(tempV.y * halfH) + halfH;
+          item.element.style.left = `${x}px`;
+          item.element.style.top = `${y}px`;
+        }
+      });
+    }
+
+    /* =========================================================================
+       3. INTERACTION & CAMERA SMOOTH NAVIGATION
+       ========================================================================= */
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let pointerDownPos = { x: 0, y: 0 };
+
+    function onPointerDown(e) {
+      pointerDownPos.x = e.clientX;
+      pointerDownPos.y = e.clientY;
+    }
+
+    function onSceneClick(e) {
+      // Disregard if drag was significant (user was orbiting)
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 8) return;
+
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(islandMeshes, true);
+
+      if (intersects.length > 0) {
+        // Find top-level island group
+        let obj = intersects[0].object;
+        while (obj.parent && obj.parent !== islandGroup) {
+          obj = obj.parent;
+        }
+        if (obj.userData && obj.userData.islandData) {
+          openIsland(obj.userData.islandData.id);
+        }
+      }
+    }
+
+    /* Smoothly Fly Camera to Selected Island */
+    function openIsland(islandId) {
+      const targetIsland = islandMeshes.find(m => m.userData.islandData.id === islandId);
+      if (!targetIsland) return;
+
+      const data = targetIsland.userData.islandData;
+      selectedIsland = data;
+
+      // Position camera offset to view the island comfortably while drawer is open
+      const worldPos = new THREE.Vector3();
+      targetIsland.getWorldPosition(worldPos);
+
+      // On wide screens, bias the camera slightly left so the right drawer doesn't obstruct
+      const isMobile = window.innerWidth <= 768;
+      const camOffset = isMobile ? new THREE.Vector3(0, 9, 13) : new THREE.Vector3(-3.5, 9, 14);
+
+      camTargetPos.copy(worldPos).add(camOffset);
+      camLookTarget.copy(worldPos).add(new THREE.Vector3(0, 1.2, 0));
+      isAnimatingCamera = true;
+
+      // Instant transition if in low stimulation mode
+      if (isLowStim) {
+        camera.position.copy(camTargetPos);
+        controls.target.copy(camLookTarget);
+        isAnimatingCamera = false;
+      }
+
+      // Populate & open Drawer
+      populateDrawer(data);
+      document.getElementById("island-drawer").classList.add("open");
+
+      // Highlight corresponding label
+      document.querySelectorAll(".island-label").forEach(l => l.classList.remove("active"));
+      const lbl = document.getElementById(`label-island-${data.id}`);
+      if (lbl) lbl.classList.add("active");
+    }
+
+    /* Reset Camera to Overview */
+    function resetToOverview() {
+      selectedIsland = null;
+      camTargetPos.copy(OVERVIEW_CAM_POS);
+      camLookTarget.copy(OVERVIEW_LOOK_TARGET);
+      isAnimatingCamera = true;
+
+      if (isLowStim) {
+        camera.position.copy(OVERVIEW_CAM_POS);
+        controls.target.copy(OVERVIEW_LOOK_TARGET);
+        isAnimatingCamera = false;
+      }
+
+      closeIslandDrawer();
+      document.querySelectorAll(".island-label").forEach(l => l.classList.remove("active"));
+    }
+
+    function closeIslandDrawer() {
+      document.getElementById("island-drawer").classList.remove("open");
+    }
+
+    function onWindowResize() {
+      if (!camera || !renderer) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      updateHtmlLabels();
+    }
+
+    /* Keyboard navigation: Tab / Enter / Esc */
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        resetToOverview();
+      }
+    });
+
+    /* =========================================================================
+       4. DRAWER CONTENT POPULATION & INTERACTIVE ACTIVITIES
+       ========================================================================= */
+    function populateDrawer(data) {
+      document.getElementById("d-badge").innerText = data.id;
+      document.getElementById("d-badge").style.color = data.accentCss;
+      document.getElementById("d-title").innerText = `Island ${data.id}: ${data.unitNum}`;
+      document.getElementById("d-subtitle").innerText = data.title;
+      document.getElementById("d-intro").innerText = data.intro;
+
+      // Render Lessons List (using exact titles and plain descriptions)
+      const lessonsContainer = document.getElementById("d-lessons");
+      lessonsContainer.innerHTML = data.lessons.map(l => `
+        <div class="lesson-card">
+          <div class="lesson-num">${l.num}</div>
+          <div class="lesson-title">${l.title}</div>
+          <div class="lesson-desc">${l.desc}</div>
+        </div>
+      `).join("");
+
+      // Render Specific Interactive Unit Activity
+      const activityContainer = document.getElementById("d-activity");
+      activityContainer.innerHTML = renderActivityHtml(data);
+      bindActivityEvents(data);
+    }
+
+    function renderActivityHtml(data) {
+      const act = data.activity;
+      let bodyHtml = "";
+
+      switch (data.activityType) {
+        case "match": // Unit 1: Match the tool to the task
+          bodyHtml = `
+            <div class="activity-instructions">${act.instruction}</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+              ${act.pairs.map((p, idx) => `
+                <div style="font-size:0.8rem; font-weight:600; color:#334155;">Task ${idx+1}: "${p.task}"</div>
+                <div class="match-row">
+                  ${COURSE_ISLANDS[0].activity.pairs.map(toolPair => `
+                    <button class="match-btn match-choice" data-task="${idx}" data-tool="${toolPair.tool}" onclick="handleMatchSelect(this, ${idx}, '${p.tool}')">${toolPair.tool}</button>
+                  `).join("")}
+                </div>
+              `).join("")}
+            </div>
+            <div class="feedback-banner" id="match-feedback"></div>
+          `;
+          break;
+
+        case "quiz": // Unit 2: Which task would you use?
+          bodyHtml = `
+            <div class="activity-instructions"><strong>Scenario:</strong> ${act.scenario}</div>
+            <div style="margin-top:10px;">
+              ${act.options.map((opt, idx) => `
+                <button class="scenario-btn" onclick="handleQuizAnswer(this, ${opt.correct}, '${opt.feedback.replace(/'/g, "\\'")}')">
+                  ${opt.text}
+                </button>
+              `).join("")}
+            </div>
+            <div class="feedback-banner" id="quiz-feedback"></div>
+          `;
+          break;
+
+        case "pipeline": // Unit 3: Pipeline order
+          bodyHtml = `
+            <div class="activity-instructions">${act.instruction}</div>
+            <div class="pipeline-order-list" style="margin-top:10px;">
+              ${act.steps.map((st, idx) => `
+                <div class="pipeline-step">
+                  <span>Step</span>
+                  <select class="pipeline-select" data-correct="${st.correctOrder}">
+                    <option value="">--</option>
+                    <option value="1">Step 1</option>
+                    <option value="2">Step 2</option>
+                    <option value="3">Step 3</option>
+                  </select>
+                  <span>${st.label}</span>
+                </div>
+              `).join("")}
+            </div>
+            <button class="btn" style="align-self:flex-start; margin-top:8px;" onclick="checkPipelineOrder()">Check Order</button>
+            <div class="feedback-banner" id="pipeline-feedback"></div>
+          `;
+          break;
+
+        case "designer": // Unit 4: Design your helper
+          bodyHtml = `
+            <div class="activity-instructions">${act.instruction}</div>
+            <div style="margin-top:8px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">WORKFLOW GOAL:</label>
+              <select id="helper-goal" style="width:100%; padding:8px; border-radius:6px; border:1px solid var(--card-border); margin-top:4px; font-family:inherit;">
+                ${act.goals.map(g => `<option value="${g}">${g}</option>`).join("")}
+              </select>
+            </div>
+            <div style="margin-top:12px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">SELECT GEMINI MODULES:</label>
+              <div class="checkbox-pill-grid">
+                ${act.components.map((c, i) => `
+                  <label class="check-pill">
+                    <input type="checkbox" value="${c}" checked>
+                    <span>${c}</span>
+                  </label>
+                `).join("")}
+              </div>
+            </div>
+            <button class="btn" style="margin-top:10px; align-self:flex-start;" onclick="generateHelperSummary()">Generate Helper Plan</button>
+            <div class="feedback-banner info" id="helper-feedback"></div>
+          `;
+          break;
+
+        case "agent_sort": // Unit 5: Agent or Chatbot sorting
+          bodyHtml = `
+            <div class="activity-instructions">${act.instruction}</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+              ${act.items.map((it, idx) => `
+                <div style="background:#f8fafc; border:1px solid var(--card-border); border-radius:6px; padding:8px 12px;">
+                  <div style="font-size:0.8rem; font-weight:600; margin-bottom:6px;">"${it.text}"</div>
+                  <div style="display:flex; gap:8px;">
+                    <button class="match-btn" onclick="checkAgentSort(this, '${it.answer}', 'Chatbot')">💬 Chatbot</button>
+                    <button class="match-btn" onclick="checkAgentSort(this, '${it.answer}', 'Agent')">🤖 Autonomous Agent</button>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+            <div style="margin-top:10px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">REFLECTION PROMPT:</label>
+              <input type="text" placeholder="What repetitive task in your studies would you hand to an AI agent?" style="width:100%; padding:8px; border:1px solid var(--card-border); border-radius:6px; font-size:0.8rem; margin-top:4px;" onchange="this.style.borderColor='var(--success)';">
+            </div>
+          `;
+          break;
+
+        case "explorer": // Unit 6: Tool explorer card flip
+          bodyHtml = `
+            <div class="activity-instructions">${act.instruction}</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+              <div>
+                <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">TOOL A:</label>
+                <select id="tool-a" style="width:100%; padding:8px; border:1px solid var(--card-border); border-radius:6px; margin-top:4px; font-family:inherit;">
+                  ${act.tools.map((t, idx) => `<option value="${t}" ${idx===0?'selected':''}>${t}</option>`).join("")}
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">TOOL B:</label>
+                <select id="tool-b" style="width:100%; padding:8px; border:1px solid var(--card-border); border-radius:6px; margin-top:4px; font-family:inherit;">
+                  ${act.tools.map((t, idx) => `<option value="${t}" ${idx===1?'selected':''}>${t}</option>`).join("")}
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">ONE-SENTENCE CLASS TRIAL IDEA:</label>
+              <textarea placeholder="Write one sentence on what test or experiment you would try first with these tools..." rows="2" style="width:100%; padding:8px; border:1px solid var(--card-border); border-radius:6px; font-size:0.8rem; margin-top:4px; font-family:inherit;"></textarea>
+            </div>
+            <div style="font-size:0.74rem; color:var(--text-muted); margin-top:4px; font-style:italic;">
+              Note: Explore these emerging tools in class discussions as practical hands-on exercises.
+            </div>
+          `;
+          break;
+      }
+
+      return `
+        <div class="activity-badge">Interactive Challenge</div>
+        <div class="activity-title">${act.title}</div>
+        ${bodyHtml}
+      `;
+    }
+
+    function bindActivityEvents(data) {
+      // Stub for any post-DOM injection binders if needed
+    }
+
+    /* Activity handlers */
+    let matchAnswers = {};
+    function handleMatchSelect(btn, taskIdx, correctTool) {
+      const parentRow = btn.parentElement;
+      parentRow.querySelectorAll("button").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+
+      matchAnswers[taskIdx] = btn.getAttribute("data-tool") === correctTool;
+
+      const fb = document.getElementById("match-feedback");
+      if (Object.keys(matchAnswers).length >= 3) {
+        const allCorrect = Object.values(matchAnswers).every(v => v === true);
+        fb.className = "feedback-banner show " + (allCorrect ? "success" : "info");
+        fb.innerText = allCorrect
+          ? "🎉 Excellent! You matched all three tools to their ideal tasks perfectly."
+          : "Almost there! Double-check which tool specializes in custom camera training vs multi-object boxes.";
+      }
+    }
+
+    function handleQuizAnswer(btn, isCorrect, feedbackText) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll(".scenario-btn").forEach(b => b.classList.remove("correct", "wrong"));
+      btn.classList.add(isCorrect ? "correct" : "wrong");
+
+      const fb = document.getElementById("quiz-feedback");
+      fb.className = "feedback-banner show " + (isCorrect ? "success" : "info");
+      fb.innerText = (isCorrect ? "✅ " : "💡 ") + feedbackText;
+    }
+
+    function checkPipelineOrder() {
+      const selects = document.querySelectorAll(".pipeline-select");
+      let allCorrect = true;
+      selects.forEach(s => {
+        if (s.value !== s.getAttribute("data-correct")) allCorrect = false;
+      });
+
+      const fb = document.getElementById("pipeline-feedback");
+      fb.className = "feedback-banner show " + (allCorrect ? "success" : "info");
+      fb.innerText = allCorrect
+        ? "🎯 Correct! Step 1: Capture & Preprocess -> Step 2: Model Inference -> Step 3: Threshold & Overlay."
+        : "Not quite in sequence yet. Remember: we must first capture the camera image, pass it through the model, and then draw the visual output.";
+    }
+
+    function generateHelperSummary() {
+      const goal = document.getElementById("helper-goal").value;
+      const checkedBoxes = Array.from(document.querySelectorAll(".check-pill input:checked")).map(c => c.value.split(" ")[0]);
+      const fb = document.getElementById("helper-feedback");
+      fb.className = "feedback-banner show info";
+      fb.innerHTML = `<strong>✨ Architecture Blueprint:</strong> For <em>"${goal}"</em>, your pipeline combines <strong>${checkedBoxes.join(", ")}</strong> to deliver an interactive, grounded student co-pilot.`;
+    }
+
+    function checkAgentSort(btn, correctCategory, chosenCategory) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll("button").forEach(b => b.classList.remove("correct", "wrong"));
+      if (correctCategory === chosenCategory) {
+        btn.classList.add("correct");
+      } else {
+        btn.classList.add("wrong");
+      }
+    }
+
+    /* Accessible text-only modal */
+    function openAccessibleModal() {
+      document.getElementById("accessible-list-modal").classList.add("open");
+    }
+
+    function closeAccessibleModal() {
+      document.getElementById("accessible-list-modal").classList.remove("open");
+    }
+
+    function populateAccessibleList() {
+      const container = document.getElementById("accessible-items-list");
+      container.innerHTML = COURSE_ISLANDS.map(island => `
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="color:#0f172a; font-size:1rem;">Island ${island.id}: ${island.unitNum} - ${island.title}</strong>
+            <button class="btn" style="padding:4px 12px; font-size:0.75rem;" onclick="closeAccessibleModal(); openIsland('${island.id}');">Explore Island ${island.id}</button>
+          </div>
+          <p style="font-size:0.82rem; color:#64748b; margin-top:6px;">${island.intro}</p>
+          <ul style="font-size:0.8rem; margin-left:20px; margin-top:8px; color:#334155;">
+            ${island.lessons.map(l => `<li><strong>${l.num}</strong>: ${l.title} - <em>${l.desc}</em></li>`).join("")}
+          </ul>
+        </div>
+      `).join("");
+    }
+
+    /* =========================================================================
+       5. LOW-STIMULATION MODE
+       ========================================================================= */
+    function toggleLowStim() {
+      enableLowStimMode(!isLowStim);
+    }
+
+    function enableLowStimMode(enable) {
+      isLowStim = enable;
+      const btn = document.getElementById("btn-low-stim");
+
+      if (isLowStim) {
+        document.body.classList.add("low-stim");
+        btn.classList.add("active");
+        btn.innerHTML = `<span>🌿</span><span>Low-stim: ON</span>`;
+        isBobbing = false;
+
+        // Simplify Three.js scene: stop motion, flat neutral sky
+        if (scene) scene.background = new THREE.Color(0xf1f5f9);
+        if (cloudGroup) cloudGroup.visible = false;
+
+        // Auto-mute audio in low-stim mode
+        if (isAudioPlaying) {
+          toggleAudio();
+        }
+      } else {
+        document.body.classList.remove("low-stim");
+        btn.classList.remove("active");
+        btn.innerHTML = `<span>🌿</span><span>Low-stimulation mode</span>`;
+        isBobbing = true;
+
+        if (scene) scene.background = new THREE.Color(0xdbeafe);
+        if (cloudGroup) cloudGroup.visible = true;
+      }
+    }
+
+    /* =========================================================================
+       6. PROCEDURAL BROWSER AMBIENT MUSIC (WEB AUDIO API - ZERO ASSETS)
+       ========================================================================= */
+    let audioCtx = null;
+    let isAudioPlaying = false;
+    let masterGain = null;
+    let synthTimer = null;
+    let currentVolume = 0.4;
+
+    // Pentatonic scale (C4, D4, E4, G4, A4, C5) for serene, non-intrusive ambient harmony
+    const PENTATONIC_FREQS = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 659.25];
+
+    function initAudio() {
+      if (audioCtx) return;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(currentVolume, audioCtx.currentTime);
+
+      // Low-pass filter to ensure sound is warm, soft, and non-harsh
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+      masterGain.connect(filter);
+      filter.connect(audioCtx.destination);
+    }
+
+    function toggleAudio() {
+      if (!isAudioPlaying) {
+        initAudio();
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        isAudioPlaying = true;
+        document.getElementById("music-icon").innerText = "🎵";
+        document.getElementById("music-label").innerText = "Music: On";
+        document.getElementById("btn-music").classList.add("active");
+        document.getElementById("volume-wrapper").style.display = "flex";
+        scheduleNextAmbientNote();
+      } else {
+        isAudioPlaying = false;
+        document.getElementById("music-icon").innerText = "🔇";
+        document.getElementById("music-label").innerText = "Music: Off";
+        document.getElementById("btn-music").classList.remove("active");
+        document.getElementById("volume-wrapper").style.display = "none";
+        if (synthTimer) clearTimeout(synthTimer);
+      }
+    }
+
+    function setAudioVolume(val) {
+      currentVolume = val / 100.0;
+      if (masterGain && audioCtx) {
+        masterGain.gain.setTargetAtTime(currentVolume, audioCtx.currentTime, 0.05);
+      }
+    }
+
+    /* Plays a soft, slow-fading ambient chime */
+    function playSoftNote(freq, duration = 3.5) {
+      if (!audioCtx || !isAudioPlaying) return;
+
+      const osc = audioCtx.createOscillator();
+      const noteGain = audioCtx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      // Gentle attack (1.2s) and peaceful long release (2.2s)
+      const now = audioCtx.currentTime;
+      noteGain.gain.setValueAtTime(0.0001, now);
+      noteGain.gain.linearRampToValueAtTime(0.08, now + 1.2);
+      noteGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+      osc.connect(noteGain);
+      noteGain.connect(masterGain);
+
+      osc.start(now);
+      osc.stop(now + duration + 0.1);
+    }
+
+    function scheduleNextAmbientNote() {
+      if (!isAudioPlaying) return;
+
+      // Pick random harmonic note
+      const freq = PENTATONIC_FREQS[Math.floor(Math.random() * PENTATONIC_FREQS.length)];
+      playSoftNote(freq, 3.5 + Math.random() * 2.0);
+
+      // Occasionally add a gentle fifth/octave harmony
+      if (Math.random() > 0.5) {
+        setTimeout(() => {
+          if (isAudioPlaying) {
+            const harmFreq = PENTATONIC_FREQS[Math.floor(Math.random() * PENTATONIC_FREQS.length)];
+            playSoftNote(harmFreq, 4.0);
+          }
+        }, 800);
+      }
+
+      // Next note in 2.2 to 4.5 seconds
+      const delay = 2200 + Math.random() * 2200;
+      synthTimer = setTimeout(scheduleNextAmbientNote, delay);
+    }
+
+    /* =========================================================================
+       7. MAIN ANIMATION & RENDERING LOOP
+       ========================================================================= */
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
+
+      // Smooth camera interpolation
+      if (isAnimatingCamera) {
+        camera.position.lerp(camTargetPos, 0.05);
+        controls.target.lerp(camLookTarget, 0.05);
+
+        if (camera.position.distanceTo(camTargetPos) < 0.1 && controls.target.distanceTo(camLookTarget) < 0.1) {
+          isAnimatingCamera = false;
+        }
+      }
+
+      // Gentle island bobbing (disabled in low stimulation mode)
+      if (isBobbing && islandMeshes) {
+        islandMeshes.forEach(island => {
+          const ud = island.userData;
+          const bob = Math.sin(elapsed * ud.bobSpeed + ud.bobPhase) * 0.28;
+          island.position.y = ud.baseY + bob;
+        });
+      }
+
+      // Slow ambient cloud drift
+      if (cloudGroup && !isLowStim) {
+        cloudGroup.children.forEach(cloud => {
+          cloud.userData.angle += cloud.userData.speed;
+          cloud.position.x = Math.cos(cloud.userData.angle) * cloud.userData.radius;
+          cloud.position.z = Math.sin(cloud.userData.angle) * cloud.userData.radius;
+        });
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+
+      // Update 2D labels position over 3D objects
+      updateHtmlLabels();
+    }
+
+    // Initialize once DOM is ready
+    window.addEventListener("DOMContentLoaded", () => {
+      init3D();
+    });
+  </script>
+</body>
+</html>
