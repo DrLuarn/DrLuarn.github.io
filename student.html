@@ -249,8 +249,17 @@
                         const website   = cells[3] ? (cells[3].v || '').toString().trim() : '';
 
                         if (name && studentId && name !== "姓名") {
-                            const baseUrl = website.replace(/\/+$/, '');
-                            const photo   = baseUrl + '/mypic.jpg';
+                            // Students often paste the full address bar URL (e.g. ".../index.html")
+                            // instead of just the site's root, which would otherwise build a
+                            // broken photo path like ".../index.html/mypic.jpg". Using the URL's
+                            // origin strips any trailing filename/path so this works either way.
+                            let baseUrl;
+                            try {
+                                baseUrl = new URL(website).origin;
+                            } catch (e) {
+                                baseUrl = website.replace(/\/+$/, '');
+                            }
+                            const photo = baseUrl + '/mypic.jpg';
 
                             studentMap.set(studentId, { name, studentId, website, photo });
                         }
