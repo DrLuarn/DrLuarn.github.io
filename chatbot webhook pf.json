@@ -1,0 +1,180 @@
+{
+  "name": "chatbot webhook pf",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e463386e-e6e2-4a6f-bd2c-d9a4bf21c1be",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        208
+      ],
+      "webhookId": "8f231a11-2b78-4b64-83b6-f94708e4fef0"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "=You are a smart and considerate personal AI assistant. Please respond to messages based on the information you receive, keeping the following points in mind:\n-Please ensure that all subsequent messages are responded to in English\n-You can query my schedule/appointments.\n-Use the serpAPI tool for web searches when necessary.\n-The current time is: {{ $now }}\n-Remove the phrase 'Hello! According to the retrieved information') from the response.\n-If I ask you to handle any schedule functions, use the Google Calendar Tool.\n-If I ask you to add or update an event but do not provide an end time, the default duration for the event should be set to 1 hour.\n-If I ask you to modify an event, first use the Google Calendar Tool to retrieve the event's original information before making the modification.\n-When providing information or answers, please format your response using bullet points or numbered lists for better readability.\n-Use markdown formatting: use '-' for bullet points or '1.', '2.', etc. for numbered lists.\n-Break down complex information into clear, concise points.\n"
+        }
+      },
+      "id": "4b353440-ac90-463b-aaf8-5696e60ca432",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        704,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "id": "fad4d738-46bc-467a-94fa-0dd0b73db836",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        384
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.sessionId }}"
+      },
+      "id": "a044097e-c288-4655-8952-223d66240727",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        768,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": $json.output } }}",
+        "options": {}
+      },
+      "id": "4a26a6a1-b722-47ae-912b-f76e75f3fece",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1040,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApiTool",
+      "typeVersion": 1,
+      "position": [
+        912,
+        384
+      ],
+      "id": "90121a84-1712-4c53-a48a-a92e753de96b",
+      "name": "Google search in SerpApi",
+      "credentials": {
+        "serpApi": {
+          "id": "cvFyXnSvB6S4R7rH",
+          "name": "SerpApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search in SerpApi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b9dca142-9f40-4c7a-8a7f-41ac4aa4a61a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3f65b896826ad898cfa88212df1b11fe08c66ac16b2b2fbbe14579642ebaf5c7"
+  },
+  "nodeGroups": [],
+  "id": "sCm3gOeNGU2Oy9aO",
+  "tags": []
+}
