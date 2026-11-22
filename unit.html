@@ -758,7 +758,7 @@
             const unit = unitInfo[currentUnit];
             images = [];
 
-            const maxCheck = 12; // realistic upper bound on images per unit
+            const maxCheck = 20; // realistic upper bound on images per unit
             const checks = await Promise.all(
                 Array.from({ length: maxCheck }, (_, k) => k + 1).map(i =>
                     findImageForIndex(currentUnit, i).then(src => ({ i, src }))
