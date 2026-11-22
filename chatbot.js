@@ -498,12 +498,12 @@ class ChatBot {
                     <div class="chatbot-header">
                         <div class="chatbot-title">
                             <span class="title-icon">🎓</span>
-                            <span>欒老師AI課程聊天BOT</span>
+                            <span>Prof. Luan's AI Course ChatBOT</span>
                         </div>
                         <div class="chatbot-header-buttons">
                             <button class="chatbot-btn clear-btn" id="clearChatBtn" title="Clear chat history">
                                 🗑️
-                                <span class="clear-btn-tooltip">清除記錄</span>
+                                <span class="clear-btn-tooltip">Clear history</span>
                             </button>
                             <button class="chatbot-btn chatbot-close" id="chatbotClose" title="Close Chat">×</button>
                         </div>
@@ -518,14 +518,14 @@ class ChatBot {
                     </div>
                     
                     <div class="chat-input">
-                        <input 
-                            type="text" 
-                            class="input-field" 
-                            id="messageInput" 
-                            placeholder="輸入您的問題..."
+                        <input
+                            type="text"
+                            class="input-field"
+                            id="messageInput"
+                            placeholder="Type your question..."
                             maxlength="500"
                         >
-                        <button class="send-button" id="sendButton" disabled>發送</button>
+                        <button class="send-button" id="sendButton" disabled>Send</button>
                     </div>
                 </div>
             </div>
@@ -556,7 +556,7 @@ class ChatBot {
 
         // Clear chat button
         this.clearChatBtn.addEventListener('click', () => {
-            if (confirm('確定要清除所有聊天記錄嗎？此動作無法復原。')) {
+            if (confirm('Are you sure you want to clear all chat history? This cannot be undone.')) {
                 this.clearHistory();
             }
         });
@@ -649,13 +649,15 @@ class ChatBot {
             }
             
             const data = await response.json();
-            
-            if (data.success && data.message) {
-                this.addMessage(data.message, 'ai');
-                
+
+            const reply = data.output || (data.success && data.message);
+
+            if (reply) {
+                this.addMessage(reply, 'ai');
+
                 // Save conversation to local storage
-                this.saveChatToLocal(message, data.message);
-                
+                this.saveChatToLocal(message, reply);
+
                 // Show notification if chatbot is closed
                 if (!this.chatbotPanel.classList.contains('active')) {
                     this.showNotification();
@@ -663,10 +665,10 @@ class ChatBot {
             } else {
                 throw new Error('Invalid response format');
             }
-            
+
         } catch (error) {
             console.error('Error sending message:', error);
-            this.addMessage('抱歉，發生錯誤。請檢查您的網路連線或稍後重試。', 'error-message');
+            this.addMessage('Sorry, an error occurred. Please check your network connection or try again later.', 'error-message');
         } finally {
             // Hide typing indicator
             this.hideTypingIndicator();
@@ -730,7 +732,7 @@ class ChatBot {
         if (recentHistory.length === 0) {
             // If no history, show welcome message
             setTimeout(() => {
-                this.addMessage('你好！我是欒老師的AI課程助手。有任何問題嗎？', 'ai');
+                this.addMessage("Hello! I'm Prof. Luan's AI course assistant. Do you have any questions?", 'ai');
             }, 1000);
         }
     }
