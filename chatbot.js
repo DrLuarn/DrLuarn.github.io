@@ -354,6 +354,37 @@ class ChatBot {
                 border-left: 3px solid #dc2626;
             }
 
+            .message.ai p {
+                margin: 0 0 8px 0;
+            }
+
+            .message.ai p:last-child {
+                margin-bottom: 0;
+            }
+
+            .message.ai ul,
+            .message.ai ol {
+                margin: 0 0 8px 0;
+                padding-left: 20px;
+            }
+
+            .message.ai ul:last-child,
+            .message.ai ol:last-child {
+                margin-bottom: 0;
+            }
+
+            .message.ai li {
+                margin-bottom: 4px;
+            }
+
+            .message.ai li:last-child {
+                margin-bottom: 0;
+            }
+
+            .message.ai strong {
+                font-weight: 600;
+            }
+
             .typing-indicator {
                 display: none;
                 align-items: center;
@@ -678,10 +709,69 @@ class ChatBot {
     addMessage(content, type) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}`;
-        messageDiv.textContent = content;
-        
+
+        if (type === 'ai') {
+            messageDiv.innerHTML = this.formatMarkdown(content);
+        } else {
+            messageDiv.textContent = content;
+        }
+
         this.messagesContainer.appendChild(messageDiv);
         this.scrollToBottom();
+    }
+
+    // Convert a constrained subset of markdown (bold, bullet/numbered lists,
+    // line breaks) from the AI's response into safe HTML. Escapes HTML first
+    // so the model's own text can never inject markup.
+    formatMarkdown(content) {
+        const escapeHtml = (str) => str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        let text = escapeHtml(content).trim();
+
+        // Some responses use " * " as an inline bullet separator instead of
+        // actual line breaks (e.g. "... as follows: * **A**: ... * **B**: ...").
+        // Turn those into real list items too.
+        text = text.replace(/\s\*\s(?=\*\*)/g, '\n- ');
+
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+        let html = '';
+        let listType = null; // 'ul' | 'ol' | null
+
+        const closeList = () => {
+            if (listType) {
+                html += `</${listType}>`;
+                listType = null;
+            }
+        };
+
+        lines.forEach(line => {
+            const bulletMatch = line.match(/^[-*]\s+(.*)$/);
+            const numberedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+            if (bulletMatch) {
+                if (listType !== 'ul') { closeList(); html += '<ul>'; listType = 'ul'; }
+                html += `<li>${this.inlineMarkdown(bulletMatch[1])}</li>`;
+            } else if (numberedMatch) {
+                if (listType !== 'ol') { closeList(); html += '<ol>'; listType = 'ol'; }
+                html += `<li>${this.inlineMarkdown(numberedMatch[1])}</li>`;
+            } else {
+                closeList();
+                html += `<p>${this.inlineMarkdown(line)}</p>`;
+            }
+        });
+
+        closeList();
+        return html;
+    }
+
+    // Inline formatting within a single line: **bold** only (content is
+    // already HTML-escaped by the caller, so this is safe).
+    inlineMarkdown(line) {
+        return line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     }
     
     showTypingIndicator() {
