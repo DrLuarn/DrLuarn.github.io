@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MMI5194 Final Report — The New Frontiers of AI</title>
 <style>
   @page { size: A4; margin: 17mm 15mm 18mm 15mm; }
@@ -37,6 +38,31 @@
   .stat .n { font-size: 17pt; font-weight: 700; color: #14304f; display: block; }
   .stat .l { font-size: 8.8pt; color: #5a6b7a; }
   .footer { margin-top: 34px; border-top: 1px solid #d5dde4; padding-top: 8px; font-size: 8.8pt; color: #7a8794; text-align: center; }
+
+  img { max-width: 100%; height: auto; }
+  @media screen and (max-width: 640px) {
+    body { font-size: 11pt; }
+    .cover { padding: 22px 18px 18px; border-radius: 0; }
+    .cover h1 { font-size: 18pt; }
+    .cover h2 { font-size: 11pt; }
+    h2.part { font-size: 14pt; }
+    h3 { font-size: 11.5pt; }
+    .photos { flex-direction: column; }
+    .photos img, .photos.single img { width: 100%; }
+    .stat-row { flex-wrap: wrap; }
+    .stat { flex: 1 1 42%; }
+    table { font-size: 8.6pt; }
+    th, td { padding: 4px 5px; }
+    blockquote { margin-left: 0; }
+  }
+
+  @media screen {
+    body { max-width: 900px; margin: 0 auto; padding: 26px 24px 44px; }
+  }
+  @media screen and (max-width: 640px) {
+    body { padding: 14px 14px 30px; }
+    .cover { border-radius: 6px; }
+  }
 </style>
 </head>
 <body>
@@ -60,25 +86,25 @@
 
 <table>
 <tr><th style="width:4%">#</th><th style="width:26%">Student</th><th style="width:38%">Project</th><th>Core technology</th></tr>
-<tr><td>1</td><td>Valeria Yagui Nishii</td><td>Review Insights Dashboard</td><td>n8n, Gemini API, Streamlit</td></tr>
-<tr><td>2</td><td>Anchal Tewari</td><td>Document Intake for German Municipal Offices</td><td>Document AI, web app (Civic Desk)</td></tr>
-<tr><td>3</td><td>Amit Sharma</td><td>StudyLens</td><td>Multi-agent loop, Telegram</td></tr>
-<tr><td>4</td><td>Chirag Milan Gupte</td><td>AI Calorie Tracker</td><td>Gemini vision</td></tr>
-<tr><td>5</td><td>Alejandra González Ibarra</td><td>SAM OneAI Skill</td><td>Knowledge skill, SAP Joule Work</td></tr>
-<tr><td>6</td><td>Nur Hidayah Binti Ahmad</td><td>Packaging Price Watch</td><td>Python engine, scheduled Claude agent</td></tr>
-<tr><td>7</td><td>Mitthu Ghosh</td><td>AgriTech Performance &amp; Operations Dashboard</td><td>Gemini 2.5, dashboard analytics</td></tr>
-<tr><td>8</td><td>Bashar Alkassis</td><td>NOMAD — travel itinerary companion</td><td>Agentic re-planning prototype</td></tr>
-<tr><td>9</td><td>Gayathri Sekar</td><td>FridgeChef AI</td><td>Multimodal vision, recipe generation</td></tr>
-<tr><td>10</td><td>Alesia Musabelliu</td><td>MIRRA — AI beauty companion</td><td>Five-agent concept design</td></tr>
-<tr><td>11</td><td>Pascal Müller</td><td>Pforzheim Student Copilot</td><td>Cue agent, skills, WhatsApp</td></tr>
-<tr><td>12</td><td>Claribel Crystal Lupi</td><td>Job Application Autopilot</td><td>Browser extension, Claude, Sheets</td></tr>
-<tr><td>13</td><td>Manuel Lowien</td><td>Hand Music</td><td>MediaPipe hand tracking</td></tr>
-<tr><td>14</td><td>Aaron Ipser</td><td>DB Navigator Next Gen</td><td>HAFAS routing data, AI news feed</td></tr>
+<tr><td>1</td><td>Valeria Y.</td><td>Review Insights Dashboard</td><td>n8n, Gemini API, Streamlit</td></tr>
+<tr><td>2</td><td>Anchal T.</td><td>Document Intake for German Municipal Offices</td><td>Document AI, web app (Civic Desk)</td></tr>
+<tr><td>3</td><td>Amit S.</td><td>StudyLens</td><td>Multi-agent loop, Telegram</td></tr>
+<tr><td>4</td><td>Chirag G.</td><td>AI Calorie Tracker</td><td>Gemini vision</td></tr>
+<tr><td>5</td><td>Alejandra G.</td><td>SAM OneAI Skill</td><td>Knowledge skill, SAP Joule Work</td></tr>
+<tr><td>6</td><td>Hidayah A.</td><td>Packaging Price Watch</td><td>Python engine, scheduled Claude agent</td></tr>
+<tr><td>7</td><td>Mitthu G.</td><td>AgriTech Performance &amp; Operations Dashboard</td><td>Gemini 2.5, dashboard analytics</td></tr>
+<tr><td>8</td><td>Bashar A.</td><td>NOMAD — travel itinerary companion</td><td>Agentic re-planning prototype</td></tr>
+<tr><td>9</td><td>Gayathri S.</td><td>FridgeChef AI</td><td>Multimodal vision, recipe generation</td></tr>
+<tr><td>10</td><td>Alesia M.</td><td>MIRRA — AI beauty companion</td><td>Five-agent concept design</td></tr>
+<tr><td>11</td><td>Pascal M.</td><td>Pforzheim Student Copilot</td><td>Cue agent, skills, WhatsApp</td></tr>
+<tr><td>12</td><td>Claribel L.</td><td>Job Application Autopilot</td><td>Browser extension, Claude, Sheets</td></tr>
+<tr><td>13</td><td>Manuel L.</td><td>Hand Music</td><td>MediaPipe hand tracking</td></tr>
+<tr><td>14</td><td>Aaron I.</td><td>DB Navigator Next Gen</td><td>HAFAS routing data, AI news feed</td></tr>
 </table>
 
 <div class="student">
-<h3>1. Valeria Yagui Nishii — Review Insights Dashboard</h3>
-<p class="sub">Student ID 334789 · MDBM · Portfolio: <a href="https://m334789.github.io/">m334789.github.io</a> · App: review-insights-final-project.streamlit.app</p>
+<h3>1. Valeria Y. — Review Insights Dashboard</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/valeria1.jpg" alt="Valeria presenting the Review Insights dashboard"><img src="img/valeria2.jpg" alt="The n8n workflow behind the dashboard"></div>
 <p><b>The project.</b> Businesses receive more customer reviews than anyone can read. Valeria built a pipeline that turns a raw review file into a management-ready insight dashboard. In her Streamlit app, the user uploads a CSV of reviews (columns: Date, Rating, Review) or pastes review text, and presses “Analyze reviews”. The app sends the reviews through a webhook into her <b>n8n</b> workflow, which builds a prompt and calls the <b>Gemini API</b> to analyse sentiment and extract recurring issues; the parsed results flow back into the dashboard.</p>
 <p><b>What it produces.</b> A sentiment trend chart (switchable by day, week or month), a sentiment-share donut, and a “Top 3 issues” panel with mention counts and a written summary. In her demo data — online reviews of pet harnesses — 37% of reviews were positive, and the top issues were product quality concerns (5 mentions), inaccurate sizing (4) and shipping delays and problems (4); customers liked the harness design but questioned sizing, delivery and value for money. Results can be downloaded. The app is deployed on Streamlit Cloud, with the code in her GitHub repository.</p>
@@ -86,8 +112,8 @@
 </div>
 
 <div class="student">
-<h3>2. Anchal Tewari — Document Intake for German Municipal Offices</h3>
-<p class="sub">Student ID 335729 · MBA · App: “Civic Desk” Document Intake Desk (hosted on chatgpt.site)</p>
+<h3>2. Anchal T. — Document Intake for German Municipal Offices</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/anchal1.jpg" alt="The Document Intake Desk app"><img src="img/anchal2.jpg" alt="Title slide: Which case does Scan.pdf belong to?"></div>
 <p><b>The project.</b> Anchal’s presentation opened with a deceptively simple question: <i>“Which case does Scan.pdf belong to?”</i> German municipal offices receive large numbers of follow-up document submissions (<i>Nachreichungen</i>) — often a bare email with a scanned attachment, no subject line, and the case reference (<i>Aktenzeichen</i>) field left empty. Before anything can be filed, a clerk has to work out which case the document belongs to and what must be checked.</p>
 <p><b>What she built.</b> A working “Document Intake Desk” with three panels: an inbox of incoming documents, a document review pane, and the case checklist. In her demo inbox, three rental-agreement PDFs already carried case reference DEMO-241, while the fourth — Scan.pdf — had none. The review pane extracts structured fields from the document (case reference DEMO-241, agreement reference MIET-017, document ID MV-041, contract end date 31 March 2027), and a “Check document” action validates the submission against the case checklist before filing.</p>
@@ -95,8 +121,8 @@
 </div>
 
 <div class="student">
-<h3>3. Amit Sharma — StudyLens</h3>
-<p class="sub">Student ID 335692 · MBA · Portfolio: <a href="https://amitvedvyas-bit.github.io/">amitvedvyas-bit.github.io</a></p>
+<h3>3. Amit S. — StudyLens</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/amit1.jpg" alt="StudyLens landing page"><img src="img/amit2.jpg" alt="StudyLens steps: quiz delivered and answered on Telegram"></div>
 <p><b>The project.</b> StudyLens is a personal revision agent built around a simple promise: <i>“Your notes, quizzing you back.”</i> The student photographs or uploads lecture notes or slides; from there an agent loop takes over. The system reads the material, writes quiz questions — and checks its own questions against the notes before using them (his example: “Which dataset verifies a model before deployment? — the validation set”) — then delivers the quiz to the student’s phone over <b>Telegram</b>. Answers given in the chat are graded; a tutor agent explains what was missed, and a planner agent updates the student’s progress.</p>
 <p><b>Architecture.</b> Amit emphasised that taking a photo and reading it are things any tool can do; the real work is the loop that reacts to the student’s answers. His design uses <b>four specialised agents passing the work around</b> — reading, question generation and checking, tutoring, and planning/tracking — an explicit multi-agent system rather than a single chatbot.</p>
@@ -104,16 +130,16 @@
 </div>
 
 <div class="student">
-<h3>4. Chirag Milan Gupte — AI Calorie Tracker</h3>
-<p class="sub">Student ID 336215 · MBA · Portfolio: <a href="https://336215.github.io/">336215.github.io</a></p>
+<h3>4. Chirag G. — AI Calorie Tracker</h3>
+<p class="sub">MBA</p>
 <div class="photos single"><img src="img/chirag1.jpg" alt="Chirag demonstrating the AI Calorie Tracker with an orange"></div>
 <p><b>The project.</b> A direct application of perception AI to everyday life: snap or upload a photo of your food, and Gemini’s vision model identifies the dish and estimates its calories. The app keeps a daily log (“Today’s log”) with a running kcal-per-day counter, and offers Camera, Upload and Identify actions. Chirag demonstrated it live in class, holding an orange up to the camera while the app analysed it — a small moment that made the perception-AI unit tangible for the whole room.</p>
 <p class="concepts"><b>Course concepts applied:</b> Perception AI · multimodal vision models · personal health tooling.</p>
 </div>
 
 <div class="student">
-<h3>5. Alejandra González Ibarra — SAM OneAI Skill</h3>
-<p class="sub">Student ID 335169 · MDBM · Portfolio: <a href="https://m335169.github.io/">m335169.github.io</a></p>
+<h3>5. Alejandra G. — SAM OneAI Skill</h3>
+<p class="sub">MDBM</p>
 <div class="photos single"><img src="img/alejandra1.jpg" alt="The SAM OneAI Skill slide"></div>
 <p><b>The project.</b> Alejandra tackled a classic enterprise problem: employees waste hours hunting through SharePoint for authoritative answers. She built <b>SAM OneAI</b> as a reusable <i>skill</i> for Joule Work Desktop — installing it is as simple as uploading the SKILL.md file. The skill understands the question, routes it to the right SAM knowledge space (SPM Portfolio Management, SCM Compliance, SFM Financial, TDM Tools &amp; Data, TMO Transformation Office, or SAM General), reads the trusted content, and returns a sourced answer in seconds instead of a pile of search results.</p>
 <p><b>Why it matters.</b> Of all the projects, this one most directly showed the course’s “skills” idea inside a real corporate stack: knowledge work packaged as an installable, governed capability rather than an ad-hoc chat with a model.</p>
@@ -121,8 +147,8 @@
 </div>
 
 <div class="student">
-<h3>6. Nur Hidayah Binti Ahmad — Packaging Price Watch</h3>
-<p class="sub">Student ID 335033 · MDBM · Portfolio: <a href="https://m335033.github.io/">m335033.github.io</a></p>
+<h3>6. Hidayah A. — Packaging Price Watch</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/hidayah1.jpg" alt="Packaging Price Watch title slide with demo results"><img src="img/hidayah2.jpg" alt="The four-step workflow of Packaging Price Watch"></div>
 <p><b>The problem.</b> Packaging contracts are typically indexed: when a raw-material index moves beyond an agreed window, the contract price must change. In practice, buyers collect index values manually every month and check every contract by hand — slow, error-prone work in which missed decrease cycles mean silently overpaying, and sheer volume creates decision fatigue.</p>
 <p><b>What she built.</b> A four-step system designed so that humans only touch the decisions. (1) Procurement maintains the raw data — an Excel index tracker and contract list — a few minutes of human work per month. (2) A review engine written in <b>Python</b> (all calculations in code, covered by 20 tests) applies the timing windows, weighted changes, triggers and data checks, driven daily at 07:00 by a <b>scheduled Claude agent</b>. (3) A shared dashboard updates automatically: every contract’s status, the flagged price changes with their drivers, and a draft supplier notice. (4) Buyers review only the flagged cases, agree the new price with the supplier, and approve before anything is sent. Her timing rule: a window ending in month M is reviewed when the index is published in M+1, and the new price applies from the 1st of M+2. In the demo replay of 12 contracts, the engine flagged three price changes for 1 December 2026 (+7.89%, −6.00%, +5.12%).</p>
@@ -130,8 +156,8 @@
 </div>
 
 <div class="student">
-<h3>7. Mitthu Ghosh — AgriTech Performance &amp; Operations Dashboard</h3>
-<p class="sub">Student ID 335632 · MBA · Portfolio: <a href="https://335632.github.io/">335632.github.io</a></p>
+<h3>7. Mitthu G. — AgriTech Performance &amp; Operations Dashboard</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/mitthu1.jpg" alt="The AgriTech dashboard overview"><img src="img/mitthu2.jpg" alt="The AI Predictive Hub with agronomic synthesis"></div>
 <p><b>The project.</b> Mitthu built a smart-farming “control room” for a scenario of corn production in California’s Central Valley (Autumn 2026). Interactive filters — region, cultivar, growing cycle, farm scale from micro to mega-farm, and date range — drive every KPI on the page: 14 farms and 6,664 acres monitored, a yield forecast of 36,385 tons, water efficiency of 94.2%, a carbon reduction of 2,999 MT, 168 active IoT sensors (soil moisture and weather stations), and farmer satisfaction of 4.7/5. “Farm Care Alerts” pair each problem with a countermeasure: an AquaFlow draw limit of −5% compensated by precision drip scheduling, and forecast heat answered by shifting automated spray sweeps to the night.</p>
 <p><b>The AI layer.</b> The “AI Predictive Hub”, powered by <b>Gemini 2.5</b>, produces an “AI Agronomic Synthesis”: an executive summary (1,450 acres of dual-purpose corn, yield +4.8% versus the regional baseline), a bioclimatic risk rated HIGH (a San Joaquin Valley heat dome — 14 days above 104 °F, relative humidity below 18%), a pathogen risk rated MEDIUM (a Southern Corn Rust model at 42%, with preventive triazole fungicide recommended for overhead-irrigated zones), an irrigation advisory (subsurface drip at 115% of baseline ETo), and a profit estimate of +$140 per acre net margin with pumping energy down 14%. A conversational AI Operational Advisor answers follow-up questions. Tabs cover Crop Yield &amp; Analytics, Live Operations &amp; GIS, Market, and Finance &amp; ESG.</p>
@@ -139,8 +165,8 @@
 </div>
 
 <div class="student">
-<h3>8. Bashar Alkassis — NOMAD</h3>
-<p class="sub">Student ID 335061 · MDBM · Portfolio: <a href="https://335061.github.io/">335061.github.io</a></p>
+<h3>8. Bashar A. — NOMAD</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/bashar1.jpg" alt="The NOMAD Marrakech itinerary"><img src="img/bashar2.jpg" alt="NOMAD re-planning a day after a weather update"></div>
 <p><b>The project.</b> NOMAD — tagline <i>“Your trip. Still on.”</i> — is an AI travel companion for city breaks built around one principle: <b>it re-plans around disruption, but it never touches your fixed bookings, and nothing changes until you approve.</b> The user states a destination, dates and the kind of day they like (culture, local food, outdoors, slow mornings); NOMAD builds the itinerary and marks fixed bookings — in the demo, a 13:00 lunch reservation in Marrakech — as protected.</p>
 <p><b>Disruption handling.</b> Two scenarios carried the demo. When the weather turns, the 10:00 Agafay desert buggy tour is moved to the next day and replaced today by a hammam and spa afternoon — “Your day, reimagined”: the adventure is kept, the day stays relaxing. When a museum turns out to be closed on arrival, NOMAD proposes a replacement stop (a courtyard gallery, open, 12 minutes’ walk) while the 13:00 lunch reservation stays exactly where it was. Bashar also designed a proper evaluation: a study with 12 participants and two matched closure scenarios, comparing manual re-planning (maps, search and memory) against NOMAD on speed, accuracy, confidence and cognitive load, with the order varied to cancel learning effects. The prototype ships with 20 curated city-break destinations and is transparent about being a prototype — the slides note that venue availability in the demo is simulated.</p>
@@ -148,8 +174,8 @@
 </div>
 
 <div class="student">
-<h3>9. Gayathri Sekar — FridgeChef AI</h3>
-<p class="sub">Student ID 333080 · MBA · Portfolio: <a href="https://333080.github.io/">333080.github.io</a></p>
+<h3>9. Gayathri S. — FridgeChef AI</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/gayathri1.jpg" alt="FridgeChef AI: scan your fridge, discover meals"><img src="img/gayathri2.jpg" alt="FridgeChef recipe cards with 100% ingredient match"></div>
 <p><b>The project.</b> FridgeChef AI starts from a question everyone knows: <i>“What’s in your fridge? Snap a photo. Discover delicious meals.”</i> Step 1 is a multimodal vision scan: the user uploads photos of the fridge and counter from several angles — shelves, crisper drawers, counter — with images compressed on the client side before analysis. The system identifies the ingredients it can see, the user adjusts preferences (dietary requirements, units in metric or imperial), and the app generates recipe cards.</p>
 <p><b>What it produces.</b> Each card shows a match score against the ingredients actually on hand (the three demo dishes — a Mediterranean skillet shakshuka, herb-seared chicken breast with cherry tomatoes, and a 10-minute Mexican-style “fridge harvest” — all scored 100%), cooking time, difficulty, calories and protein/carbs/fat, plus an itemised “In Your Fridge” list with quantities (six free-range eggs, 250 g cherry tomatoes, 150 g baby spinach, 200 g feta) and the reassurance “You have 100% of the ingredients to cook right now!”. Features include Favourites, a Shopping List, and one-click “View Full Recipe” and “Cook Mode”. Privacy is treated as a feature, not a footnote: the design stresses “Private &amp; Ephemeral Photos”, and preset sample fridges (Mediterranean Fridge, Asian Stir-Fry Counter, High-Protein Shelf) let anyone try the flow without uploading a real photo.</p>
@@ -157,8 +183,8 @@
 </div>
 
 <div class="student">
-<h3>10. Alesia Musabelliu — MIRRA</h3>
-<p class="sub">Student ID 335076 · MDBM · Portfolio: <a href="https://335076.github.io/">335076.github.io</a></p>
+<h3>10. Alesia M. — MIRRA</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/alesia1.jpg" alt="MIRRA title slide: Recognize. Personalize. Adapt."><img src="img/alesia2.jpg" alt="The five agents behind MIRRA"></div>
 <p><b>The project.</b> MIRRA is an agentic AI personal beauty companion, presented as a concept introduction (five slides) built on three verbs: <b>Recognize. Personalize. Adapt.</b> The problem she identified is familiar to anyone standing in a cosmetics aisle: too many products to choose from, confusing ingredient combinations, and routines that never adapt when skin or needs change.</p>
 <p><b>The design.</b> Rather than one monolithic assistant, MIRRA is a team of five agents coordinated by an <b>Orchestrator</b>: a <b>Skin Intelligence</b> agent that understands the user’s skin, an <b>Ingredient Guardian</b> that checks products and possible ingredient conflicts, a <b>Routine Architect</b> that builds the morning and evening routines, and a <b>Reflection Agent</b> that reviews results and adapts the routine. Her stated vision: help users understand the products they own, create routines based on individual needs — using the camera to recognise products — adapt recommendations when needs change, and keep users in control of their skincare decisions. The goal, in her words, is to combine perception, reasoning and adaptation in one companion — a neat summary of the course’s own arc.</p>
@@ -166,8 +192,8 @@
 </div>
 
 <div class="student">
-<h3>11. Pascal Müller — Pforzheim Student Copilot</h3>
-<p class="sub">Student ID 325712 · MMI (Master Marketing Intelligence) · Portfolio: <a href="https://paelus.github.io/">paelus.github.io</a> · Dashboard: paelus.github.io/student-copilot</p>
+<h3>11. Pascal M. — Pforzheim Student Copilot</h3>
+<p class="sub">MMI (Master Marketing Intelligence)</p>
 <div class="photos"><img src="img/pascal1.jpg" alt="How the Student Copilot works: Cue agent, skills, WhatsApp"><img src="img/pascal2.jpg" alt="Live demo: the morning brief and the web dashboard"></div>
 <p><b>The problem.</b> A student’s morning is spread across five apps and three websites — weather, the Mensa menu page, Moodle and email deadlines, city events, news — with no single overview, so deadlines that live in heads, notes and inboxes slip. The one app he opens anyway, every morning, is WhatsApp.</p>
 <p><b>What he built.</b> A personal study assistant that lives in WhatsApp, built on a <b>Cue agent named “Cosmo”</b> with two custom skills (<i>pforzheim-student-copilot</i> and <i>daily-news-briefing</i>) and persistent memory. On weekdays at <b>07:00</b> it sends a morning brief: the Pforzheim weather with what-to-wear advice for the ride, today’s Mensa menu with its source, his deadlines for the next seven days, events in Pforzheim and at the university, and two news stories on his chosen topics. All day, WhatsApp commands manage the system — <i>brief</i>, <i>mensa</i>, <i>weather</i>, <i>topics</i>, <i>deadline &lt;task&gt; &lt;date&gt;</i>, <i>deadlines</i>, <i>done</i>, <i>remind &lt;text&gt; &lt;time&gt;</i> — while deadlines and news topics are kept in the agent’s memory between chats. A web dashboard mirrors the same data with live weather, a deadline countdown and a brief preview. The live demo used the real brief from Wednesday 26 November, which had arrived by itself at 07:06. Pascal closed by mapping his build onto <b>six building blocks from the course</b>: agent, skills, scheduled task, messenger, memory, and web + chatbot — the most literal embodiment of the course’s personal-agent unit in the whole session.</p>
@@ -175,8 +201,8 @@
 </div>
 
 <div class="student">
-<h3>12. Claribel Crystal Lupi — Job Application Autopilot</h3>
-<p class="sub">Student ID 335034 · MDBM · Portfolio: <a href="https://335034.github.io/">335034.github.io</a></p>
+<h3>12. Claribel L. — Job Application Autopilot</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/claribel1.jpg" alt="The Job Application Autopilot tracker"><img src="img/claribel2.jpg" alt="Interview invite in, prep pack out"></div>
 <p><b>The project.</b> Job hunting means applying at scale — and losing track. Claribel’s slogan: <i>“Mass job application. One click logs a job; an interview invite brings a ready pack.”</i> A browser extension reads the title, company, location and date from a job posting and keeps the full job description; one click on “Save to sheet” logs the job into a Google Sheets tracker with applied date, position, company, status and comments. The “days since applied” counter turns amber after 14 days — time to follow up.</p>
 <p><b>The interview pack.</b> When a row’s status flips to “Interview”, the candidate types <i>/job-refresh</i> in Claude (on laptop or phone); Claude researches the company, the role and the field, reads the CV, and links a <b>prep pack</b> into the row: company at a glance, the role decoded, a “job knowledge” ladder (descriptive → diagnostic → predictive → prescriptive analytics), a CV gap checklist (in her example: SQL and dashboards are strong matches; A/B testing needs revision; Python pandas needs polish), likely questions, a jargon glossary, and questions to ask them. She even costed the three ways to run it: the Claude subscription (€0 extra), the Claude API (≈ $10–20 in total — her pick; her estimate covers 500 jobs and 30 prep packs), or the Gemini free tier ($0, with daily caps).</p>
@@ -184,8 +210,8 @@
 </div>
 
 <div class="student">
-<h3>13. Manuel Lowien — Hand Music</h3>
-<p class="sub">Student ID 324033 · MMI · Portfolio: <a href="https://324033.github.io/">324033.github.io</a></p>
+<h3>13. Manuel L. — Hand Music</h3>
+<p class="sub">MMI</p>
 <div class="photos"><img src="img/manuel1.jpg" alt="Hand Music gameplay with falling notes"><img src="img/manuel2.jpg" alt="The Hand Music main menu"></div>
 <p><b>The project.</b> <i>“Spiele Musik mit deinen Händen”</i> — play music with your hands. Hand Music is a rhythm game driven by <b>MediaPipe hand tracking</b>: a webcam watches the player’s hands, and each finger-sign corresponds to a note (the tiles at the bottom of the screen run C, D, E, F, G, A, H, C′). Notes fall down lanes in Guitar-Hero style; making the right sign at the right moment scores points and builds a combo, with immediate feedback (“Perfekt!”, “Gut”). Side panels show the live hand-skeleton tracking for the left and right hands and the next note to play, and the game even counts in by recognising held-up fingers (4-3-2-1).</p>
 <p><b>Modes and content.</b> The German-language UI offers free play (<i>Freies Spiel</i>), a practice mode (<i>Übungsmodus</i>), instructions and settings. The song library is children’s songs — the live demo used <i>Alle meine Entchen</i> (easy difficulty, 40 BPM, glockenspiel sound), and the library also shows <i>Mary Had a Little Lamb</i>, <i>Twinkle Twinkle Little Star</i>, <i>Old MacDonald Had a Farm</i>, <i>Hänschen klein</i> and <i>Bruder Jakob</i>. Manuel demonstrated it live in class, playing with his own hands while the score climbed.</p>
@@ -193,8 +219,8 @@
 </div>
 
 <div class="student">
-<h3>14. Aaron Ipser — DB Navigator Next Gen</h3>
-<p class="sub">Student ID 336209 · MBA · Portfolio: <a href="https://336209.github.io/">336209.github.io</a></p>
+<h3>14. Aaron I. — DB Navigator Next Gen</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/aaron1.jpg" alt="DB Navigator Next Gen route map with alternatives"><img src="img/aaron2.jpg" alt="The route builder and BW news tab"></div>
 <p><b>The project.</b> Aaron reimagined Deutsche Bahn’s journey planner as a “Next Gen” concept for Baden-Württemberg. His prototype combines <b>live DB HAFAS routing</b> with a statewide dataset — the header advertises 64 stops and 8 bus networks, and the coverage line spans the state’s 23 transport associations (<i>Verkehrsverbünde</i>: VVS, VRN, KVV, RVF, bodo and more) — with a visible “data pipeline status” panel and one-click Baden-Württemberg scenario routes (for example Schwäbisch Hall to a business hub, Karlsruhe to a university town, Mannheim Hbf to Freiburg on an ICE, or a statewide city-centre bus explorer).</p>
 <p><b>The experience.</b> A modular route builder lets the traveller assemble a journey leg by leg (Stuttgart Hbf → Ludwigsburg by S-Bahn → Mannheim Hbf) with the Deutschlandticket in mind; the map view shows the best connection (2 h 22 min) against an alternative (2 h 56 min) with mode filters for regional rail, S-Bahn/U-Bahn and preferences. A “BW Rail &amp; Bus News” tab, described as powered by an AI news ticker, turns raw disruption information into advice — for example a Stuttgart Hbf concourse advisory suggesting travellers allow an extra 15–25 minutes for cross-town connections, and an explainer that the Deutschlandticket and JugendBW ticket are valid across all regional rail and local buses statewide.</p>
@@ -203,7 +229,7 @@
 
 <h2 class="part">Part 2 — Anonymous Course Feedback</h2>
 
-<p><b>Method.</b> After the final presentations, students were invited to complete an anonymous Google Form with two open questions. The form collected no names and no email addresses, and signing in was not required. Each question received <b>20 responses</b> — roughly 43% of the 47 students on the class list. One answer text appears twice under each question (in Q1, “I loved every part of this course! I really like the transition from manually using agentic ai to having the system being created automatically through advanced apps.”; in Q2, “I would not change a single thing about this course. The professor is an absolute genius…”). These are counted as submitted; they most likely reflect a duplicate submission, so the number of distinct respondents is probably 19–20. One Q2 response was signed voluntarily (“Sincerely, Alesia Musabelliu”) despite the form being anonymous.</p>
+<p><b>Method.</b> After the final presentations, students were invited to complete an anonymous Google Form with two open questions. The form collected no names and no email addresses, and signing in was not required. Each question received <b>20 responses</b> — roughly 43% of the 47 students on the class list. One answer text appears twice under each question (in Q1, “I loved every part of this course! I really like the transition from manually using agentic ai to having the system being created automatically through advanced apps.”; in Q2, “I would not change a single thing about this course. The professor is an absolute genius…”). These are counted as submitted; they most likely reflect a duplicate submission, so the number of distinct respondents is probably 19–20. One Q2 response was voluntarily signed with a name despite the form being anonymous.</p>
 
 <div class="stat-row">
   <div class="stat"><span class="n">20</span><span class="l">responses per question</span></div>
