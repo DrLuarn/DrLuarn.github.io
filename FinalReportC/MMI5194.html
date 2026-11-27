@@ -2,6 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MMI5194 期末報告 — AI 的新邊界</title>
 <style>
   @page { size: A4; margin: 17mm 15mm 18mm 15mm; }
@@ -37,6 +38,23 @@
   .stat .n { font-size: 17pt; font-weight: 700; color: #14304f; display: block; }
   .stat .l { font-size: 8.8pt; color: #5a6b7a; }
   .footer { margin-top: 34px; border-top: 1px solid #d5dde4; padding-top: 8px; font-size: 8.8pt; color: #7a8794; text-align: center; }
+
+  img { max-width: 100%; height: auto; }
+  @media screen and (max-width: 640px) {
+    body { font-size: 11pt; }
+    .cover { padding: 22px 18px 18px; border-radius: 0; }
+    .cover h1 { font-size: 18pt; }
+    .cover h2 { font-size: 11pt; }
+    h2.part { font-size: 14pt; }
+    h3 { font-size: 11.5pt; }
+    .photos { flex-direction: column; }
+    .photos img, .photos.single img { width: 100%; }
+    .stat-row { flex-wrap: wrap; }
+    .stat { flex: 1 1 42%; }
+    table { font-size: 8.6pt; }
+    th, td { padding: 4px 5px; }
+    blockquote { margin-left: 0; }
+  }
 </style>
 </head>
 <body>
@@ -60,25 +78,25 @@
 
 <table>
 <tr><th style="width:4%">#</th><th style="width:26%">學生</th><th style="width:38%">專案</th><th>核心技術</th></tr>
-<tr><td>1</td><td>Valeria Yagui Nishii</td><td>Review Insights 顧客評論洞察儀表板</td><td>n8n、Gemini API、Streamlit</td></tr>
-<tr><td>2</td><td>Anchal Tewari</td><td>德國市政機關文件收件系統</td><td>文件 AI、網頁應用（Civic Desk）</td></tr>
-<tr><td>3</td><td>Amit Sharma</td><td>StudyLens</td><td>多代理人迴圈、Telegram</td></tr>
-<tr><td>4</td><td>Chirag Milan Gupte</td><td>AI 熱量追蹤器</td><td>Gemini 視覺</td></tr>
-<tr><td>5</td><td>Alejandra González Ibarra</td><td>SAM OneAI Skill</td><td>知識技能、SAP Joule Work</td></tr>
-<tr><td>6</td><td>Nur Hidayah Binti Ahmad</td><td>Packaging Price Watch 包裝價格監測</td><td>Python 引擎、排程 Claude agent</td></tr>
-<tr><td>7</td><td>Mitthu Ghosh</td><td>AgriTech 農業績效與營運儀表板</td><td>Gemini 2.5、儀表板分析</td></tr>
-<tr><td>8</td><td>Bashar Alkassis</td><td>NOMAD 旅遊行程夥伴</td><td>代理式重排行程原型</td></tr>
-<tr><td>9</td><td>Gayathri Sekar</td><td>FridgeChef AI</td><td>多模態視覺、食譜生成</td></tr>
-<tr><td>10</td><td>Alesia Musabelliu</td><td>MIRRA AI 美妝夥伴</td><td>五代理人概念設計</td></tr>
-<tr><td>11</td><td>Pascal Müller</td><td>Pforzheim Student Copilot</td><td>Cue agent、技能、WhatsApp</td></tr>
-<tr><td>12</td><td>Claribel Crystal Lupi</td><td>Job Application Autopilot</td><td>瀏覽器擴充、Claude、Sheets</td></tr>
-<tr><td>13</td><td>Manuel Lowien</td><td>Hand Music</td><td>MediaPipe 手部追蹤</td></tr>
-<tr><td>14</td><td>Aaron Ipser</td><td>DB Navigator Next Gen</td><td>HAFAS 路由資料、AI 新聞推播</td></tr>
+<tr><td>1</td><td>Valeria Y.</td><td>Review Insights 顧客評論洞察儀表板</td><td>n8n、Gemini API、Streamlit</td></tr>
+<tr><td>2</td><td>Anchal T.</td><td>德國市政機關文件收件系統</td><td>文件 AI、網頁應用（Civic Desk）</td></tr>
+<tr><td>3</td><td>Amit S.</td><td>StudyLens</td><td>多代理人迴圈、Telegram</td></tr>
+<tr><td>4</td><td>Chirag G.</td><td>AI 熱量追蹤器</td><td>Gemini 視覺</td></tr>
+<tr><td>5</td><td>Alejandra G.</td><td>SAM OneAI Skill</td><td>知識技能、SAP Joule Work</td></tr>
+<tr><td>6</td><td>Hidayah A.</td><td>Packaging Price Watch 包裝價格監測</td><td>Python 引擎、排程 Claude agent</td></tr>
+<tr><td>7</td><td>Mitthu G.</td><td>AgriTech 農業績效與營運儀表板</td><td>Gemini 2.5、儀表板分析</td></tr>
+<tr><td>8</td><td>Bashar A.</td><td>NOMAD 旅遊行程夥伴</td><td>代理式重排行程原型</td></tr>
+<tr><td>9</td><td>Gayathri S.</td><td>FridgeChef AI</td><td>多模態視覺、食譜生成</td></tr>
+<tr><td>10</td><td>Alesia M.</td><td>MIRRA AI 美妝夥伴</td><td>五代理人概念設計</td></tr>
+<tr><td>11</td><td>Pascal M.</td><td>Pforzheim Student Copilot</td><td>Cue agent、技能、WhatsApp</td></tr>
+<tr><td>12</td><td>Claribel L.</td><td>Job Application Autopilot</td><td>瀏覽器擴充、Claude、Sheets</td></tr>
+<tr><td>13</td><td>Manuel L.</td><td>Hand Music</td><td>MediaPipe 手部追蹤</td></tr>
+<tr><td>14</td><td>Aaron I.</td><td>DB Navigator Next Gen</td><td>HAFAS 路由資料、AI 新聞推播</td></tr>
 </table>
 
 <div class="student">
-<h3>1. Valeria Yagui Nishii — Review Insights 顧客評論洞察儀表板</h3>
-<p class="sub">學號 334789 · MDBM · 個人網頁：<a href="https://m334789.github.io/">m334789.github.io</a> · 應用：review-insights-final-project.streamlit.app</p>
+<h3>1. Valeria Y. — Review Insights 顧客評論洞察儀表板</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/valeria1.jpg" alt="Valeria 發表 Review Insights 儀表板"><img src="img/valeria2.jpg" alt="儀表板背後的 n8n 工作流"></div>
 <p><b>專案內容。</b>企業收到的顧客評論數量，早就超過任何人能逐則閱讀的程度。Valeria 打造了一條管線，把原始評論檔轉成管理層可以直接使用的洞察儀表板：在她的 Streamlit 應用裡，使用者上傳評論 CSV（欄位：Date、Rating、Review）或直接貼上評論文字，按下「Analyze reviews」，應用程式就透過 Webhook 把評論送進她的 <b>n8n</b> 工作流，組裝提示詞後呼叫 <b>Gemini API</b> 做情緒分析與議題擷取，解析後的結果再回流到儀表板。</p>
 <p><b>產出成果。</b>儀表板包含情緒趨勢圖（可切換日／週／月）、情緒占比圓環圖，以及附提及次數與文字綜整的「Top 3 issues」面板。她的 demo 資料是寵物胸背帶的網路評論：正面評論占 37%，前三大問題是產品品質疑慮（5 次提及）、尺寸不準（4 次）與物流延誤問題（4 次）；顧客喜歡胸背帶的設計，但對尺寸、配送與性價比有疑慮。分析結果可下載。應用部署在 Streamlit Cloud，程式碼放在她的 GitHub repo。</p>
@@ -86,8 +104,8 @@
 </div>
 
 <div class="student">
-<h3>2. Anchal Tewari — 德國市政機關文件收件系統</h3>
-<p class="sub">學號 335729 · MBA · 應用：「Civic Desk」Document Intake Desk（部署於 chatgpt.site）</p>
+<h3>2. Anchal T. — 德國市政機關文件收件系統</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/anchal1.jpg" alt="Document Intake Desk 應用畫面"><img src="img/anchal2.jpg" alt="標題投影片：Scan.pdf 到底屬於哪個案件？"></div>
 <p><b>專案內容。</b>Anchal 的報告用一個看似簡單的問題開場：<i>「Which case does Scan.pdf belong to?（Scan.pdf 到底屬於哪個案件？）」</i>德國市政機關每天收到大量補件文件（Nachreichung）——往往只是一封沒有主旨的電郵夾著掃描附件，案件編號（Aktenzeichen）欄位還留空。文件要歸檔之前，承辦人員得先弄清楚它屬於哪個案件、又需要查核什麼。</p>
 <p><b>她打造的系統。</b>一個可運作的「Document Intake Desk」，有三個面板：收件匣、文件檢視、案件查核清單。她的 demo 收件匣裡有三份租賃合約 PDF 已帶案件編號 DEMO-241，第四份正是沒有編號的 Scan.pdf。檢視面板會從文件擷取結構化欄位（案件編號 DEMO-241、合約編號 MIET-017、文件 ID MV-041、合約到期日 2027 年 3 月 31 日），按下「Check document」即可對照案件查核清單驗證後再歸檔。</p>
@@ -95,8 +113,8 @@
 </div>
 
 <div class="student">
-<h3>3. Amit Sharma — StudyLens</h3>
-<p class="sub">學號 335692 · MBA · 個人網頁：<a href="https://amitvedvyas-bit.github.io/">amitvedvyas-bit.github.io</a></p>
+<h3>3. Amit S. — StudyLens</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/amit1.jpg" alt="StudyLens 首頁"><img src="img/amit2.jpg" alt="StudyLens 流程：測驗透過 Telegram 送達並作答"></div>
 <p><b>專案內容。</b>StudyLens 是一個個人複習代理，核心承諾很簡單：<i>「Your notes, quizzing you back.（你的筆記，反過來考你。）」</i>學生拍下或上傳上課筆記、投影片後，agent 迴圈就接手：系統讀取教材、撰寫測驗題——而且會先拿筆記自我檢查題目與答案是否正確（他的範例：「Which dataset verifies a model before deployment? — the validation set」）——再透過 <b>Telegram</b> 把測驗送到學生手機。學生在聊天裡作答後，系統批改，家教 agent 講解答錯的地方，規劃 agent 則更新學習進度。</p>
 <p><b>系統架構。</b>Amit 特別強調：拍照與讀取是任何工具都能做的事，真正的功夫在於能對學生答案做出反應的迴圈。他的設計用了<b>四個分工的 agent 互相傳遞工作</b>——讀取、出題與檢查、家教講解、規劃與追蹤——是一套明確的多代理人系統，而不是單一聊天機器人。</p>
@@ -104,16 +122,16 @@
 </div>
 
 <div class="student">
-<h3>4. Chirag Milan Gupte — AI 熱量追蹤器</h3>
-<p class="sub">學號 336215 · MBA · 個人網頁：<a href="https://336215.github.io/">336215.github.io</a></p>
+<h3>4. Chirag G. — AI 熱量追蹤器</h3>
+<p class="sub">MBA</p>
 <div class="photos single"><img src="img/chirag1.jpg" alt="Chirag 在課堂上用柳橙實機示範 AI 熱量追蹤器"></div>
 <p><b>專案內容。</b>把感知 AI 直接用在日常生活中：拍下或上傳食物照片，Gemini 視覺模型就能辨識餐點並估算熱量。應用程式有每日紀錄（Today’s log）與即時累計的每日大卡計數，並提供 Camera、Upload、Identify 三個操作。Chirag 在課堂上拿著一顆柳橙對著鏡頭實機示範，讓全班親眼看到感知 AI 單元如何落地——是當天很有感染力的一個小時刻。</p>
 <p class="concepts"><b>應用到的課程概念：</b>感知 AI · 多模態視覺模型 · 個人健康工具。</p>
 </div>
 
 <div class="student">
-<h3>5. Alejandra González Ibarra — SAM OneAI Skill</h3>
-<p class="sub">學號 335169 · MDBM · 個人網頁：<a href="https://m335169.github.io/">m335169.github.io</a></p>
+<h3>5. Alejandra G. — SAM OneAI Skill</h3>
+<p class="sub">MDBM</p>
 <div class="photos single"><img src="img/alejandra1.jpg" alt="SAM OneAI Skill 投影片"></div>
 <p><b>專案內容。</b>Alejandra 瞄準一個經典的企業痛點：員工為了找一份權威答案，要在 SharePoint 裡翻找好幾個小時。她把 <b>SAM OneAI</b> 做成一個可重複使用的 <i>skill</i>，安裝在 Joule Work Desktop 上——安裝方式簡單到只要上傳 SKILL.md 檔案。這個 skill 會理解問題、把問題路由到正確的 SAM 知識空間（SPM 投資組合管理、SCM 合規、SFM 財務、TDM 工具與數據、TMO 轉型辦公室或 SAM General）、讀取可信內容，幾秒內就回傳附出處的答案，而不是丟回一堆搜尋結果。</p>
 <p><b>為什麼重要。</b>在所有專案中，這個專案最直接地展現了課程「skills」的概念如何進入真實企業技術棧：把知識工作包裝成一個可安裝、受治理的能力，而不是跟模型隨意聊聊。</p>
@@ -121,8 +139,8 @@
 </div>
 
 <div class="student">
-<h3>6. Nur Hidayah Binti Ahmad — Packaging Price Watch 包裝價格監測</h3>
-<p class="sub">學號 335033 · MDBM · 個人網頁：<a href="https://m335033.github.io/">m335033.github.io</a></p>
+<h3>6. Hidayah A. — Packaging Price Watch 包裝價格監測</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/hidayah1.jpg" alt="Packaging Price Watch 標題投影片與 demo 結果"><img src="img/hidayah2.jpg" alt="Packaging Price Watch 的四步驟工作流"></div>
 <p><b>問題。</b>包裝合約通常是連動指數的：原物料指數漲跌超過約定區間，合約價就必須調整。實務上，採購人員每月人工蒐集指數、逐份人工檢查合約——緩慢又容易出錯，漏掉降價週期就是默默多付錢，案件量大還會造成決策疲勞。</p>
 <p><b>她打造的系統。</b>一套四步驟、讓人只碰決策的系統。（1）採購人員維護原始資料——Excel 指數追蹤表與合約清單——每月只需幾分鐘人力。（2）用 <b>Python</b> 寫的審查引擎負責所有計算（程式碼內含 20 個測試），套用時間窗、加權變化、觸發條件與資料檢查，由<b>排程 Claude agent</b> 每天 07:00 驅動。（3）共用儀表板自動更新：每份合約的狀態、被標記的價格變動與其驅動因素、給供應商的通知草稿。（4）採購人員只審查被標記的案件，與供應商議定新價格、核准後才寄出。她的時間規則是：區間在 M 月結束 → 指數在 M+1 月公布時審查 → 新價格自 M+2 月 1 日起適用。在 12 份合約的 demo 重播中，引擎標記了 3 筆將於 2026 年 12 月 1 日生效的價格變動（+7.89%、−6.00%、+5.12%）。</p>
@@ -130,8 +148,8 @@
 </div>
 
 <div class="student">
-<h3>7. Mitthu Ghosh — AgriTech 農業績效與營運儀表板</h3>
-<p class="sub">學號 335632 · MBA · 個人網頁：<a href="https://335632.github.io/">335632.github.io</a></p>
+<h3>7. Mitthu G. — AgriTech 農業績效與營運儀表板</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/mitthu1.jpg" alt="AgriTech 儀表板總覽"><img src="img/mitthu2.jpg" alt="AI Predictive Hub 的農藝綜整分析"></div>
 <p><b>專案內容。</b>Mitthu 打造了一個智慧農業「控制室」，情境是加州中央谷地的玉米生產（2026 年秋季）。互動篩選器——地區、品種、生長週期、從微型到超大型的農場規模、日期區間——會驅動頁面上每一個 KPI：監控 14 座農場、6,664 英畝，產量預測 36,385 噸，用水效率 94.2%，減碳 2,999 公噸，168 個運作中的 IoT 感測器（土壤濕度與氣象站），農民滿意度 4.7/5。「Farm Care Alerts」為每個問題配上對策：AquaFlow 取水限制 −5%，以精準滴灌排程補償；預報高溫，則把自動噴灑改到夜間。</p>
 <p><b>AI 層。</b>由 <b>Gemini 2.5</b> 驅動的「AI Predictive Hub」會產出「AI Agronomic Synthesis」：執行摘要（1,450 英畝雙用作物玉米，產量較區域基準 +4.8%）、評為 HIGH 的生物氣候風險（San Joaquin Valley 熱穹——14 天高於 104 °F、相對濕度低於 18%）、評為 MEDIUM 的病原風險（南方玉米銹病模型 42%，建議對高架灌溉區預防性施用三唑類殺菌劑）、灌溉建議（地下滴灌達基準 ETo 的 115%），以及利潤估計（每英畝淨利 +$140、抽水能耗 −14%）。另有對話式的 AI Operational Advisor 回答後續問題。頁籤涵蓋 Crop Yield &amp; Analytics、Live Operations &amp; GIS、Market 與 Finance &amp; ESG。</p>
@@ -139,8 +157,8 @@
 </div>
 
 <div class="student">
-<h3>8. Bashar Alkassis — NOMAD</h3>
-<p class="sub">學號 335061 · MDBM · 個人網頁：<a href="https://335061.github.io/">335061.github.io</a></p>
+<h3>8. Bashar A. — NOMAD</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/bashar1.jpg" alt="NOMAD 的 Marrakech 行程表"><img src="img/bashar2.jpg" alt="NOMAD 在天氣變化後重新安排行程"></div>
 <p><b>專案內容。</b>NOMAD——標語是 <i>“Your trip. Still on.（你的旅程，照走不誤。）”</i>——是一個城市短旅的 AI 行程夥伴，建立在一個原則上：<b>它會因應突發狀況重新規劃，但絕不動你的固定訂位，而且任何變更都要經你批准才生效。</b>使用者告訴它目的地、日期與喜歡的步調（文化、在地美食、戶外、悠閒的早晨），NOMAD 排出行為，並把固定訂位——demo 裡是 Marrakech 13:00 的午餐訂位——標記為受保護。</p>
 <p><b>突發狀況處理。</b>Demo 用兩個情境貫穿。天氣轉壞時，10:00 的 Agafay 沙漠越野車行程移到隔天，今天改排 Hammam 與 spa 的悠閒下午——「Your day, reimagined」：冒險保留了，這一天也保持放鬆。到了博物館才發現沒開時，NOMAD 提議換到步行 12 分鐘的 Courtyard Gallery 作為替代站點，13:00 的午餐訂位則原封不動。Bashar 還設計了正規的評估方法：12 位參與者、兩個配對的「景點關閉」情境，對照組用傳統方式（地圖、搜尋與記憶）自己重排，實驗組用 NOMAD，量測速度、正確性、信心與認知負荷，並交換順序以消除學習效應。原型內建 20 個精選 city-break 目的地，而且誠實註明這是 prototype、demo 中的場地供應狀況是模擬的。</p>
@@ -148,8 +166,8 @@
 </div>
 
 <div class="student">
-<h3>9. Gayathri Sekar — FridgeChef AI</h3>
-<p class="sub">學號 333080 · MBA · 個人網頁：<a href="https://333080.github.io/">333080.github.io</a></p>
+<h3>9. Gayathri S. — FridgeChef AI</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/gayathri1.jpg" alt="FridgeChef AI：拍下冰箱，發現美味料理"><img src="img/gayathri2.jpg" alt="FridgeChef 食譜卡，食材吻合度 100%"></div>
 <p><b>專案內容。</b>FridgeChef AI 從一個人人都有的問題出發：<i>「What’s in your fridge? Snap a photo. Discover delicious meals.（你冰箱裡有什麼？拍張照，發現美味料理。）」</i>第一步是多模態視覺掃描：使用者從多個角度上傳冰箱與流理台的照片——層架、蔬果抽屜、台面——圖片在傳送分析前先在用戶端壓縮。系統辨識出看得見的食材，使用者調整偏好（飲食需求、公制或英制單位），應用程式就生成食譜卡。</p>
 <p><b>產出成果。</b>每張卡顯示與手邊食材的吻合分數（demo 的三道菜——地中海 Shakshuka、香草煎雞胸佐櫻桃番茄、10 分鐘墨西哥風「冰箱大雜燴」——全部 100%）、烹飪時間、難度、熱量與蛋白質／碳水／脂肪，並逐項列出「In Your Fridge」清單與份量（雞蛋 6 顆、櫻桃番茄 250 g、嫩菠菜 150 g、Feta 起司 200 g），還有一句保證：「You have 100% of the ingredients to cook right now!（食材 100% 齊全，現在就能煮！）」功能包括我的最愛、購物清單，以及一鍵「View Full Recipe」與「Cook Mode」。隱私被當成功能而不是附註：設計上強調「Private &amp; Ephemeral Photos」，並內建範例冰箱（地中海冰箱、亞洲熱炒台面、高蛋白層架），讓任何人不用上傳真實照片就能試用整個流程。</p>
@@ -157,8 +175,8 @@
 </div>
 
 <div class="student">
-<h3>10. Alesia Musabelliu — MIRRA</h3>
-<p class="sub">學號 335076 · MDBM · 個人網頁：<a href="https://335076.github.io/">335076.github.io</a></p>
+<h3>10. Alesia M. — MIRRA</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/alesia1.jpg" alt="MIRRA 標題投影片：Recognize. Personalize. Adapt."><img src="img/alesia2.jpg" alt="MIRRA 背後的五個 agent"></div>
 <p><b>專案內容。</b>MIRRA 是一個代理式 AI 個人美妝夥伴，以五頁的概念介紹呈現，建立在三個動詞上：<b>Recognize（辨識）、Personalize（個人化）、Adapt（適應）</b>。她指出的問題，是任何人站在美妝貨架前都熟悉的：產品多到不知如何選、成分組合讓人困惑、保養流程在膚況或需求改變時從不調整。</p>
 <p><b>系統設計。</b>MIRRA 不是單一助理，而是一支由 <b>Orchestrator</b> 協調的五人 agent 團隊：理解使用者膚質的 <b>Skin Intelligence</b>、檢查產品與成分衝突的 <b>Ingredient Guardian</b>、組建早晚保養流程的 <b>Routine Architect</b>，以及回顧成效並調整流程的 <b>Reflection Agent</b>。她闡述的願景是：幫使用者理解自己擁有的產品、用相機辨識產品、依個人需求建立流程、在需求改變時調整建議，並讓使用者始終掌握保養決定的主導權。用她的話說，目標是把感知、推理與適應結合成一個夥伴——恰好也是這門課主軸的精煉總結。</p>
@@ -166,8 +184,8 @@
 </div>
 
 <div class="student">
-<h3>11. Pascal Müller — Pforzheim Student Copilot</h3>
-<p class="sub">學號 325712 · MMI（Master Marketing Intelligence）· 個人網頁：<a href="https://paelus.github.io/">paelus.github.io</a> · 儀表板：paelus.github.io/student-copilot</p>
+<h3>11. Pascal M. — Pforzheim Student Copilot</h3>
+<p class="sub">MMI（Master Marketing Intelligence）</p>
 <div class="photos"><img src="img/pascal1.jpg" alt="Student Copilot 的運作方式：Cue agent、技能、WhatsApp"><img src="img/pascal2.jpg" alt="實機示範：晨間簡報與網頁儀表板"></div>
 <p><b>問題。</b>一個學生的早晨散落在五個 app 和三個網站裡——天氣、Mensa 菜單頁、Moodle 與電郵裡的截止日、市區活動、新聞——沒有單一總覽，於是存在腦袋、筆記和收件匣裡的截止日就這樣漏掉了。而他每天早上反正一定會開的 app，是 WhatsApp。</p>
 <p><b>他打造的系統。</b>一個住在 WhatsApp 裡的個人學業助理，以名為「Cosmo」的 <b>Cue agent</b> 為核心，配上兩個自訂技能（<i>pforzheim-student-copilot</i> 與 <i>daily-news-briefing</i>）與持久記憶。平日 <b>07:00</b> 它送出晨間簡報：Pforzheim 天氣與騎車穿著建議、今日 Mensa 菜單（附來源）、未來七天的截止日、Pforzheim 與學校的活動、他自選主題的兩則新聞。整天都可以用 WhatsApp 指令管理系統——<i>brief</i>、<i>mensa</i>、<i>weather</i>、<i>topics</i>、<i>deadline &lt;事項&gt; &lt;日期&gt;</i>、<i>deadlines</i>、<i>done</i>、<i>remind &lt;文字&gt; &lt;時間&gt;</i>——截止日與新聞主題則保存在 agent 的記憶裡、跨對話延續。網頁儀表板同步呈現相同資料，含即時天氣、截止日倒數與簡報預覽。實機示範用的是 11 月 26 日星期三的真實簡報，它在 07:06 自己送達。他最後把自己的作品對應到<b>課程的六大 building blocks</b>：agent、技能、排程任務、通訊管道、記憶、網路＋聊天機器人——是全場最直接體現課程「個人代理」單元的作品。</p>
@@ -175,8 +193,8 @@
 </div>
 
 <div class="student">
-<h3>12. Claribel Crystal Lupi — Job Application Autopilot</h3>
-<p class="sub">學號 335034 · MDBM · 個人網頁：<a href="https://335034.github.io/">335034.github.io</a></p>
+<h3>12. Claribel L. — Job Application Autopilot</h3>
+<p class="sub">MDBM</p>
 <div class="photos"><img src="img/claribel1.jpg" alt="Job Application Autopilot 追蹤表"><img src="img/claribel2.jpg" alt="面試邀請進來，準備包出去"></div>
 <p><b>專案內容。</b>求職就是大量投遞——然後失去追蹤。Claribel 的標語是：<i>「Mass job application. One click logs a job; an interview invite brings a ready pack.（大量投遞求職：一鍵記錄職缺；面試邀請一來，準備包就備好。）」</i>瀏覽器擴充功能會讀取職缺頁面的職稱、公司、地點與日期，並保存完整的職缺說明；點一下「Save to sheet」就把職缺記進 Google Sheets 追蹤表，含投遞日期、職位、公司、狀態與備註。「距投遞天數」超過 14 天會變成琥珀色——該追蹤了。</p>
 <p><b>面試準備包。</b>當某一列的狀態改成「Interview」，求職者在 Claude 裡輸入 <i>/job-refresh</i>（筆電或手機皆可）；Claude 研究公司、職位與領域，讀取履歷，然後把一份<b>準備包</b>連結回該列：公司速覽、職位解讀、「職能知識」階梯（描述性 → 診斷性 → 預測性 → 規範性分析）、CV 差距清單（她的範例：SQL 與儀表板是強項；A/B 測試需要複習；Python pandas 需要加強）、可能面試題、術語表、以及可以反問對方的問題。她甚至比較了三種運行方式的成本：Claude 訂閱（額外費用 €0）、Claude API（總計約 $10–20——她的選擇；她的估算可涵蓋 500 筆職缺與 30 份準備包）、Gemini 免費層（$0，但有每日上限）。</p>
@@ -184,8 +202,8 @@
 </div>
 
 <div class="student">
-<h3>13. Manuel Lowien — Hand Music</h3>
-<p class="sub">學號 324033 · MMI · 個人網頁：<a href="https://324033.github.io/">324033.github.io</a></p>
+<h3>13. Manuel L. — Hand Music</h3>
+<p class="sub">MMI</p>
 <div class="photos"><img src="img/manuel1.jpg" alt="Hand Music 遊戲畫面與落下的音符"><img src="img/manuel2.jpg" alt="Hand Music 主選單"></div>
 <p><b>專案內容。</b><i>「Spiele Musik mit deinen Händen」</i>——用你的雙手彈音樂。Hand Music 是一款由 <b>MediaPipe 手部追蹤</b>驅動的節奏遊戲：網路攝影機看著玩家的手，每個手指手勢對應一個音符（畫面下方的音符磚是 C、D、E、F、G、A、H、C′）。音符像 Guitar Hero 那樣沿軌道落下，在正確時機比出正確手勢就得分並累積 combo，還有即時回饋（「Perfekt!」、「Gut」）。兩側面板即時顯示左右手的手部骨架追蹤與下一個要彈的音符，遊戲甚至會辨識舉起的手指來倒數開場（4-3-2-1）。</p>
 <p><b>模式與內容。</b>德文介面提供自由演奏（Freies Spiel）、練習模式（Übungsmodus）、說明與設定。曲庫是兒歌——現場示範用的是 <i>Alle meine Entchen</i>（簡單難度、40 BPM、鐘琴音色），曲庫裡還有 <i>Mary Had a Little Lamb</i>、<i>Twinkle Twinkle Little Star</i>、<i>Old MacDonald Had a Farm</i>、<i>Hänschen klein</i> 與 <i>Bruder Jakob</i>。Manuel 在課堂上親自實機示範，邊彈分數邊往上跳。</p>
@@ -193,8 +211,8 @@
 </div>
 
 <div class="student">
-<h3>14. Aaron Ipser — DB Navigator Next Gen</h3>
-<p class="sub">學號 336209 · MBA · 個人網頁：<a href="https://336209.github.io/">336209.github.io</a></p>
+<h3>14. Aaron I. — DB Navigator Next Gen</h3>
+<p class="sub">MBA</p>
 <div class="photos"><img src="img/aaron1.jpg" alt="DB Navigator Next Gen 路線地圖與替代路線"><img src="img/aaron2.jpg" alt="路線組合器與 BW 新聞頁籤"></div>
 <p><b>專案內容。</b>Aaron 把德國鐵路的旅程規劃器重新想像成 Baden-Württemberg 州版的「Next Gen」概念。他的原型結合了 <b>DB HAFAS 即時路由</b>與全州資料——頁首標示 64 個站點、8 個公車網絡，涵蓋範圍橫跨全州 23 個運輸聯盟（Verkehrsverbünde：VVS、VRN、KVV、RVF、bodo 等）——還有一個看得見的「資料管線狀態」面板與一鍵載入的 BW 情景路線（例如 Schwäbisch Hall 到商業樞紐、Karlsruhe 到大學城、Mannheim Hbf 到 Freiburg 的 ICE，或全州城市中心公車探索）。</p>
 <p><b>使用體驗。</b>模組化路線組合器讓旅客逐段拼出旅程（Stuttgart Hbf → Ludwigsburg 搭 S-Bahn → Mannheim Hbf），並納入 Deutschlandticket 的邏輯；地圖畫面同時顯示最佳路線（2 小時 22 分）與替代路線（2 小時 56 分），可依區域鐵路、S-Bahn／U-Bahn 與偏好篩選交通工具。「BW Rail &amp; Bus News」頁籤自述由 AI 新聞推播驅動，把原始的營運異常資訊轉成建議——例如 Stuttgart Hbf 月台動線提醒，建議旅客為跨城轉乘多留 15–25 分鐘；以及一則說明：Deutschlandticket 與 JugendBW 在全州的區域鐵路與地方公車都有效。</p>
@@ -203,7 +221,7 @@
 
 <h2 class="part">第二部分 — 不記名課程回饋</h2>
 
-<p><b>方法。</b>期末報告結束後，學生受邀填寫一份不記名的 Google 表單，共有兩題開放式問題。表單不蒐集姓名與電郵地址，也不需要登入。每題各收到 <b>20 則回覆</b>——約占名單 47 位學生的 43%。兩題各有一則答案文字出現兩次（Q1 是 “I loved every part of this course! I really like the transition from manually using agentic ai to having the system being created automatically through advanced apps.”；Q2 是 “I would not change a single thing about this course. The professor is an absolute genius…”）。這些都照提交內容計入；最可能是同一位學生重複送出，因此實際填答人數應為 19–20 人。Q2 有一則回覆在不記名表單上自願署名（“Sincerely, Alesia Musabelliu”）。</p>
+<p><b>方法。</b>期末報告結束後，學生受邀填寫一份不記名的 Google 表單，共有兩題開放式問題。表單不蒐集姓名與電郵地址，也不需要登入。每題各收到 <b>20 則回覆</b>——約占名單 47 位學生的 43%。兩題各有一則答案文字出現兩次（Q1 是 “I loved every part of this course! I really like the transition from manually using agentic ai to having the system being created automatically through advanced apps.”；Q2 是 “I would not change a single thing about this course. The professor is an absolute genius…”）。這些都照提交內容計入；最可能是同一位學生重複送出，因此實際填答人數應為 19–20 人。Q2 有一則回覆在不記名表單上自願署名。</p>
 
 <div class="stat-row">
   <div class="stat"><span class="n">20</span><span class="l">每題回覆數</span></div>
